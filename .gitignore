@@ -14,3 +14,5 @@
 node_modules
 .env*
 .env
+packages/shared/dist/*
+dist/*

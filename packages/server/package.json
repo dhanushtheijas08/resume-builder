@@ -7,6 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@resume-builder/shared": "workspace:*",
     "express": "^5.1.0"
   },
   "devDependencies": {
