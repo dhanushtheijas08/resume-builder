@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "target": "ESNext",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true,
+    "useUnknownInCatchVariables": true,
+    "noImplicitOverride": true,
+    "paths": {
+      "test/*": ["test/*"],
+      "~/*": ["src/*"]
+    },
+    "typeRoots": ["src/types", "node_modules/@types"],
+    "baseUrl": "."
+  },
+  "include": ["src", "test"]
+}

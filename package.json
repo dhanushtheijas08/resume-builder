@@ -1,4 +1,16 @@
 {
-  "name": "resume-builder-v2",
-  "packageManager": "yarn@4.5.2"
+  "name": "resume-builder",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "dev": "concurrently --names \"CLIENT,SERVER,SHARED\" --prefix-colors \"blue,green,yellow\" \"yarn workspace @resume-builder/client dev\" \"yarn workspace @resume-builder/server dev\" \"yarn workspace @resume-builder/shared dev\""
+  },
+  "packageManager": "yarn@4.5.2",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
 }
