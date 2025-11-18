@@ -2,12 +2,14 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { LoginForm } from "./login/login-form";
 import { RegisterForm } from "./register/register-form";
 import { SocialProvider } from "./social-provider";
+import Link from "next/link";
 
 export const AuthCard = ({ type }: { type: "login" | "register" }) => {
   return (
@@ -60,6 +62,20 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
         {/* Form */}
         {type === "login" ? <LoginForm /> : <RegisterForm />}
       </CardContent>
+
+      <CardFooter className="flex justify-center">
+        <p className="text-center text-sm text-muted-foreground border-t pt-1.5 w-full">
+          {type === "login"
+            ? "Don't have an account?"
+            : "Already have an account?"}
+          <Link
+            href={type === "login" ? "/register" : "/login"}
+            className="text-primary underline ml-1 hover:text-primary/80 transition-colors"
+          >
+            {type === "login" ? "Sign up" : "Sign in"}
+          </Link>
+        </p>
+      </CardFooter>
     </Card>
   );
 };
