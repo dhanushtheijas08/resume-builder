@@ -10,24 +10,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { registerAction } from "@/lib/actions/auth-action";
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export const RegisterForm = () => {
+  const router = useRouter();
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: "test 123",
+      email: "test@example.com",
+      password: "test123456",
     },
   });
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log(data);
-    // TODO: Implement authentication logic here
-  };
+  const { execute, status } = useAction(registerAction, {
+    onSuccess: ({ data }) => {
+      toast.success(data.message);
+      if (data.redirectUrl) {
+        router.push(data.redirectUrl);
+      }
+    },
+    onError: ({ error }) => {
+      if (error.serverError?.redirectUrl) {
+        router.push(error.serverError?.redirectUrl);
+      }
+      toast.error(error.serverError?.message);
+    },
+  });
+
+  const onSubmit = (data: RegisterFormData) => execute(data);
 
   return (
     <Form {...form}>
@@ -39,7 +57,11 @@ export const RegisterForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your name" {...field} />
+                <Input
+                  placeholder="Enter your name"
+                  disabled={status === "executing"}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -52,7 +74,12 @@ export const RegisterForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="m@example.com" {...field} />
+                <Input
+                  type="email"
+                  placeholder="m@example.com"
+                  disabled={status === "executing"}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -68,6 +95,7 @@ export const RegisterForm = () => {
                 <Input
                   type="password"
                   placeholder="Enter your password"
+                  disabled={status === "executing"}
                   {...field}
                 />
               </FormControl>
@@ -75,8 +103,13 @@ export const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full mt-2.5" variant="primary">
-          Create account
+        <Button
+          type="submit"
+          className="w-full mt-2.5"
+          variant="primary"
+          disabled={status === "executing"}
+        >
+          {status === "executing" ? <Spinner /> : "Create account"}
         </Button>
       </form>
     </Form>

@@ -1,6 +1,3 @@
-import { GitHubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { LoginForm } from "./login/login-form";
 import { RegisterForm } from "./register/register-form";
+import { SocialProvider } from "./social-provider";
 
 export const AuthCard = ({ type }: { type: "login" | "register" }) => {
   return (
@@ -25,7 +23,7 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <Button
             type="button"
             variant="outline-2"
@@ -44,7 +42,8 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
             <GoogleIcon />
             Google
           </Button>
-        </div>
+        </div> */}
+        <SocialProvider />
 
         {/* Separator */}
         <div className="relative my-6">
