@@ -9,6 +9,7 @@ import {
 } from "../validations/auth";
 import { APIError } from "better-auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export const loginAction = safeAction
   .inputSchema(loginSchema)
@@ -101,3 +102,21 @@ export const socialLoginAction = safeAction
 
     redirect(url);
   });
+
+
+export const signOutAction = safeAction.action(async () => {
+  try {
+    const nextHeaders = await headers();
+    await auth.api.signOut({
+      headers: nextHeaders,
+    });
+  } catch (error) {
+    if (error instanceof APIError) {
+      throw new ActionError(error.message, error.statusCode);
+    }
+    if (error instanceof ActionError) {
+      throw error;
+    }
+    throw new ActionError("Failed to sign out", 500);
+  }
+});

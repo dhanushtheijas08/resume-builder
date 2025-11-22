@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { socialLoginAction } from "@/lib/actions/auth-action";
+import { socialLoginAction } from "@/lib/actions/auth-actions";
 import { useAction } from "next-safe-action/hooks";
 
 export const SocialProvider = () => {

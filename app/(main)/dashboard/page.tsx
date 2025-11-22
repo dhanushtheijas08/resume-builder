@@ -1,22 +1,11 @@
-"use client";
-
-import { useState } from "react";
-import { Grid3x3, List, Filter } from "lucide-react";
 import { UserHeader } from "@/components/common/header";
-import { ResumeCard } from "@/components/dashboard/resume-card";
-import { SidebarInset } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UserWelcomeMessge } from "@/components/dashboard/welcome-message";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  ResumeListSection,
+  type ResumeCardData,
+} from "@/components/dashboard/resume-list-section";
 
-// Dummy data
-const resumes = [
+const resumes: ResumeCardData[] = [
   {
     id: "1",
     title: "Software Engineer Resume",
@@ -62,106 +51,14 @@ const resumes = [
 ];
 
 export default function UserDashboardPage() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [filter, setFilter] = useState("all");
-
-  const filteredResumes = resumes.filter((resume) => {
-    if (filter === "all") return true;
-    if (filter === "resume") return resume.type === "resume";
-    if (filter === "cover-letter") return resume.type === "cover-letter";
-    return true;
-  });
-
   return (
     <div>
       <UserHeader />
 
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto p-6 space-y-6">
-          {/* Greeting Section */}
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Hello, John! 👋
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Welcome back. Lets create something amazing today.
-            </p>
-          </div>
-
-          {/* Filters and View Toggle */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <Tabs
-              value={filter}
-              onValueChange={setFilter}
-              className="w-full sm:w-auto"
-            >
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="resume">Resumes</TabsTrigger>
-                <TabsTrigger value="cover-letter">Cover Letters</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <Select defaultValue="recent">
-                <SelectTrigger className="w-[180px]">
-                  <Filter className="mr-2 size-4" />
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="recent">Recently Edited</SelectItem>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="oldest">Oldest First</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <div className="flex items-center gap-1 border rounded-lg p-1">
-                <Button
-                  variant={viewMode === "grid" ? "secondary" : "ghost"}
-                  size="icon"
-                  className="size-8"
-                  onClick={() => setViewMode("grid")}
-                >
-                  <Grid3x3 className="size-4" />
-                  <span className="sr-only">Grid view</span>
-                </Button>
-                <Button
-                  variant={viewMode === "list" ? "secondary" : "ghost"}
-                  size="icon"
-                  className="size-8"
-                  onClick={() => setViewMode("list")}
-                >
-                  <List className="size-4" />
-                  <span className="sr-only">List view</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Resume Grid/List */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Your Documents</h2>
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "flex flex-col gap-4"
-              }
-            >
-              {filteredResumes.map((resume) => (
-                <ResumeCard key={resume.id} {...resume} />
-              ))}
-            </div>
-
-            {filteredResumes.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-muted-foreground">No documents found</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Try adjusting your filters or create a new document
-                </p>
-              </div>
-            )}
-          </div>
+          <UserWelcomeMessge />
+          <ResumeListSection resumes={resumes} />
         </div>
       </main>
     </div>

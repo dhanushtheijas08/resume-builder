@@ -14,6 +14,7 @@ export class ActionError extends Error {
 export const safeAction = createSafeActionClient({
   defaultValidationErrorsShape: "flattened",
   handleServerError: (error): ResponseData => {
+    console.log(error);
     if (error instanceof ActionError) {
       return {
         message: error.message,

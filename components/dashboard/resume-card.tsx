@@ -20,75 +20,75 @@ interface ResumeCardProps {
 export function ResumeCard({
   title,
   lastEdited,
-  type,
-  gradient,
-}: ResumeCardProps) {
+}: Omit<ResumeCardProps, "type" | "gradient"> &
+  Partial<Pick<ResumeCardProps, "type" | "gradient">>) {
   return (
-    <Card className="group relative overflow-hidden border border-border/50 bg-background transition-all hover:shadow-md hover:border-border">
-      {/* Updated preview area to match Image 1: Clean light gray background with a miniature document mockup */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/30 p-6">
-        <div className="h-full w-full rounded-sm bg-white shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-[1.02] group-hover:shadow-md">
-          {/* Document Skeleton */}
-          <div className="flex flex-col gap-2 p-3 opacity-50">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-full bg-primary/20" />
-              <div className="space-y-1 flex-1">
-                <div className="h-1.5 w-12 rounded bg-primary/20" />
-                <div className="h-1 w-8 rounded bg-primary/10" />
-              </div>
+    <Card className="group relative overflow-hidden border-muted/40 bg-card transition-all duration-300 hover:shadow-xl hover:border-border/80 hover:-translate-y-1">
+      {/* Preview Area */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/10 p-6 transition-colors group-hover:bg-muted/20">
+        {/* Document Mockup */}
+        <div className="relative h-full w-full origin-top rounded-md bg-background shadow-sm ring-1 ring-border/10 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-md">
+          {/* Document Header */}
+          <div className="flex items-center gap-3 border-b border-border/5 p-4">
+            <div className="h-8 w-8 rounded-full bg-primary/10" />
+            <div className="space-y-1.5 flex-1">
+              <div className="h-2 w-24 rounded-full bg-muted-foreground/10" />
+              <div className="h-1.5 w-16 rounded-full bg-muted-foreground/10" />
             </div>
-            <div className="space-y-1 mt-2">
-              <div className="h-1 w-full rounded bg-muted-foreground/20" />
-              <div className="h-1 w-full rounded bg-muted-foreground/20" />
-              <div className="h-1 w-3/4 rounded bg-muted-foreground/20" />
+          </div>
+
+          {/* Document Body Skeleton */}
+          <div className="space-y-3 p-4 opacity-50">
+            <div className="space-y-1.5">
+              <div className="h-1.5 w-full rounded-full bg-muted-foreground/10" />
+              <div className="h-1.5 w-5/6 rounded-full bg-muted-foreground/10" />
+              <div className="h-1.5 w-4/5 rounded-full bg-muted-foreground/10" />
             </div>
-            <div className="space-y-1 mt-1">
-              <div className="h-1 w-11/12 rounded bg-muted-foreground/20" />
-              <div className="h-1 w-full rounded bg-muted-foreground/20" />
+            <div className="space-y-1.5 pt-2">
+              <div className="h-1.5 w-11/12 rounded-full bg-muted-foreground/10" />
+              <div className="h-1.5 w-full rounded-full bg-muted-foreground/10" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Updated footer to be minimal: Title and date only, with menu on hover */}
-      <div className="p-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1 min-w-0 space-y-1">
-            <h3 className="font-medium text-sm leading-none truncate">
-              {title}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Last edited {lastEdited}
-            </p>
-          </div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <MoreVertical className="h-3 w-3" />
-                <span className="sr-only">More options</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Copy className="mr-2 size-4" />
-                Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Download className="mr-2 size-4" />
-                Download
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">
-                <Trash2 className="mr-2 size-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+      {/* Footer */}
+      <div className="flex items-center justify-between p-4">
+        <div className="min-w-0 flex-1 space-y-1">
+          <h3 className="truncate font-semibold text-sm text-foreground/90 group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          <p className="text-xs text-muted-foreground font-medium">
+            Edited {lastEdited}
+          </p>
         </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground opacity-0 transition-all duration-200 hover:bg-muted hover:text-foreground group-hover:opacity-100"
+            >
+              <MoreVertical className="h-4 w-4" />
+              <span className="sr-only">More options</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem className="cursor-pointer">
+              <Copy className="mr-2 h-4 w-4" />
+              Duplicate
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <Download className="mr-2 h-4 w-4" />
+              Download PDF
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Card>
   );
