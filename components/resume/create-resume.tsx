@@ -26,22 +26,103 @@ import {
   createResumeSchema,
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence } from "framer-motion";
 import { Layout, Plus, Sparkles, X } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { useAction } from "next-safe-action/hooks";
-import { COMPANIES, EXPERIENCE, ROLES, TEMPLATES } from "./data";
+import { useQuery } from "@tanstack/react-query";
+import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
-import { TemplateCard } from "./template-card";
+import { TemplateCard, TemplateCardSkeleton } from "./template-card";
+import { RESUME_TEMPLATES_API_URL } from "@/lib/env";
+import Image from "next/image";
+
+const ITEMS_PER_PAGE = 9;
+
+type ResumeTemplateApiItem = {
+  id: string;
+  title: string;
+  role: string;
+  experience: number;
+  company: string;
+  location: string;
+  previewImageUrl: string;
+  tags: string[];
+};
+
+type ResumeTemplateApiResponse = {
+  data: {
+    templates: ResumeTemplateApiItem[];
+    pagination: {
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    };
+  };
+};
+
+const TEMPLATE_COLORS = [
+  { color: "bg-slate-100", accent: "bg-slate-900" },
+  { color: "bg-blue-50", accent: "bg-blue-600" },
+  { color: "bg-purple-50", accent: "bg-purple-600" },
+  { color: "bg-emerald-50", accent: "bg-emerald-600" },
+  { color: "bg-red-50", accent: "bg-red-600" },
+  { color: "bg-orange-50", accent: "bg-orange-600" },
+  { color: "bg-indigo-50", accent: "bg-indigo-600" },
+];
+
+function getExperienceLabel(experience: number): string {
+  if (experience < 2) return "Entry Level";
+  if (experience < 5) return "Mid Level";
+  if (experience < 8) return "Senior";
+  if (experience < 12) return "Lead";
+  return "Executive";
+}
+
+async function fetchResumeTemplates(params: {
+  page: number;
+  role: string;
+  exp: string;
+  company: string;
+}): Promise<ResumeTemplateApiResponse> {
+  const searchParams = new URLSearchParams();
+  searchParams.set("page", String(params.page));
+  searchParams.set("pageSize", String(ITEMS_PER_PAGE));
+
+  if (params.role && params.role !== "All") {
+    searchParams.set("role", params.role);
+  }
+
+  if (params.exp && params.exp !== "All") {
+    searchParams.set("experience", params.exp);
+  }
+
+  if (params.company && params.company !== "All") {
+    searchParams.set("company", params.company);
+  }
+
+  const url = `${RESUME_TEMPLATES_API_URL}?${searchParams.toString()}`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch resume templates");
+  }
+
+  return response.json();
+}
 
 export function CreateResume() {
   const [open, setOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("All");
-  const [selectedExp, setSelectedExp] = useState("All");
-  const [selectedCompany, setSelectedCompany] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterOptions, setFilterOptions] = useState({
+    role: "All",
+    exp: "All",
+    company: "All",
+  });
   const router = useRouter();
   const form = useForm<CreateResumeFormData>({
     resolver: zodResolver(createResumeSchema),
@@ -85,18 +166,47 @@ export function CreateResume() {
     },
   });
 
-  const filteredTemplates = TEMPLATES.filter((template) => {
-    const roleMatch = selectedRole === "All" || template.role === selectedRole;
-    const expMatch =
-      selectedExp === "All" || template.experience === selectedExp;
-    const companyMatch =
-      selectedCompany === "All" || template.company === selectedCompany;
-    return roleMatch && expMatch && companyMatch;
+  const {
+    data: apiData,
+    isLoading,
+    isError,
+  } = useQuery<ResumeTemplateApiResponse, Error>({
+    queryKey: ["resume-templates", filterOptions, currentPage],
+    queryFn: () =>
+      fetchResumeTemplates({
+        page: currentPage,
+        role: filterOptions.role,
+        exp: filterOptions.exp,
+        company: filterOptions.company,
+      }),
+    enabled: open,
   });
+
+  const totalTemplates = apiData?.data.pagination.total ?? 0;
+  const totalPages = apiData?.data.pagination.totalPages ?? 1;
+
+  const uiTemplates = useMemo(() => {
+    const templates = apiData?.data.templates ?? [];
+
+    return templates.map((template, index) => {
+      const palette = TEMPLATE_COLORS[index % TEMPLATE_COLORS.length];
+
+      return {
+        id: template.id,
+        name: template.title,
+        role: template.role,
+        experience: getExperienceLabel(template.experience),
+        company: template.company,
+        previewImageUrl: template.previewImageUrl,
+        color: palette.color,
+        accent: palette.accent,
+      };
+    });
+  }, [apiData]);
 
   const isPending = status === "executing";
 
-  const handleTemplateSelect = (templateId: string) => {
+  const selectTemplate = (templateId: string) => {
     form.setValue(
       "templateId",
       selectedTemplate === templateId ? "" : templateId,
@@ -105,9 +215,12 @@ export function CreateResume() {
   };
 
   const resetAllFilters = () => {
-    setSelectedRole("All");
-    setSelectedExp("All");
-    setSelectedCompany("All");
+    setFilterOptions({
+      role: "All",
+      exp: "All",
+      company: "All",
+    });
+    setCurrentPage(1);
   };
 
   return (
@@ -126,8 +239,8 @@ export function CreateResume() {
             className="flex h-full"
           >
             {/* Sidebar - Filters & Info */}
-            <div className="w-80 border-r bg-muted/30 p-6 flex flex-col gap-8 shrink-0">
-              <DialogHeader>
+            <div className="w-80 border-r bg-muted/30  flex flex-col gap-8 shrink-0">
+              <DialogHeader className="px-6 pt-6">
                 <DialogTitle className="text-2xl font-semibold tracking-tight">
                   Create Resume
                 </DialogTitle>
@@ -136,7 +249,7 @@ export function CreateResume() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-6">
+              <div className="space-y-6 p-6">
                 <div className="space-y-2">
                   <Label htmlFor="title" className="text-sm font-medium">
                     Resume Name
@@ -165,9 +278,9 @@ export function CreateResume() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <Label className="text-sm font-medium">Filters</Label>
-                    {(selectedRole !== "All" ||
-                      selectedExp !== "All" ||
-                      selectedCompany !== "All") && (
+                    {filterOptions.role !== "All" ||
+                    filterOptions.exp !== "All" ||
+                    filterOptions.company !== "All" ? (
                       <Button
                         variant="outline"
                         size="sm"
@@ -177,7 +290,7 @@ export function CreateResume() {
                         <X className="size-3" />
                         Reset
                       </Button>
-                    )}
+                    ) : null}
                   </div>
 
                   <div className="space-y-3">
@@ -186,8 +299,14 @@ export function CreateResume() {
                         Role
                       </Label>
                       <FilterCombobox
-                        value={selectedRole}
-                        onChange={setSelectedRole}
+                        value={filterOptions.role}
+                        onChange={(value) => {
+                          setFilterOptions((prev) => ({
+                            ...prev,
+                            role: value,
+                          }));
+                          setCurrentPage(1);
+                        }}
                         options={ROLES}
                         placeholder="Select Role"
                         searchPlaceholder="Search role..."
@@ -199,8 +318,11 @@ export function CreateResume() {
                         Experience
                       </Label>
                       <FilterCombobox
-                        value={selectedExp}
-                        onChange={setSelectedExp}
+                        value={filterOptions.exp}
+                        onChange={(value) => {
+                          setFilterOptions((prev) => ({ ...prev, exp: value }));
+                          setCurrentPage(1);
+                        }}
                         options={EXPERIENCE}
                         placeholder="Select Experience"
                         searchPlaceholder="Search experience..."
@@ -212,8 +334,14 @@ export function CreateResume() {
                         Company
                       </Label>
                       <FilterCombobox
-                        value={selectedCompany}
-                        onChange={setSelectedCompany}
+                        value={filterOptions.company}
+                        onChange={(value) => {
+                          setFilterOptions((prev) => ({
+                            ...prev,
+                            company: value,
+                          }));
+                          setCurrentPage(1);
+                        }}
                         options={COMPANIES}
                         placeholder="Select Company"
                         searchPlaceholder="Search company..."
@@ -223,15 +351,15 @@ export function CreateResume() {
                 </div>
               </div>
 
-              <div className="mt-auto pt-6 border-t space-y-4">
+              <div className=" px-3.5 pt-6 border-t space-y-4 mt-14">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">
                     Selected Template
                   </span>
                   <span className="font-medium truncate max-w-[120px]">
-                    {selectedTemplate
-                      ? TEMPLATES.find((t) => t.id === selectedTemplate)?.name
-                      : "None"}
+                    {uiTemplates.find(
+                      (template) => template.id === selectedTemplate
+                    )?.name ?? "None"}
                   </span>
                 </div>
                 {errors.templateId?.message && (
@@ -239,6 +367,7 @@ export function CreateResume() {
                     {errors.templateId.message}
                   </p>
                 )}
+
                 <div className="grid grid-cols-2 gap-3">
                   <Button variant="outline" onClick={() => setOpen(false)}>
                     Cancel
@@ -246,7 +375,7 @@ export function CreateResume() {
                   <Button
                     type="submit"
                     form="create-resume-form"
-                    // disabled={isPending || !titleValue || !selectedTemplate}
+                    disabled={isPending || !titleValue || !selectedTemplate}
                     className="relative overflow-hidden"
                     variant="primary"
                   >
@@ -268,25 +397,82 @@ export function CreateResume() {
               <div className="h-14 border-b flex items-center px-6 justify-between bg-background/50 backdrop-blur sticky top-0 z-10">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Layout className="size-4" />
-                  <span>{filteredTemplates.length} templates available</span>
+                  <span>
+                    {isLoading && !apiData
+                      ? "Loading templates..."
+                      : `${totalTemplates} templates available`}
+                  </span>
                 </div>
-                {/* Could add search here later */}
               </div>
 
               <ScrollArea className="flex-1 p-6 max-h-[82.5vh]">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-10">
-                  <AnimatePresence mode="popLayout">
-                    {filteredTemplates.map((template) => (
-                      <TemplateCard
-                        key={template.id}
-                        template={template}
-                        isSelected={selectedTemplate === template.id}
-                        onClick={() => handleTemplateSelect(template.id)}
-                      />
-                    ))}
-                  </AnimatePresence>
+                  {isLoading && !apiData ? (
+                    Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+                      <TemplateCardSkeleton key={index} />
+                    ))
+                  ) : isError ? (
+                    <p className="text-sm text-destructive">
+                      Failed to load templates. Please try again.
+                    </p>
+                  ) : uiTemplates.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      No templates found for the selected filters.
+                    </p>
+                  ) : (
+                    <>
+                      {uiTemplates.map((template) => (
+                        <TemplateCard
+                          key={template.id}
+                          template={template}
+                          isSelected={selectedTemplate === template.id}
+                          onClick={() => selectTemplate(template.id)}
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-10">
+                  {uiTemplates[0] && (
+                    <Image
+                      src={uiTemplates[0].previewImageUrl}
+                      alt="Selected Template"
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover"
+                      quality={100}
+                    />
+                  )}
+                </div> */}
               </ScrollArea>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 py-4 border-t bg-background sticky bottom-0 z-10">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
             </div>
           </form>
         </Form>

@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import { Briefcase, Building2, Check, Clock } from "lucide-react";
+import Image from "next/image";
 
 interface Template {
   id: string;
@@ -10,6 +10,7 @@ interface Template {
   role: string;
   experience: string;
   company?: string;
+  previewImageUrl?: string;
   color: string;
   accent: string;
 }
@@ -26,50 +27,61 @@ export function TemplateCard({
   onClick,
 }: TemplateCardProps) {
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.2 }}
+    <div
       onClick={onClick}
       className={cn(
         "group relative cursor-pointer rounded-xl border-2 transition-all duration-300 overflow-hidden",
         isSelected
           ? "border-primary ring-4 ring-primary/10 scale-[1.02] shadow-xl"
-          : "border-transparent hover:border-border hover:shadow-lg hover:-translate-y-1"
+          : "border-transparent hover:border-border hover:shadow-lg"
       )}
     >
       {/* Preview Area */}
       <div
         className={cn(
-          "aspect-3/4 w-full p-5 transition-colors rounded-b-lg",
+          "aspect-3/4 w-full transition-colors rounded-b-lg overflow-hidden relative",
           template.color
         )}
       >
-        <div className="h-full w-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-3 group-hover:shadow-md transition-all">
-          {/* Header Skeleton */}
-          <div className="flex gap-3 items-center border-b pb-3">
-            <div
-              className={cn("size-8 rounded-full shrink-0", template.accent)}
-            />
-            <div className="space-y-1.5 flex-1">
-              <div className="h-2 w-2/3 bg-slate-200 rounded-full" />
-              <div className="h-1.5 w-1/2 bg-slate-100 rounded-full" />
+        {template.previewImageUrl ? (
+          <Image
+            src={template.previewImageUrl}
+            alt={template.name}
+            quality={100}
+            width={200}
+            height={200}
+            className="h-full w-full object-cover object-top transition-transform duration-500"
+          />
+        ) : (
+          <div className="h-full w-full p-5">
+            <div className="h-full w-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-3 group-hover:shadow-md transition-all">
+              {/* Header Skeleton */}
+              <div className="flex gap-3 items-center border-b pb-3">
+                <div
+                  className={cn(
+                    "size-8 rounded-full shrink-0",
+                    template.accent
+                  )}
+                />
+                <div className="space-y-1.5 flex-1">
+                  <div className="h-2 w-2/3 bg-slate-200 rounded-full" />
+                  <div className="h-1.5 w-1/2 bg-slate-100 rounded-full" />
+                </div>
+              </div>
+              {/* Body Skeleton */}
+              <div className="space-y-3 mt-1">
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+                <div className="h-1.5 w-3/4 bg-slate-100 rounded-full" />
+              </div>
+              <div className="space-y-3 mt-2">
+                <div className="h-1.5 w-1/3 bg-slate-200 rounded-full" />
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+                <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+              </div>
             </div>
           </div>
-          {/* Body Skeleton */}
-          <div className="space-y-3 mt-1">
-            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
-            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
-            <div className="h-1.5 w-3/4 bg-slate-100 rounded-full" />
-          </div>
-          <div className="space-y-3 mt-2">
-            <div className="h-1.5 w-1/3 bg-slate-200 rounded-full" />
-            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
-            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Info Overlay */}
@@ -102,6 +114,35 @@ export function TemplateCard({
           <Check className="size-5" />
         </div>
       )}
-    </motion.div>
+    </div>
+  );
+}
+
+export function TemplateCardSkeleton() {
+  return (
+    <div className="group relative cursor-pointer rounded-xl border-2 border-transparent overflow-hidden">
+      <div className="aspect-3/4 w-full p-5 rounded-b-lg bg-slate-50 animate-pulse">
+        <div className="h-full w-full bg-white rounded-lg shadow-sm p-4 flex flex-col gap-3">
+          <div className="flex gap-3 items-center border-b pb-3">
+            <div className="size-8 rounded-full bg-slate-200 shrink-0" />
+            <div className="space-y-1.5 flex-1">
+              <div className="h-2 w-2/3 bg-slate-200 rounded-full" />
+              <div className="h-1.5 w-1/2 bg-slate-100 rounded-full" />
+            </div>
+          </div>
+
+          <div className="space-y-3 mt-1">
+            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+            <div className="h-1.5 w-3/4 bg-slate-100 rounded-full" />
+          </div>
+          <div className="space-y-3 mt-2">
+            <div className="h-1.5 w-1/3 bg-slate-200 rounded-full" />
+            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+            <div className="h-1.5 w-full bg-slate-100 rounded-full" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
