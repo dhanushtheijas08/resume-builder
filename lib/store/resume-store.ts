@@ -52,12 +52,39 @@ export interface Project {
   technologies: string[];
 }
 
+// Custom Section Types
+export type CustomFieldType = "text" | "textarea" | "richtext" | "date" | "url" | "email" | "phone";
+
+export interface CustomField {
+  id: string;
+  name: string;
+  type: CustomFieldType;
+  placeholder?: string;
+  required?: boolean;
+}
+
+export interface CustomSectionEntry {
+  id: string;
+  values: Record<string, string | JSONContent>;
+}
+
+export interface CustomSection {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  fields: CustomField[];
+  entries: CustomSectionEntry[];
+  allowMultiple: boolean;
+}
+
 export interface ResumeData {
   personalInfo: PersonalInfo;
   experiences: Experience[];
   education: Education[];
   skills: Skill[];
   projects: Project[];
+  customSections: CustomSection[];
 }
 
 interface ResumeStore {
@@ -84,6 +111,13 @@ interface ResumeStore {
   updateProject: (id: string, data: Partial<Project>) => void;
   removeProject: (id: string) => void;
   setProject: (id: string, data: Project) => void;
+  // Custom Sections
+  addCustomSection: (section: Omit<CustomSection, "id" | "entries">) => string;
+  updateCustomSection: (id: string, data: Partial<CustomSection>) => void;
+  removeCustomSection: (id: string) => void;
+  addCustomSectionEntry: (sectionId: string, entry: CustomSectionEntry) => void;
+  updateCustomSectionEntry: (sectionId: string, entryId: string, values: Record<string, string | JSONContent>) => void;
+  removeCustomSectionEntry: (sectionId: string, entryId: string) => void;
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 11);
@@ -210,6 +244,7 @@ const initialResumeData: ResumeData = {
       technologies: ["Next.js", "TypeScript", "Prisma", "Tailwind CSS"],
     },
   ],
+  customSections: [],
 };
 
 export const useResumeStore = create<ResumeStore>((set) => ({
@@ -416,6 +451,85 @@ export const useResumeStore = create<ResumeStore>((set) => ({
         ),
       },
     })),
+
+  // Custom Sections
+  addCustomSection: (section) => {
+    const id = generateId();
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: [
+          ...state.resumeData.customSections,
+          { ...section, id, entries: [] },
+        ],
+      },
+    }));
+    return id;
+  },
+
+  updateCustomSection: (id, data) =>
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: state.resumeData.customSections.map((section) =>
+          section.id === id ? { ...section, ...data } : section
+        ),
+      },
+    })),
+
+  removeCustomSection: (id) =>
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: state.resumeData.customSections.filter(
+          (section) => section.id !== id
+        ),
+      },
+    })),
+
+  addCustomSectionEntry: (sectionId, entry) =>
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: state.resumeData.customSections.map((section) =>
+          section.id === sectionId
+            ? { ...section, entries: [...section.entries, entry] }
+            : section
+        ),
+      },
+    })),
+
+  updateCustomSectionEntry: (sectionId, entryId, values) =>
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: state.resumeData.customSections.map((section) =>
+          section.id === sectionId
+            ? {
+                ...section,
+                entries: section.entries.map((entry) =>
+                  entry.id === entryId ? { ...entry, values } : entry
+                ),
+              }
+            : section
+        ),
+      },
+    })),
+
+  removeCustomSectionEntry: (sectionId, entryId) =>
+    set((state) => ({
+      resumeData: {
+        ...state.resumeData,
+        customSections: state.resumeData.customSections.map((section) =>
+          section.id === sectionId
+            ? {
+                ...section,
+                entries: section.entries.filter((entry) => entry.id !== entryId),
+              }
+            : section
+        ),
+      },
+    })),
 }));
 
 // Helper to create empty instances for dialog forms
@@ -455,4 +569,14 @@ export const createEmptyProject = (): Project => ({
   github: "",
   technologies: [],
 });
+
+export const createCustomSectionEntry = (fields: CustomField[]): CustomSectionEntry => ({
+  id: generateId(),
+  values: fields.reduce((acc, field) => {
+    acc[field.id] = field.type === "richtext" ? { type: "doc", content: [] } : "";
+    return acc;
+  }, {} as Record<string, string | JSONContent>),
+});
+
+export { generateId };
 

@@ -1,11 +1,12 @@
 "use client";
 
-import { useResumeStore } from "@/lib/store/resume-store";
+import { useResumeStore, CustomSection } from "@/lib/store/resume-store";
 import { RichTextRenderer } from "./rich-text-renderer";
+import { JSONContent } from "@tiptap/react";
 
 export function ResumePreview() {
   const { resumeData } = useResumeStore();
-  const { personalInfo, experiences, education, skills, projects } = resumeData;
+  const { personalInfo, experiences, education, skills, projects, customSections } = resumeData;
 
   // Group skills by category
   const skillsByCategory = skills.reduce((acc, skill) => {
@@ -220,6 +221,97 @@ export function ResumePreview() {
           </div>
         </section>
       )}
+
+      {/* Custom Sections */}
+      {customSections.map((section) => (
+        <CustomSectionPreview key={section.id} section={section} formatDate={formatDate} />
+      ))}
     </div>
+  );
+}
+
+// Component to render custom sections
+function CustomSectionPreview({
+  section,
+  formatDate,
+}: {
+  section: CustomSection;
+  formatDate: (date: string) => string;
+}) {
+  if (section.entries.length === 0) return null;
+
+  const getFieldValue = (
+    entry: CustomSection["entries"][0],
+    fieldId: string
+  ): string | JSONContent => {
+    return entry.values[fieldId] || "";
+  };
+
+  const renderFieldValue = (
+    value: string | JSONContent,
+    type: string
+  ): React.ReactNode => {
+    if (type === "richtext" && typeof value === "object") {
+      return <RichTextRenderer content={value as JSONContent} />;
+    }
+    if (type === "date" && typeof value === "string") {
+      return formatDate(value);
+    }
+    if (type === "url" && typeof value === "string" && value) {
+      return (
+        <a
+          href={value.startsWith("http") ? value : `https://${value}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline"
+        >
+          {value}
+        </a>
+      );
+    }
+    return value as string;
+  };
+
+  // Get the first text field as the title
+  const titleField = section.fields.find((f) => f.type === "text");
+
+  return (
+    <section className="mb-6">
+      <h2 className="text-xl font-semibold mb-3 border-b border-gray-300 pb-1">
+        {section.name}
+      </h2>
+      <div className="space-y-4">
+        {section.entries.map((entry) => (
+          <div key={entry.id} className="mb-3">
+            {titleField && (
+              <h3 className="font-semibold text-lg">
+                {getFieldValue(entry, titleField.id) as string}
+              </h3>
+            )}
+            {section.fields
+              .filter((f) => f.id !== titleField?.id)
+              .map((field) => {
+                const value = getFieldValue(entry, field.id);
+                if (!value || (typeof value === "string" && !value.trim()))
+                  return null;
+                return (
+                  <div key={field.id} className="mt-1">
+                    {field.type === "richtext" ? (
+                      <div className="prose prose-sm max-w-none">
+                        {renderFieldValue(value, field.type)}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-700">
+                        <span className="font-medium">{field.name}:</span>{" "}
+                        {renderFieldValue(value, field.type)}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

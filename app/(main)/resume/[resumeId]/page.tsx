@@ -6,6 +6,8 @@ import { ExperienceSection } from "@/components/resume/forms/experience-section"
 import { PersonalInfoSection } from "@/components/resume/forms/personal-info-section";
 import { ProjectsSection } from "@/components/resume/forms/projects-section";
 import { SkillsSection } from "@/components/resume/forms/skills-section";
+import { CustomSectionComponent } from "@/components/resume/forms/custom-section";
+import { AddCustomSectionDialog } from "@/components/resume/forms/add-custom-section-dialog";
 import { ResumePreview } from "@/components/resume/preview/resume-preview";
 import {
   Accordion,
@@ -16,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  Award,
+  BookOpen,
   Briefcase,
   Check,
   Code,
@@ -23,22 +27,71 @@ import {
   Eye,
   FileText,
   FolderKanban,
+  Globe,
   GraduationCap,
+  Heart,
+  Languages,
+  Lightbulb,
   Loader2,
+  Medal,
+  Mic,
   PanelLeftClose,
   PanelRightClose,
+  Plus,
   Save,
-  User,
   Sparkles,
+  Star,
+  Target,
+  Trash2,
+  Trophy,
+  User,
+  Users,
+  Zap,
 } from "lucide-react";
 import { useResumeStore } from "@/lib/store/resume-store";
+
+// Icon mapping for custom sections
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  star: Star,
+  award: Award,
+  trophy: Trophy,
+  medal: Medal,
+  target: Target,
+  lightbulb: Lightbulb,
+  heart: Heart,
+  users: Users,
+  globe: Globe,
+  languages: Languages,
+  mic: Mic,
+  book: BookOpen,
+  zap: Zap,
+};
+
+// Color mapping for custom sections
+const getColorClasses = (color: string) => {
+  const colorMap: Record<string, { bg: string; text: string }> = {
+    rose: { bg: "bg-rose-500/10", text: "text-rose-500" },
+    pink: { bg: "bg-pink-500/10", text: "text-pink-500" },
+    fuchsia: { bg: "bg-fuchsia-500/10", text: "text-fuchsia-500" },
+    violet: { bg: "bg-violet-500/10", text: "text-violet-500" },
+    indigo: { bg: "bg-indigo-500/10", text: "text-indigo-500" },
+    blue: { bg: "bg-blue-500/10", text: "text-blue-500" },
+    cyan: { bg: "bg-cyan-500/10", text: "text-cyan-500" },
+    teal: { bg: "bg-teal-500/10", text: "text-teal-500" },
+    emerald: { bg: "bg-emerald-500/10", text: "text-emerald-500" },
+    lime: { bg: "bg-lime-500/10", text: "text-lime-500" },
+    amber: { bg: "bg-amber-500/10", text: "text-amber-500" },
+    orange: { bg: "bg-orange-500/10", text: "text-orange-500" },
+  };
+  return colorMap[color] || { bg: "bg-violet-500/10", text: "text-violet-500" };
+};
 
 export default function ResumePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const { resumeData } = useResumeStore();
+  const { resumeData, removeCustomSection } = useResumeStore();
 
   // Calculate completion percentage
   const calculateCompletion = () => {
@@ -305,7 +358,73 @@ export default function ResumePage() {
                   </div>
                 </AccordionContent>
               </AccordionItem>
+
+              {/* Custom Sections */}
+              {resumeData.customSections.map((section) => {
+                const IconComponent = ICON_MAP[section.icon] || Star;
+                const colorClasses = getColorClasses(section.color);
+                return (
+                  <AccordionItem
+                    key={section.id}
+                    value={`custom-${section.id}`}
+                    className="border rounded-xl bg-card shadow-sm overflow-hidden"
+                  >
+                    <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`size-8 rounded-lg ${colorClasses.bg} flex items-center justify-center`}
+                        >
+                          <IconComponent className={`size-4 ${colorClasses.text}`} />
+                        </div>
+                        <div className="text-left">
+                          <span className="font-medium">{section.name}</span>
+                          <p className="text-xs text-muted-foreground font-normal">
+                            Custom section
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {section.entries.length > 0 && (
+                          <Check className="size-4 text-emerald-500" />
+                        )}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="size-7 mr-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeCustomSection(section.id);
+                          }}
+                        >
+                          <Trash2 className="size-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-0 pb-0">
+                      <div className="px-5 pb-5 pt-2">
+                        <CustomSectionComponent section={section} />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
+
+            {/* Add Custom Section Button */}
+            <div className="mt-4">
+              <AddCustomSectionDialog
+                trigger={
+                  <Button
+                    variant="outline"
+                    className="w-full h-14 border-dashed hover:border-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <Plus className="size-5 mr-2" />
+                    Add Custom Section
+                  </Button>
+                }
+              />
+            </div>
           </div>
         </ScrollArea>
       </div>
