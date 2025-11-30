@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const objectIdSchemaFn = (message: string) =>
+export const objectIdSchemaFn = (message: string) =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, message);
 
 export const createResumeSchema = z.object({
@@ -16,7 +16,12 @@ export const personalInfoSchme = z.object({
     .string()
     .min(1, "Name is required")
     .max(50, "Name must be at most 50 characters"),
-  email: z.email("Invalid email address"),
+  email: z.email("Invalid email address").trim().toLowerCase(),
+  designation: z
+    .string()
+    .trim()
+    .max(50, "Designation must be at most 50 characters")
+    .optional(),
   jobTitle: z
     .string()
     .max(50, "Job title must be at most 50 characters")
@@ -33,7 +38,7 @@ export const personalInfoSchme = z.object({
   linkedin: z.url("Invalid LinkedIn URL").optional(),
   portfolio: z.url("Invalid portfolio URL").optional(),
   github: z.url("Invalid GitHub URL").optional(),
-  profileImage: z.string().optional(),
+  profileImage: z.string("Invalid profile image").optional(),
 });
 
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;

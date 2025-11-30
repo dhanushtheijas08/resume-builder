@@ -96,8 +96,27 @@ model Resume {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  profileId String?  @db.ObjectId
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("resume")
+}
+
+model Profile {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  designation String
+  bio         String
+  phoneNumber String
+  email       String
+  location    String
+
+  profileImage   String?
+  github    String?
+  linkedin  String?
+  portfolio String?
+  resumes      Resume[]
 }

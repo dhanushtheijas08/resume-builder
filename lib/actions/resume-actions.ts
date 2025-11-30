@@ -5,17 +5,14 @@ import { getUserSession } from "../server-helper";
 import { ResponseData } from "../validations/auth";
 import { createResumeSchema } from "../validations/resume";
 import prisma from "../prisma";
+import { validateUser } from "./validate-user";
 
 export const createResumeAction = safeAction
   .inputSchema(createResumeSchema)
   .action(
     async ({ parsedInput: { title, templateId } }): Promise<ResponseData> => {
       try {
-        const session = await getUserSession();
-        if (session instanceof Error) {
-          throw new ActionError(session.message, 401);
-        }
-        const { user } = session;
+        const user = await validateUser();
         if (!user) {
           throw new ActionError("User not found", 404);
         }

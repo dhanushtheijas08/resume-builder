@@ -1,15 +1,32 @@
 "use client";
-import { useState } from "react";
 import { GitHubIcon } from "@/components/icons/github";
 import { LinkedinIcon } from "@/components/icons/linkedin";
 import { Button } from "@/components/ui/button";
+import {
+  PersonalInfoFormData,
+  personalInfoSchme,
+} from "@/lib/validations/resume";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2, Globe, Mail, MapPin, Phone, Plus, User } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { EmptySection } from "../empty-section";
 import { ResumeDialog } from "../resume-dialog";
 import { PersonalInfoForm } from "./personal-info-form";
-
+import { useParams } from "next/navigation";
+import { createProfileAction } from "@/lib/actions/resume-actions/personal-info-actions";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
+const defaultValues = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  location: "",
+};
 export const PersonalInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const hasData = true;
+  const { resumeId } = useParams<{ resumeId: string }>();
+  const hasData = false;
   const personalInfo = {
     fullName: "John Doe",
     email: "john.doe@example.com",
@@ -19,14 +36,25 @@ export const PersonalInfo = () => {
     github: "github.com/username",
     website: "yourwebsite.com",
   };
-  const savePersonalInfo = () => {
-    console.log("savePersonalInfo");
-  };
+  const form = useForm<PersonalInfoFormData>({
+    resolver: zodResolver(personalInfoSchme),
+    defaultValues: defaultValues,
+  });
+  const { execute: createProfile, status } = useAction(createProfileAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Profile created successfully!");
+        setIsOpen(false);
+      }
+    },
+  });
+  const savePersonalInfo = (values: PersonalInfoFormData) =>
+    createProfile({ ...values, resumeId: resumeId });
 
   return (
     <div className="space-y-4">
       {hasData ? (
-        <div className="border rounded-lg p-5 bg-background/40 ">
+        <div className="border rounded-lg p-5 bg-background/40">
           <div className="flex items-start gap-4 text-white/90">
             <div className="size-14 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
               <User className="size-7 text-blue-500" />
@@ -96,24 +124,17 @@ export const PersonalInfo = () => {
           </div>
         </div>
       ) : (
-        <div className="border border-dashed rounded-lg p-8 flex flex-col items-center justify-center text-center">
-          <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-3">
-            <User className="size-6 text-muted-foreground" />
-          </div>
-          <h4 className="font-medium mb-1">No personal info added</h4>
-          <p className="text-sm text-muted-foreground mb-4">
-            Add your contact details to get started.
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setIsOpen(true)}
-          >
+        <EmptySection
+          title="No personal info added"
+          description="Add your contact details to get started."
+          icon={<User className="size-6 text-blue-500" />}
+          iconClassName="bg-blue-500/10"
+        >
+          <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
             <Plus className="size-4 mr-2" />
             Add Personal Info
           </Button>
-        </div>
+        </EmptySection>
       )}
 
       <ResumeDialog
@@ -121,11 +142,14 @@ export const PersonalInfo = () => {
         description="Add your contact details and professional summary."
         open={isOpen}
         onOpenChange={setIsOpen}
-        actionFn={savePersonalInfo}
         className="sm:max-w-2xl w-full max-h-[90vh]"
         icon={<User className="size-5" />}
       >
-        <PersonalInfoForm />
+        <PersonalInfoForm
+          form={form}
+          actionFn={savePersonalInfo}
+          isLoading={status === "executing" ? true : false}
+        />
       </ResumeDialog>
     </div>
   );

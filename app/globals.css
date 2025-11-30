@@ -175,3 +175,15 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: oklch(0.5 0 0);
 }
+
+.rich-text ul {
+  @apply list-disc pl-6 my-2;
+}
+
+.rich-text ol {
+  @apply list-decimal pl-6 my-2;
+}
+
+.rich-text li {
+  @apply leading-6;
+}

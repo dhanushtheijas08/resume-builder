@@ -1,14 +1,10 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Save, X } from "lucide-react";
 
 interface ResumeDialogProps {
   title: string;
@@ -17,7 +13,6 @@ interface ResumeDialogProps {
   className?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  actionFn: () => void;
   children: React.ReactNode;
 }
 
@@ -28,7 +23,6 @@ export const ResumeDialog = ({
   className,
   open,
   onOpenChange,
-  actionFn,
   children,
 }: ResumeDialogProps) => {
   return (
@@ -42,12 +36,6 @@ export const ResumeDialog = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {children}
-        <DialogFooter>
-          <Button type="submit" className="w-fit" onClick={actionFn}>
-            <Save className="size-4" />
-            Save changes
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
