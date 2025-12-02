@@ -1,17 +1,20 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { PersonalInfo } from "@/components/resume/sections/personal-info/personal-info";
+import { WorkExperienceSection } from "@/components/resume/sections/work-experience/work-experience";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { OBJECT_ID_REGEX } from "@/lib/const";
+import { fetchUserResume } from "@/lib/queries/resume";
 import {
   Briefcase,
   Code,
@@ -20,8 +23,19 @@ import {
   GraduationCap,
   User,
 } from "lucide-react";
-import { PersonalInfo } from "@/components/resume/sections/personal-info/personal-info";
-const ResumePage = () => {
+
+const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
+  const { resumeId } = await params;
+
+  if (!resumeId || !OBJECT_ID_REGEX.test(resumeId)) {
+    throw new Error("Invalid resume ID format");
+  }
+  const resume = await fetchUserResume(resumeId);
+
+  if (!resume) {
+    throw new Error("Resume not found");
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <nav className="flex items-center justify-between px-4 py-2.5 border-b">
@@ -58,7 +72,7 @@ const ResumePage = () => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    <PersonalInfo />
+                    <PersonalInfo profile={resume?.profile ?? null} />
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -82,7 +96,9 @@ const ResumePage = () => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    {/* <ExperienceSection /> */}
+                    <WorkExperienceSection
+                      experiences={resume?.workExperiences ?? []}
+                    />
                   </div>
                 </AccordionContent>
               </AccordionItem>

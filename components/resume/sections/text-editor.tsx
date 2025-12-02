@@ -22,7 +22,7 @@ export const TextEditor = ({
     editorProps: {
       attributes: {
         class: isLoading
-          ? "focus:outline-none border border-t-0 border-input rounded-b-md p-2 max-w-[40rem] min-h-[120px] max-h-[200px] overflow-auto custom-scrollbar opacity-50 bg-muted text-muted-foreground cursor-not-allowed pointer-events-none"
+          ? "focus:outline-none border border-t-0 border-input rounded-b-md p-2 max-w-[40rem] min-h-[120px] max-h-[200px] overflow-auto custom-scrollbar opacity-50 cursor-not-allowed pointer-events-none"
           : "focus:outline-none border border-t-0 border-input rounded-b-md p-2 max-w-[40rem] min-h-[120px] max-h-[200px] overflow-auto custom-scrollbar",
       },
     },

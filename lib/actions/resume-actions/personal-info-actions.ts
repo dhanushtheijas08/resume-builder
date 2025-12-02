@@ -32,7 +32,7 @@ export const createProfileAction = safeAction
     }
 
     try {
-      await prisma.resume.update({
+      const resume = await prisma.resume.update({
         where: { id: parsedInput.resumeId },
         data: {
           profile: {
@@ -50,7 +50,11 @@ export const createProfileAction = safeAction
             },
           },
         },
+        include: {
+          profile: true,
+        },
       });
+      console.log({ resume });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
@@ -63,6 +67,47 @@ export const createProfileAction = safeAction
     return {
       success: true,
       message: "Profile created successfully",
+      statusCode: 201,
+    };
+  });
+export const editProfileAction = safeAction
+  .inputSchema(
+    personalInfoSchme.extend({
+      id: objectIdSchemaFn("Invalid profile ID"),
+    })
+  )
+  .action(async ({ parsedInput }): Promise<ResponseData> => {
+    const user = await validateUser();
+
+    try {
+      const profile = await prisma.profile.update({
+        where: { id: parsedInput.id },
+        data: {
+          name: parsedInput.name,
+          email: parsedInput.email,
+          phoneNumber: parsedInput.phoneNumber,
+          bio: parsedInput.bio ?? "",
+          designation: parsedInput.designation ?? "",
+          location: parsedInput.location ?? "",
+          profileImage: parsedInput.profileImage ?? "",
+          github: parsedInput.github ?? "",
+          linkedin: parsedInput.linkedin ?? "",
+          portfolio: parsedInput.portfolio ?? "",
+        },
+      });
+      console.log({ profile });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new ActionError("Profile already exists for this resume", 409);
+        } else {
+          throw new ActionError("Failed to create profile", 500);
+        }
+      }
+    }
+    return {
+      success: true,
+      message: "Profile updated successfully",
       statusCode: 201,
     };
   });

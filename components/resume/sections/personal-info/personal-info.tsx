@@ -1,128 +1,38 @@
 "use client";
-import { GitHubIcon } from "@/components/icons/github";
-import { LinkedinIcon } from "@/components/icons/linkedin";
+
 import { Button } from "@/components/ui/button";
-import {
-  PersonalInfoFormData,
-  personalInfoSchme,
-} from "@/lib/validations/resume";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit2, Globe, Mail, MapPin, Phone, Plus, User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { EmptySection } from "../empty-section";
-import { ResumeDialog } from "../resume-dialog";
-import { PersonalInfoForm } from "./personal-info-form";
-import { useParams } from "next/navigation";
-import { createProfileAction } from "@/lib/actions/resume-actions/personal-info-actions";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
-const defaultValues = {
-  name: "",
-  email: "",
-  phoneNumber: "",
-  location: "",
-};
-export const PersonalInfo = () => {
+import { PersonalInfoDialog } from "./personal-info-dialog";
+import { PersonalInfoDisplay } from "./personal-info-display";
+import { Profile } from "@/app/generated/prisma/client";
+import { usePersonalInfo } from "./use-personal-info";
+
+export const PersonalInfo = ({ profile }: { profile: Profile | null }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { resumeId } = useParams<{ resumeId: string }>();
-  const hasData = false;
-  const personalInfo = {
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    linkedin: "linkedin.com/in/username",
-    github: "github.com/username",
-    website: "yourwebsite.com",
+  const hasData = !!profile;
+
+  const {
+    form,
+    savePersonalInfo,
+    updatePersonalInfo,
+    handleFormReset,
+    isLoading,
+  } = usePersonalInfo(profile, () => setIsOpen(false));
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    handleFormReset(open);
   };
-  const form = useForm<PersonalInfoFormData>({
-    resolver: zodResolver(personalInfoSchme),
-    defaultValues: defaultValues,
-  });
-  const { execute: createProfile, status } = useAction(createProfileAction, {
-    onSuccess: ({ data }) => {
-      if (data.success) {
-        toast.success(data.message ?? "Profile created successfully!");
-        setIsOpen(false);
-      }
-    },
-  });
-  const savePersonalInfo = (values: PersonalInfoFormData) =>
-    createProfile({ ...values, resumeId: resumeId });
 
   return (
     <div className="space-y-4">
-      {hasData ? (
-        <div className="border rounded-lg p-5 bg-background/40">
-          <div className="flex items-start gap-4 text-white/90">
-            <div className="size-14 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
-              <User className="size-7 text-blue-500" />
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold">
-                    {personalInfo.fullName || "Your Name"}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Personal Information
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="shrink-0"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <Edit2 className="size-4 mr-2" />
-                  Edit
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-x-8 gap-y-3 mt-4">
-                {personalInfo.email && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="size-4 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.email}</span>
-                  </div>
-                )}
-                {personalInfo.phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="size-4 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.phone}</span>
-                  </div>
-                )}
-                {personalInfo.location && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="size-4 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.location}</span>
-                  </div>
-                )}
-                {personalInfo.linkedin && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <LinkedinIcon className="size-5 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.linkedin}</span>
-                  </div>
-                )}
-                {personalInfo.github && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <GitHubIcon className="size-4 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.github}</span>
-                  </div>
-                )}
-                {personalInfo.website && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Globe className="size-4 text-muted-foreground shrink-0" />
-                    <span className="truncate">{personalInfo.website}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+      {hasData && profile ? (
+        <PersonalInfoDisplay
+          profile={profile}
+          onEditClick={() => handleOpenChange(true)}
+        />
       ) : (
         <EmptySection
           title="No personal info added"
@@ -130,27 +40,24 @@ export const PersonalInfo = () => {
           icon={<User className="size-6 text-blue-500" />}
           iconClassName="bg-blue-500/10"
         >
-          <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleOpenChange(true)}
+          >
             <Plus className="size-4 mr-2" />
             Add Personal Info
           </Button>
         </EmptySection>
       )}
 
-      <ResumeDialog
-        title="Edit Personal Info"
-        description="Add your contact details and professional summary."
+      <PersonalInfoDialog
         open={isOpen}
-        onOpenChange={setIsOpen}
-        className="sm:max-w-2xl w-full max-h-[90vh]"
-        icon={<User className="size-5" />}
-      >
-        <PersonalInfoForm
-          form={form}
-          actionFn={savePersonalInfo}
-          isLoading={status === "executing" ? true : false}
-        />
-      </ResumeDialog>
+        onOpenChange={handleOpenChange}
+        form={form}
+        actionFn={profile ? updatePersonalInfo : savePersonalInfo}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
