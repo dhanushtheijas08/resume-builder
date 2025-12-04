@@ -38,7 +38,7 @@ export const PersonalInfo = ({ profile }: { profile: Profile | null }) => {
           title="No personal info added"
           description="Add your contact details to get started."
           icon={<User className="size-6 text-blue-500" />}
-          iconClassName="bg-blue-500/10"
+          iconContainerClassName="bg-blue-500/10"
         >
           <Button
             variant="outline"

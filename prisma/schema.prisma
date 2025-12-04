@@ -99,6 +99,8 @@ model Resume {
   profileId String?  @db.ObjectId
   profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
+  workExperiences WorkExperience[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -114,9 +116,30 @@ model Profile {
   email       String
   location    String
 
-  profileImage   String?
-  github    String?
-  linkedin  String?
-  portfolio String?
+  profileImage String?
+  github       String?
+  linkedin     String?
+  portfolio    String?
   resumes      Resume[]
+
+  @@map("profile")
+}
+
+model WorkExperience {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobTitle    String
+  company     String
+  location    String?
+  startDate   String
+  endDate     String?
+  isCurrent   Boolean  @default(false)
+  description String?
+
+  resumeId String  @db.ObjectId
+  resume   Resume  @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("workExperience")
 }

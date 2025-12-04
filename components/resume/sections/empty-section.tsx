@@ -12,19 +12,19 @@ export const EmptySection = ({
   title,
   description,
   icon,
-  iconClassName,
+  iconContainerClassName,
   children,
 }: {
   title: string;
   description: string;
   icon: React.ReactNode;
-  iconClassName: string;
+  iconContainerClassName: string;
   children: React.ReactNode;
 }) => {
   return (
     <Empty className="border border-dashed rounded-lg flex flex-col items-center justify-center text-center text-white/90 bg-background/40">
       <EmptyHeader>
-        <EmptyMedia variant="icon" className={cn(iconClassName)}>
+        <EmptyMedia variant="icon" className={cn(iconContainerClassName)}>
           {icon}
         </EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>

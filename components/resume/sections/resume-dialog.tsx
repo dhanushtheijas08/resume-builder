@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 interface ResumeDialogProps {
   title: string;
@@ -27,7 +28,7 @@ export const ResumeDialog = ({
 }: ResumeDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={className}>
+      <DialogContent className={cn(className)}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {icon && icon}

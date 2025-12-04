@@ -54,7 +54,6 @@ export const createProfileAction = safeAction
           profile: true,
         },
       });
-      console.log({ resume });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
@@ -95,7 +94,6 @@ export const editProfileAction = safeAction
           portfolio: parsedInput.portfolio ?? "",
         },
       });
-      console.log({ profile });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {

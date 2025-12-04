@@ -33,7 +33,6 @@ export const TextEditor = ({
     return null;
   }
 
-  console.log({ isLoading });
 
   return (
     <div className="border rounded-md bg-background rich-text">

@@ -39,7 +39,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -59,7 +59,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -80,7 +80,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -99,7 +99,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -120,7 +120,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -139,7 +139,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -158,7 +158,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2.5">
+                  <div className="h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -178,7 +178,7 @@ export const PersonalInfoForm = ({
                     onChange={field.onChange}
                   />
                 </FormControl>
-                <div className="h-2.5">
+                <div className="h-2">
                   <FormMessage />
                 </div>
               </FormItem>
