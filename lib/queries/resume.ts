@@ -23,6 +23,11 @@ export const fetchUserResume = async (resumeId: string) => {
             startDate: "desc",
           },
         },
+        educations: {
+          orderBy: {
+            startDate: "desc",
+          },
+        },
       },
     });
 

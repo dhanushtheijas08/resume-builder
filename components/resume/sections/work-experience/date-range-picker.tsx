@@ -37,6 +37,7 @@ interface DateRangePickerProps {
   }) => void;
   className?: string;
   disabled?: boolean;
+  currentLabel?: string;
 }
 
 const DATE_FORMAT_MAP = {
@@ -55,6 +56,7 @@ export function DateRangePicker({
   onChange,
   className,
   disabled,
+  currentLabel = "I currently work here",
 }: DateRangePickerProps) {
   const formatString = DATE_FORMAT_MAP[dateFormat];
 
@@ -206,7 +208,7 @@ export function DateRangePicker({
                   htmlFor="current-position"
                   className="text-sm font-medium"
                 >
-                  I currently work here
+                  {currentLabel}
                 </Label>
               </div>
               <div className="flex items-center gap-2">

@@ -1,10 +1,9 @@
 "use server";
 import { APIError } from "better-auth";
+import prisma from "../prisma";
 import { ActionError, safeAction } from "../safe-action";
-import { getUserSession } from "../server-helper";
 import { ResponseData } from "../validations/auth";
 import { createResumeSchema } from "../validations/resume";
-import prisma from "../prisma";
 import { validateUser } from "./validate-user";
 
 export const createResumeAction = safeAction

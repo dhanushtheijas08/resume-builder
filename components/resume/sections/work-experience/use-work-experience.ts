@@ -24,10 +24,12 @@ export const defaultValues: WorkExperienceFormData = {
   endDate: "",
   isCurrent: false,
   description: "",
+  order: 1,
 };
 
 export const useWorkExperience = (
   workExperience: WorkExperience | null,
+  maxOrder: number,
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
@@ -35,7 +37,7 @@ export const useWorkExperience = (
 
   const form = useForm<WorkExperienceFormData>({
     resolver: zodResolver(workExperienceSchema),
-    defaultValues: defaultValues,
+    defaultValues: { ...defaultValues, order: maxOrder },
   });
 
   useEffect(() => {
@@ -49,18 +51,19 @@ export const useWorkExperience = (
         endDate: workExperience.endDate || "",
         isCurrent: workExperience.isCurrent || false,
         description: workExperience.description || "",
+        order: workExperience.order || maxOrder,
       });
     } else {
-      form.reset(defaultValues);
+      form.reset({ ...defaultValues, order: maxOrder });
     }
-  }, [workExperience, form]);
+  }, [workExperience, form, maxOrder]);
 
   const { execute: createWorkExperience, status } = useAction(
     createWorkExperienceAction,
     {
       onSuccess: ({ data }) => {
         if (data.success) {
-          form.reset(defaultValues);
+          form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(
             data.message ?? "Work experience created successfully!"

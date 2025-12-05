@@ -3,16 +3,13 @@ import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/p
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
 import { ResponseData } from "@/lib/validations/auth";
-import {
-  objectIdSchemaFn,
-  workExperienceSchema,
-} from "@/lib/validations/resume";
+import { objectIdSchemaFn, educationSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
 
-export const createWorkExperienceAction = safeAction
+export const createEducationAction = safeAction
   .inputSchema(
-    workExperienceSchema.safeExtend({
+    educationSchema.safeExtend({
       resumeId: objectIdSchemaFn("Invalid resume ID"),
     })
   )
@@ -36,11 +33,11 @@ export const createWorkExperienceAction = safeAction
     }
 
     try {
-      await prisma.workExperience.create({
+      await prisma.education.create({
         data: {
           order: parsedInput.order,
-          jobTitle: parsedInput.jobTitle,
-          company: parsedInput.company,
+          degree: parsedInput.degree,
+          institution: parsedInput.institution,
           location: parsedInput.location ?? "",
           startDate: parsedInput.startDate,
           endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
@@ -51,50 +48,50 @@ export const createWorkExperienceAction = safeAction
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ActionError("Failed to create work experience", 500);
+        throw new ActionError("Failed to create education", 500);
       }
       throw error;
     }
 
     return {
       success: true,
-      message: "Work experience created successfully",
+      message: "Education created successfully",
       statusCode: 201,
     };
   });
 
-export const editWorkExperienceAction = safeAction
+export const editEducationAction = safeAction
   .inputSchema(
-    workExperienceSchema.safeExtend({
-      id: objectIdSchemaFn("Invalid work experience ID"),
+    educationSchema.safeExtend({
+      id: objectIdSchemaFn("Invalid education ID"),
     })
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
 
     try {
-      const workExperience = await prisma.workExperience.findUnique({
+      const education = await prisma.education.findUnique({
         where: { id: parsedInput.id },
         include: { resume: { select: { userId: true } } },
       });
 
-      if (!workExperience) {
-        throw new ActionError("Work experience not found", 404);
+      if (!education) {
+        throw new ActionError("Education not found", 404);
       }
 
-      if (workExperience.resume.userId !== user.id) {
+      if (education.resume.userId !== user.id) {
         throw new ActionError(
-          "You do not have permission to edit this work experience",
+          "You do not have permission to edit this education",
           403
         );
       }
 
-      await prisma.workExperience.update({
+      await prisma.education.update({
         where: { id: parsedInput.id },
         data: {
           order: parsedInput.order,
-          jobTitle: parsedInput.jobTitle,
-          company: parsedInput.company,
+          degree: parsedInput.degree,
+          institution: parsedInput.institution,
           location: parsedInput.location ?? "",
           startDate: parsedInput.startDate,
           endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
@@ -107,45 +104,45 @@ export const editWorkExperienceAction = safeAction
         throw error;
       }
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ActionError("Failed to update work experience", 500);
+        throw new ActionError("Failed to update education", 500);
       }
       throw error;
     }
 
     return {
       success: true,
-      message: "Work experience updated successfully",
+      message: "Education updated successfully",
       statusCode: 200,
     };
   });
 
-export const deleteWorkExperienceAction = safeAction
+export const deleteEducationAction = safeAction
   .inputSchema(
     z.object({
-      id: objectIdSchemaFn("Invalid work experience ID"),
+      id: objectIdSchemaFn("Invalid education ID"),
     })
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
 
     try {
-      const workExperience = await prisma.workExperience.findUnique({
+      const education = await prisma.education.findUnique({
         where: { id: parsedInput.id },
         include: { resume: { select: { userId: true } } },
       });
 
-      if (!workExperience) {
-        throw new ActionError("Work experience not found", 404);
+      if (!education) {
+        throw new ActionError("Education not found", 404);
       }
 
-      if (workExperience.resume.userId !== user.id) {
+      if (education.resume.userId !== user.id) {
         throw new ActionError(
-          "You do not have permission to delete this work experience",
+          "You do not have permission to delete this education",
           403
         );
       }
 
-      await prisma.workExperience.delete({
+      await prisma.education.delete({
         where: { id: parsedInput.id },
       });
     } catch (error) {
@@ -153,14 +150,14 @@ export const deleteWorkExperienceAction = safeAction
         throw error;
       }
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ActionError("Failed to delete work experience", 500);
+        throw new ActionError("Failed to delete education", 500);
       }
       throw error;
     }
 
     return {
       success: true,
-      message: "Work experience deleted successfully",
+      message: "Education deleted successfully",
       statusCode: 200,
     };
   });

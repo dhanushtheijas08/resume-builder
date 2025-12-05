@@ -69,6 +69,7 @@ export type DateFormatType = keyof typeof DATE_FORMATS;
 
 export const workExperienceSchema = z
   .object({
+    order: z.number().int().min(1, "Order is required"),
     jobTitle: z
       .string()
       .min(1, "Job title is required")
@@ -126,6 +127,67 @@ export const workExperienceSchema = z
     }
   );
 
+export const educationSchema = z
+  .object({
+    order: z.number().int().min(1, "Order is required"),
+    degree: z
+      .string()
+      .min(1, "Degree is required")
+      .max(100, "Degree must be at most 100 characters"),
+    institution: z
+      .string()
+      .min(1, "Institution name is required")
+      .max(100, "Institution name must be at most 100 characters"),
+    location: z
+      .string()
+      .max(100, "Location must be at most 100 characters")
+      .optional(),
+    dateFormat: z.enum(["MMM YYYY", "MM/YYYY", "YYYY-MM", "MMMM YYYY"]),
+    startDate: z.string().min(1, "Start date is required"),
+    endDate: z.string().optional().or(z.literal("")),
+    isCurrent: z.boolean(),
+    description: z
+      .string()
+      .max(5000, "Description must be at most 5000 characters")
+      .optional(),
+  })
+  .refine(
+    (data) => {
+      const formatConfig = DATE_FORMATS[data.dateFormat];
+      return formatConfig.regex.test(data.startDate);
+    },
+    {
+      message: "Start date format is invalid for selected format",
+      path: ["startDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.isCurrent || !data.endDate || data.endDate === "") {
+        return true;
+      }
+      const formatConfig = DATE_FORMATS[data.dateFormat];
+      return formatConfig.regex.test(data.endDate);
+    },
+    {
+      message: "End date format is invalid for selected format",
+      path: ["endDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.isCurrent) {
+        return true;
+      }
+      return data.endDate && data.endDate.trim() !== "";
+    },
+    {
+      message: "End date is required when not currently studying",
+      path: ["endDate"],
+    }
+  );
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;
+export type EducationFormData = z.infer<typeof educationSchema>;

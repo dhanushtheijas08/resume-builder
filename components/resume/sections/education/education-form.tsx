@@ -11,18 +11,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { WorkExperienceFormData } from "@/lib/validations/resume";
-import { Loader2, Save } from "lucide-react";
+import { EducationFormData } from "@/lib/validations/resume";
+import { Save, Loader2 } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { DateRangePicker } from "./date-range-picker";
+import { DateRangePicker } from "../work-experience/date-range-picker";
 
-export const WorkExperienceForm = ({
+export const EducationForm = ({
   form,
   actionFn,
   isLoading,
 }: {
-  form: UseFormReturn<WorkExperienceFormData>;
-  actionFn: (values: WorkExperienceFormData) => void;
+  form: UseFormReturn<EducationFormData>;
+  actionFn: (values: EducationFormData) => void;
   isLoading: boolean;
 }) => {
   return (
@@ -33,15 +33,15 @@ export const WorkExperienceForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="jobTitle"
+                name="degree"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Job Title
+                      Degree
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Senior Software Engineer"
+                        placeholder="Bachelor of Science in Computer Science"
                         {...field}
                         disabled={isLoading}
                       />
@@ -55,15 +55,15 @@ export const WorkExperienceForm = ({
 
               <FormField
                 control={form.control}
-                name="company"
+                name="institution"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Company
+                      Institution
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Tech Corp Inc."
+                        placeholder="University of Technology"
                         {...field}
                         disabled={isLoading}
                       />
@@ -87,7 +87,7 @@ export const WorkExperienceForm = ({
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="San Francisco, CA or Remote"
+                        placeholder="New York, NY or Remote"
                         {...field}
                         disabled={isLoading}
                       />
@@ -105,7 +105,7 @@ export const WorkExperienceForm = ({
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Employment Period
+                      Study Period
                     </FormLabel>
                     <FormControl>
                       <DateRangePicker
@@ -122,6 +122,7 @@ export const WorkExperienceForm = ({
                           form.setValue("isCurrent", data.isCurrent);
                         }}
                         disabled={isLoading}
+                        currentLabel="I'm currently studying here"
                       />
                     </FormControl>
                     <div className="h-0.5 -mt-2.5">
@@ -140,7 +141,7 @@ export const WorkExperienceForm = ({
               render={({ field }) => (
                 <FormItem className="space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
-                    Role Description
+                    Description
                   </FormLabel>
                   <FormControl>
                     <TextEditor

@@ -18,13 +18,19 @@ export const WorkExperienceSection = ({
   const [editingExperience, setEditingExperience] =
     useState<WorkExperience | null>(null);
 
+  const hasData = experiences.length > 0;
+  const sortedExperiences = experiences.sort((a, b) => a.order - b.order);
+  const maxOrder = (sortedExperiences.at(-1)?.order ?? 0) + 1;
+
+  console.log(maxOrder);
+
   const {
     form,
     saveWorkExperience,
     updateWorkExperience,
     removeWorkExperience,
     isLoading,
-  } = useWorkExperience(editingExperience, () => {
+  } = useWorkExperience(editingExperience, maxOrder, () => {
     setIsOpen(false);
     setEditingExperience(null);
   });
@@ -46,13 +52,11 @@ export const WorkExperienceSection = ({
     handleOpenChange(true);
   };
 
-  const hasData = experiences.length > 0;
-
   return (
     <div className="space-y-4">
       {hasData ? (
         <WorkExperienceDisplay
-          experiences={experiences}
+          experiences={sortedExperiences}
           onAddClick={handleAddClick}
           onEditClick={handleEditClick}
           onDeleteClick={removeWorkExperience}
