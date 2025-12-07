@@ -28,7 +28,9 @@ export const EmptySection = ({
           {icon}
         </EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription>{description}</EmptyDescription>
+        <EmptyDescription className="text-nowrap">
+          {description}
+        </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>{children}</EmptyContent>
     </Empty>
