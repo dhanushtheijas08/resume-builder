@@ -37,6 +37,8 @@ export const fetchUserResume = async (resumeId: string) => {
 
     return resume;
   } catch (error) {
+    console.log({ error });
+
     if (error instanceof ActionError) {
       throw error;
     }

@@ -1,6 +1,7 @@
-import { PersonalInfo } from "@/components/resume/sections/personal-info/personal-info";
-import { WorkExperienceSection } from "@/components/resume/sections/work-experience/work-experience";
 import { EducationSection } from "@/components/resume/sections/education/education";
+import { PersonalInfo } from "@/components/resume/sections/personal-info/personal-info";
+import { SkillSection } from "@/components/resume/sections/skill/skill";
+import { WorkExperienceSection } from "@/components/resume/sections/work-experience/work-experience";
 import {
   Accordion,
   AccordionContent,
@@ -147,7 +148,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    {/* <SkillsSection /> */}
+                    <SkillSection />
                   </div>
                 </AccordionContent>
               </AccordionItem>
