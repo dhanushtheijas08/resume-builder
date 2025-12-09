@@ -148,7 +148,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    <SkillSection />
+                    <SkillSection skills={resume?.skills ?? []} />
                   </div>
                 </AccordionContent>
               </AccordionItem>

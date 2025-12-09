@@ -101,6 +101,7 @@ model Resume {
 
   workExperiences WorkExperience[]
   educations      Education[]
+  skills          Skill[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -165,4 +166,20 @@ model Education {
   updatedAt DateTime @updatedAt
 
   @@map("education")
+}
+
+model Skill {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  proficiency Int?
+  category    String?
+  displayType String  @default("badge") // "badge" | "progress" | "category"
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("skill")
 }

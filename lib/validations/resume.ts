@@ -187,7 +187,26 @@ export const educationSchema = z
     }
   );
 
+export const skillSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Skill name is required")
+    .max(50, "Skill name must be at most 50 characters"),
+  proficiency: z
+    .number()
+    .int()
+    .min(0, "Proficiency must be at least 0")
+    .max(100, "Proficiency must be at most 100")
+    .optional(),
+  category: z
+    .string()
+    .max(100, "Category must be at most 100 characters")
+    .optional(),
+  displayType: z.enum(["badge", "progress", "category"]).default("badge"),
+});
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;
 export type EducationFormData = z.infer<typeof educationSchema>;
+export type SkillFormData = z.infer<typeof skillSchema>;
