@@ -33,6 +33,11 @@ export const fetchUserResume = async (resumeId: string) => {
             createdAt: "asc",
           },
         },
+        projects: {
+          orderBy: {
+            order: "asc",
+          },
+        },
       },
     });
 

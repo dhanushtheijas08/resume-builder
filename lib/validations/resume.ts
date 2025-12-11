@@ -205,8 +205,68 @@ export const skillSchema = z.object({
   displayType: z.enum(["badge", "progress", "category"]).default("badge"),
 });
 
+export const projectSchema = z
+  .object({
+    order: z.number().int().min(1, "Order is required"),
+    name: z
+      .string()
+      .min(1, "Project name is required")
+      .max(100, "Project name must be at most 100 characters"),
+    description: z
+      .string()
+      .max(5000, "Description must be at most 5000 characters")
+      .optional(),
+    url: z.url("Invalid URL").optional().or(z.literal("")),
+    github: z.url("Invalid GitHub URL").optional().or(z.literal("")),
+    technologies: z
+      .string()
+      .max(500, "Technologies list is too long")
+      .optional(),
+    dateFormat: z.enum(["MMM YYYY", "MM/YYYY", "YYYY-MM", "MMMM YYYY"]),
+    startDate: z.string().optional(),
+    endDate: z.string().optional().or(z.literal("")),
+    isCurrent: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      if (!data.startDate) return true;
+      const formatConfig = DATE_FORMATS[data.dateFormat];
+      return formatConfig.regex.test(data.startDate);
+    },
+    {
+      message: "Start date format is invalid for selected format",
+      path: ["startDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.isCurrent || !data.endDate || data.endDate === "") {
+        return true;
+      }
+      const formatConfig = DATE_FORMATS[data.dateFormat];
+      return formatConfig.regex.test(data.endDate);
+    },
+    {
+      message: "End date format is invalid for selected format",
+      path: ["endDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.isCurrent) {
+        return true;
+      }
+      return !data.startDate || data.endDate || data.endDate === "";
+    },
+    {
+      message: "End date is required when not an ongoing project",
+      path: ["endDate"],
+    }
+  );
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;
 export type EducationFormData = z.infer<typeof educationSchema>;
 export type SkillFormData = z.infer<typeof skillSchema>;
+export type ProjectFormData = z.infer<typeof projectSchema>;
