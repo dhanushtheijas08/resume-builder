@@ -9,7 +9,13 @@ import { PersonalInfoDisplay } from "./personal-info-display";
 import { Profile } from "@/app/generated/prisma/client";
 import { usePersonalInfo } from "./use-personal-info";
 
-export const PersonalInfo = ({ profile }: { profile: Profile | null }) => {
+export const PersonalInfo = ({
+  profile,
+  showProfileImage = true,
+}: {
+  profile: Profile | null;
+  showProfileImage?: boolean;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const hasData = !!profile;
 
@@ -31,6 +37,7 @@ export const PersonalInfo = ({ profile }: { profile: Profile | null }) => {
       {hasData && profile ? (
         <PersonalInfoDisplay
           profile={profile}
+          showProfileImage={showProfileImage}
           onEditClick={() => handleOpenChange(true)}
         />
       ) : (

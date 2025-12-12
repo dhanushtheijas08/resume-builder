@@ -16,6 +16,11 @@ export const fetchUserResume = async (resumeId: string) => {
         id: resumeId,
       },
       include: {
+        template: {
+          select: {
+            metaData: true,
+          },
+        },
         profile: true,
         user: true,
         workExperiences: {
@@ -34,6 +39,16 @@ export const fetchUserResume = async (resumeId: string) => {
           },
         },
         projects: {
+          orderBy: {
+            order: "asc",
+          },
+        },
+        certifications: {
+          orderBy: {
+            order: "asc",
+          },
+        },
+        publications: {
           orderBy: {
             order: "asc",
           },

@@ -1,5 +1,6 @@
 "use client";
 
+import { Project } from "@/app/generated/prisma/client";
 import { GitHubIcon } from "@/components/icons/github";
 import {
   AlertDialog,
@@ -14,14 +15,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Code2, Edit2, Link2, Trash2 } from "lucide-react";
-import { Project } from "@/app/generated/prisma/client";
+import { Calendar, Edit2, Link2, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 type ProjectCardProps = {
   project: Project;
   onEditClick: () => void;
   onDeleteClick: () => void;
+  showTechUsed?: boolean;
   isDeleting?: boolean;
 };
 
@@ -29,6 +30,7 @@ export const ProjectCard = ({
   project,
   onEditClick,
   onDeleteClick,
+  showTechUsed = true,
   isDeleting = false,
 }: ProjectCardProps) => {
   return (
@@ -36,9 +38,6 @@ export const ProjectCard = ({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-md bg-primary/10 border border-primary/20">
-              <Code2 className="size-4 text-primary" />
-            </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-lg font-semibold">{project.name}</h3>
@@ -99,29 +98,31 @@ export const ProjectCard = ({
             />
           )}
 
-          {project.technologies && project.technologies.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {project.technologies
-                .slice(0, 6)
-                .map((tech: string, i: number) => (
+          {showTechUsed &&
+            project.technologies &&
+            project.technologies.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {project.technologies
+                  .slice(0, 6)
+                  .map((tech: string, i: number) => (
+                    <Badge
+                      key={i}
+                      variant="secondary"
+                      className="text-[10px] px-2 h-5 font-normal bg-muted/80 text-muted-foreground border-border/50"
+                    >
+                      {tech}
+                    </Badge>
+                  ))}
+                {project.technologies.length > 6 && (
                   <Badge
-                    key={i}
-                    variant="secondary"
+                    variant="outline"
                     className="text-[10px] px-2 h-5 font-normal bg-muted/80 text-muted-foreground border-border/50"
                   >
-                    {tech}
+                    +{project.technologies.length - 6} more
                   </Badge>
-                ))}
-              {project.technologies.length > 6 && (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] px-2 h-5 font-normal bg-muted/80 text-muted-foreground border-border/50"
-                >
-                  +{project.technologies.length - 6} more
-                </Badge>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
         </div>
 
         <div className="flex items-center gap-2 shrink-0 group-hover:opacity-100 opacity-0 transition-opacity mt-2.5">

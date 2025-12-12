@@ -9,7 +9,13 @@ import { useProject } from "./use-project";
 import { ProjectDialog } from "./project-dialog";
 import { ProjectDisplay } from "./project-display";
 
-export const ProjectSection = ({ projects }: { projects: Project[] }) => {
+export const ProjectSection = ({
+  projects,
+  showTechUsed = true,
+}: {
+  projects: Project[];
+  showTechUsed?: boolean;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
@@ -48,6 +54,7 @@ export const ProjectSection = ({ projects }: { projects: Project[] }) => {
           onAddClick={handleAddClick}
           onEditClick={handleEditClick}
           onDeleteClick={removeProject}
+          showTechUsed={showTechUsed}
           isDeleting={isLoading}
         />
       ) : (

@@ -264,9 +264,53 @@ export const projectSchema = z
     }
   );
 
+export const certificationSchema = z.object({
+  order: z.number().int().min(1, "Order is required"),
+  title: z
+    .string()
+    .min(1, "Certification title is required")
+    .max(100, "Title must be at most 100 characters"),
+  issuer: z
+    .string()
+    .min(1, "Issuer is required")
+    .max(100, "Issuer must be at most 100 characters"),
+  credentialUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+  description: z
+    .string()
+    .max(5000, "Description must be at most 5000 characters")
+    .optional(),
+});
+
+export const awardSchema = z.object({
+  description: z
+    .string()
+    .min(1, "Description is required")
+    .max(5000, "Description must be at most 5000 characters"),
+});
+
+export const publicationSchema = z.object({
+  order: z.number().int().min(1, "Order is required"),
+  title: z
+    .string()
+    .min(1, "Publication title is required")
+    .max(200, "Title must be at most 200 characters"),
+  publisher: z
+    .string()
+    .min(1, "Publisher is required")
+    .max(100, "Publisher must be at most 100 characters"),
+  url: z.string().url("Invalid URL").optional().or(z.literal("")),
+  summary: z
+    .string()
+    .max(5000, "Summary must be at most 5000 characters")
+    .optional(),
+});
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;
 export type EducationFormData = z.infer<typeof educationSchema>;
 export type SkillFormData = z.infer<typeof skillSchema>;
 export type ProjectFormData = z.infer<typeof projectSchema>;
+export type CertificationFormData = z.infer<typeof certificationSchema>;
+export type AwardFormData = z.infer<typeof awardSchema>;
+export type PublicationFormData = z.infer<typeof publicationSchema>;

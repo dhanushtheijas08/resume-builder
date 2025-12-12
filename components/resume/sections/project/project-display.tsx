@@ -10,6 +10,7 @@ type ProjectDisplayProps = {
   onAddClick: () => void;
   onEditClick: (project: Project) => void;
   onDeleteClick: (id: string) => void;
+  showTechUsed?: boolean;
   isDeleting?: boolean;
 };
 
@@ -18,6 +19,7 @@ export const ProjectDisplay = ({
   onAddClick,
   onEditClick,
   onDeleteClick,
+  showTechUsed = true,
   isDeleting = false,
 }: ProjectDisplayProps) => {
   if (projects.length === 0) {
@@ -46,6 +48,7 @@ export const ProjectDisplay = ({
             project={project}
             onEditClick={() => onEditClick(project)}
             onDeleteClick={() => onDeleteClick(project.id)}
+            showTechUsed={showTechUsed}
             isDeleting={isDeleting}
           />
         ))}

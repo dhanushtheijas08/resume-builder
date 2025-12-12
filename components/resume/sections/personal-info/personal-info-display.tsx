@@ -4,23 +4,38 @@ import { Profile } from "@/app/generated/prisma/client";
 import { GitHubIcon } from "@/components/icons/github";
 import { LinkedinIcon } from "@/components/icons/linkedin";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { Edit2, Globe, Mail, MapPin, Phone, User } from "lucide-react";
 
 type PersonalInfoDisplayProps = {
   profile: Profile;
   onEditClick: () => void;
+  showProfileImage?: boolean;
 };
 
 export const PersonalInfoDisplay = ({
   profile,
   onEditClick,
+  showProfileImage = true,
 }: PersonalInfoDisplayProps) => {
   return (
     <div className="border rounded-lg p-5 bg-background/40">
       <div className="flex items-start gap-4 text-white/90">
-        <div className="size-14 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
-          <User className="size-7 text-blue-500" />
-        </div>
+        {showProfileImage && (
+          <div className="size-14 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 overflow-hidden">
+            {profile.profileImage ? (
+              <Image
+                src={profile.profileImage}
+                alt={profile.name ?? "Profile photo"}
+                width={56}
+                height={56}
+                className="size-full object-cover"
+              />
+            ) : (
+              <User className="size-7 text-blue-500" />
+            )}
+          </div>
+        )}
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4">

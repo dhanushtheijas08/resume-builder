@@ -2,15 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus, Code } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EmptySection } from "../empty-section";
 import { SkillDialog, SkillType } from "./skill-dialog";
 import { SkillDisplay } from "./skill-display";
 import { Skill } from "@/app/generated/prisma/client";
 
-export const SkillSection = ({ skills }: { skills: Skill[] }) => {
+export const SkillSection = ({
+  skills,
+  initialSkillType = "badge",
+}: {
+  skills: Skill[];
+  initialSkillType?: SkillType;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [skillType, setSkillType] = useState<SkillType>("badge");
+  const [skillType, setSkillType] = useState<SkillType>(initialSkillType);
+
+  useEffect(() => {
+    setSkillType(initialSkillType);
+  }, [initialSkillType]);
 
   const hasData = skills.length > 0;
 

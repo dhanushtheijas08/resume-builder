@@ -1,0 +1,148 @@
+"use client";
+
+import { TextEditor } from "@/components/resume/sections/text-editor";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { PublicationFormData } from "@/lib/validations/resume";
+import { Save, Loader2, BookOpen, Link2 } from "lucide-react";
+import { UseFormReturn } from "react-hook-form";
+
+export const PublicationForm = ({
+  form,
+  actionFn,
+  isLoading,
+}: {
+  form: UseFormReturn<PublicationFormData>;
+  actionFn: (values: PublicationFormData) => void;
+  isLoading: boolean;
+}) => {
+  return (
+    <div className="w-full bg-background">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-6">
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormLabel className="text-sm font-medium text-foreground">
+                    Publication Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Research Paper: Machine Learning Applications"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <div className="h-0.5 -mt-2.5">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="publisher"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                      <BookOpen className="size-4" />
+                      Publisher
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="IEEE Computer Society"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <div className="h-0.5 -mt-2.5">
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                      <Link2 className="size-4" />
+                      URL (Optional)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://example.com/publication"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <div className="h-0.5 -mt-2.5">
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="summary"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormLabel className="text-sm font-medium text-foreground">
+                    Summary (Optional)
+                  </FormLabel>
+                  <FormControl>
+                    <TextEditor
+                      isLoading={isLoading}
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="h-0.5 -mt-2.5">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end">
+            <Button type="submit" disabled={isLoading} className="w-fit">
+              {isLoading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="size-4" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};
+

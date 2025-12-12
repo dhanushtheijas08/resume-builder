@@ -74,6 +74,7 @@ model ResumeTemplate {
   title           String
   company         String
   experience      Float
+  metaData        String?
   role            String
   location        String
   previewImageUrl String
@@ -103,6 +104,9 @@ model Resume {
   educations      Education[]
   skills          Skill[]
   projects        Project[]
+  certifications  Certification[]
+  awards          String?
+  publications    Publication[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -186,16 +190,16 @@ model Skill {
 }
 
 model Project {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  order         Int
-  name          String
-  description   String?
-  url           String?
-  github        String?
-  technologies  String[] @default([])
-  startDate     String?
-  endDate       String?
-  isCurrent     Boolean  @default(false)
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  order        Int
+  name         String
+  description  String?
+  url          String?
+  github       String?
+  technologies String[] @default([])
+  startDate    String?
+  endDate      String?
+  isCurrent    Boolean  @default(false)
 
   resumeId String @db.ObjectId
   resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
@@ -204,4 +208,39 @@ model Project {
   updatedAt DateTime @updatedAt
 
   @@map("project")
+}
+
+model Certification {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  order         Int
+  title         String
+  issuer        String
+  credentialUrl String?
+  description   String?
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("certification")
+}
+
+
+model Publication {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  order     Int
+  title     String
+  publisher String
+  url       String?
+  summary   String?
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("publication")
 }

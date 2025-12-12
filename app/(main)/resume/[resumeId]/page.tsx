@@ -3,6 +3,9 @@ import { PersonalInfo } from "@/components/resume/sections/personal-info/persona
 import { ProjectSection } from "@/components/resume/sections/project/project";
 import { SkillSection } from "@/components/resume/sections/skill/skill";
 import { WorkExperienceSection } from "@/components/resume/sections/work-experience/work-experience";
+import { CertificationSection } from "@/components/resume/sections/certification/certification";
+import { AwardSection } from "@/components/resume/sections/award/award";
+import { PublicationSection } from "@/components/resume/sections/publication/publication";
 import {
   Accordion,
   AccordionContent,
@@ -25,6 +28,9 @@ import {
   FolderKanban,
   GraduationCap,
   User,
+  Award,
+  Trophy,
+  BookOpen,
 } from "lucide-react";
 
 const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
@@ -38,6 +44,38 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   if (!resume) {
     throw new Error("Resume not found");
   }
+
+  const parseTemplateMeta = (meta?: string) => {
+    const config = {
+      showProfileImage: true,
+      skillType: "badge" as "badge" | "progress" | "category",
+      showProjectTech: true,
+    };
+
+    if (!meta) return config;
+
+    meta.split("#").forEach((entry) => {
+      const [key, value] = entry.split(":");
+      switch (key) {
+        case "p":
+          config.showProfileImage = value === "1";
+          break;
+        case "s":
+          config.skillType =
+            value === "2" ? "progress" : value === "3" ? "category" : "badge";
+          break;
+        case "pr":
+          config.showProjectTech = value === "1";
+          break;
+        default:
+          break;
+      }
+    });
+
+    return config;
+  };
+
+  const templateMeta = parseTemplateMeta(resume.template?.metaData || "");
 
   return (
     <div className="flex flex-col h-screen">
@@ -75,7 +113,10 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    <PersonalInfo profile={resume?.profile ?? null} />
+                    <PersonalInfo
+                      profile={resume?.profile ?? null}
+                      showProfileImage={templateMeta.showProfileImage}
+                    />
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -149,7 +190,10 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    <SkillSection skills={resume?.skills ?? []} />
+                    <SkillSection
+                      skills={resume?.skills ?? []}
+                      initialSkillType={templateMeta.skillType}
+                    />
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -173,7 +217,86 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                 </AccordionTrigger>
                 <AccordionContent className="px-0 pb-0">
                   <div className="px-5 pb-5 pt-2">
-                    <ProjectSection projects={resume?.projects ?? []} />
+                    <ProjectSection
+                      projects={resume?.projects ?? []}
+                      showTechUsed={templateMeta.showProjectTech}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem
+                value="certifications"
+                className="border rounded-xl bg-card shadow-sm overflow-hidden"
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                      <Award className="size-4 text-yellow-500" />
+                    </div>
+                    <div className="text-left">
+                      <span className="font-medium">Certifications</span>
+                      <p className="text-xs text-muted-foreground font-normal">
+                        Professional credentials
+                      </p>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-0 pb-0">
+                  <div className="px-5 pb-5 pt-2">
+                    <CertificationSection
+                      certifications={resume?.certifications ?? []}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem
+                value="awards"
+                className="border rounded-xl bg-card shadow-sm overflow-hidden"
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+                      <Trophy className="size-4 text-yellow-500" />
+                    </div>
+                    <div className="text-left">
+                      <span className="font-medium">Awards / Achievements</span>
+                      <p className="text-xs text-muted-foreground font-normal">
+                        Your accomplishments
+                      </p>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-0 pb-0">
+                  <div className="px-5 pb-5 pt-2">
+                    <AwardSection awards={resume?.awards ?? null} />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem
+                value="publications"
+                className="border rounded-xl bg-card shadow-sm overflow-hidden"
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                      <BookOpen className="size-4 text-indigo-500" />
+                    </div>
+                    <div className="text-left">
+                      <span className="font-medium">Publications</span>
+                      <p className="text-xs text-muted-foreground font-normal">
+                        Research and writing
+                      </p>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-0 pb-0">
+                  <div className="px-5 pb-5 pt-2">
+                    <PublicationSection
+                      publications={resume?.publications ?? []}
+                    />
                   </div>
                 </AccordionContent>
               </AccordionItem>
