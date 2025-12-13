@@ -36,8 +36,8 @@ export const createSkillAction = safeAction
       await prisma.skill.create({
         data: {
           name: parsedInput.name,
-          proficiency: parsedInput.proficiency ?? null,
-          category: parsedInput.category ?? null,
+          proficiency: parsedInput.proficiency ?? 0,
+          category: parsedInput.category ?? "Others",
           displayType: parsedInput.displayType ?? "badge",
           resumeId: parsedInput.resumeId,
         },

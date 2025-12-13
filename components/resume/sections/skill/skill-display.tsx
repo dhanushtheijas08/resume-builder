@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Edit2, LayoutGrid, BarChart3, GripHorizontal } from "lucide-react";
+import {
+  Edit2,
+  LayoutGrid,
+  BarChart3,
+  GripHorizontal,
+  Plus,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -46,35 +52,9 @@ export const SkillDisplay = ({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Tabs
-            value={skillType}
-            onValueChange={(value) => onSkillTypeChange(value as SkillType)}
-            className="hidden sm:block"
-          >
-            <TabsList className="h-8">
-              <TabsTrigger value="badge" className="text-xs px-2 h-6">
-                <GripHorizontal className="size-3 mr-1" />
-                Badge
-              </TabsTrigger>
-              <TabsTrigger value="progress" className="text-xs px-2 h-6">
-                <BarChart3 className="size-3 mr-1" />
-                Progress
-              </TabsTrigger>
-              <TabsTrigger value="category" className="text-xs px-2 h-6">
-                <LayoutGrid className="size-3 mr-1" />
-                Category
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={onEditClick}
-          >
-            <Edit2 className="size-4" />
-            <span className="sr-only">Edit skills</span>
+          <Button type="button" variant="outline" onClick={onEditClick}>
+            <Plus className="size-4" />
+            <span>Add skill</span>
           </Button>
         </div>
       </div>

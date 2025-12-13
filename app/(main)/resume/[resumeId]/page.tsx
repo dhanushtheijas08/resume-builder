@@ -87,7 +87,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
         </Button>
       </nav>
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={35}>
+        <ResizablePanel minSize={40} defaultSize={42}>
           <ScrollArea className="w-full h-[calc(100vh-3.75rem)] p-5">
             <Accordion
               type="multiple"
@@ -257,8 +257,8 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
               >
                 <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="size-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                      <Trophy className="size-4 text-yellow-500" />
+                    <div className="size-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                      <Trophy className="size-4 text-amber-500" />
                     </div>
                     <div className="text-left">
                       <span className="font-medium">Awards / Achievements</span>
@@ -304,7 +304,9 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
           </ScrollArea>
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
-        <ResizablePanel minSize={50}>Preview Section</ResizablePanel>
+        <ResizablePanel minSize={50} defaultSize={58}>
+          Preview Section
+        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );

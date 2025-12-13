@@ -176,8 +176,8 @@ model Education {
 model Skill {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  proficiency Int?
-  category    String?
+  proficiency Int? @default(0)
+  category    String? @default("Others")
   displayType String  @default("badge") // "badge" | "progress" | "category"
 
   resumeId String @db.ObjectId
@@ -188,6 +188,7 @@ model Skill {
 
   @@map("skill")
 }
+
 
 model Project {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

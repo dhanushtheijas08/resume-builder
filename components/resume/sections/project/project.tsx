@@ -60,7 +60,7 @@ export const ProjectSection = ({
       ) : (
         <EmptySection
           title="No projects added"
-          description="Showcase your best work and personal projects to impress potential employers."
+          description="Showcase your best work and personal projects"
           icon={<FolderKanban className="size-6 text-cyan-500" />}
           iconContainerClassName="bg-cyan-500/10"
         >

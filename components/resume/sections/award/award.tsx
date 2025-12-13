@@ -47,7 +47,6 @@ export const AwardSection = ({ awards }: { awards: string | null }) => {
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-start gap-2">
-                <Trophy className="size-5 text-yellow-500 shrink-0 mt-0.5" />
                 <div
                   className="text-sm text-muted-foreground leading-relaxed flex-1"
                   dangerouslySetInnerHTML={{
@@ -106,9 +105,9 @@ export const AwardSection = ({ awards }: { awards: string | null }) => {
       ) : (
         <EmptySection
           title="No awards / achievements added"
-          description="Add your awards and achievements. You can use bullet points to list multiple items."
-          icon={<Trophy className="size-6 text-yellow-500" />}
-          iconContainerClassName="bg-yellow-500/10"
+          description="Add your awards and achievements."
+          icon={<Trophy className="size-6 text-amber-500" />}
+          iconContainerClassName="bg-amber-500/10"
         >
           <Button
             variant="outline"

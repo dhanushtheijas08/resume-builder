@@ -28,7 +28,7 @@ export const EmptySection = ({
           {icon}
         </EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription className="text-nowrap">
+        <EmptyDescription className="text-nowrap text-ellipsis overflow-hidden max-w-lg">
           {description}
         </EmptyDescription>
       </EmptyHeader>

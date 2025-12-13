@@ -53,6 +53,7 @@ import { cn } from "@/lib/utils";
 import { useSkill, defaultValues } from "./use-skill";
 import { SkillFormData } from "@/lib/validations/resume";
 import { UseFormReturn } from "react-hook-form";
+import { Slider } from "@/components/ui/slider";
 
 type SkillFormProps = {
   skills: Skill[];
@@ -323,16 +324,13 @@ export const SkillForm = ({ skills, skillType }: SkillFormProps) => {
                           </span>
                         </div>
                         <FormControl>
-                          <Input
-                            type="range"
+                          <Slider
                             min={0}
                             max={100}
                             step={5}
-                            value={field.value ?? 0}
-                            onChange={(e) =>
-                              field.onChange(Number(e.target.value))
-                            }
-                            className="h-9 cursor-pointer"
+                            value={[field.value ?? 0] as number[]}
+                            onValueChange={(value) => field.onChange(value[0])}
+                            className="h-9 cursor-pointer w-full"
                           />
                         </FormControl>
                         <FormMessage />
