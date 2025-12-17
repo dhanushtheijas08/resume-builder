@@ -176,14 +176,14 @@ body {
   background-color: oklch(0.5 0 0);
 }
 
-.rich-text ul {
+.resume-ul {
   @apply list-disc pl-6 my-2;
 }
 
-.rich-text ol {
+.resume-ol {
   @apply list-decimal pl-6 my-2;
 }
 
-.rich-text li {
+.resume-li {
   @apply leading-6;
 }

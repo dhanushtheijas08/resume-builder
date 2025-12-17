@@ -2,6 +2,7 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, personalInfoSchme } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
@@ -40,7 +41,7 @@ export const createProfileAction = safeAction
               name: parsedInput.name,
               email: parsedInput.email,
               phoneNumber: parsedInput.phoneNumber,
-              bio: parsedInput.bio ?? "",
+              bio: parsedInput.bio ? sanitizeServerHtml(parsedInput.bio) : "",
               designation: parsedInput.designation ?? "",
               location: parsedInput.location ?? "",
               profileImage: parsedInput.profileImage ?? "",
@@ -85,7 +86,7 @@ export const editProfileAction = safeAction
           name: parsedInput.name,
           email: parsedInput.email,
           phoneNumber: parsedInput.phoneNumber,
-          bio: parsedInput.bio ?? "",
+          bio: parsedInput.bio ? sanitizeServerHtml(parsedInput.bio) : "",
           designation: parsedInput.designation ?? "",
           location: parsedInput.location ?? "",
           profileImage: parsedInput.profileImage ?? "",

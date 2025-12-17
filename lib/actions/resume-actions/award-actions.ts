@@ -2,6 +2,7 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, awardSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
@@ -36,7 +37,9 @@ export const upsertAwardAction = safeAction
       await prisma.resume.update({
         where: { id: parsedInput.resumeId },
         data: {
-          awards: parsedInput.description,
+          awards: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : null,
         },
       });
     } catch (error) {

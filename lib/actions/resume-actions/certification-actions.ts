@@ -2,6 +2,7 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import {
   objectIdSchemaFn,
@@ -45,7 +46,9 @@ export const createCertificationAction = safeAction
             parsedInput.credentialUrl && parsedInput.credentialUrl !== ""
               ? parsedInput.credentialUrl
               : null,
-          description: parsedInput.description ?? null,
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : null,
           resumeId: parsedInput.resumeId,
         },
       });
@@ -99,7 +102,9 @@ export const editCertificationAction = safeAction
             parsedInput.credentialUrl && parsedInput.credentialUrl !== ""
               ? parsedInput.credentialUrl
               : null,
-          description: parsedInput.description ?? null,
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : null,
         },
       });
     } catch (error) {

@@ -2,6 +2,7 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, projectSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
@@ -44,7 +45,9 @@ export const createProjectAction = safeAction
         data: {
           order: parsedInput.order,
           name: parsedInput.name,
-          description: parsedInput.description ?? "",
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : "",
           url:
             parsedInput.url && parsedInput.url !== "" ? parsedInput.url : null,
           github:
@@ -114,7 +117,9 @@ export const editProjectAction = safeAction
         data: {
           order: parsedInput.order,
           name: parsedInput.name,
-          description: parsedInput.description ?? "",
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : "",
           url:
             parsedInput.url && parsedInput.url !== "" ? parsedInput.url : null,
           github:

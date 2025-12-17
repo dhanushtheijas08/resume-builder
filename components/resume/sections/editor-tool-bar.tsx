@@ -97,7 +97,7 @@ export const EditorToolBar = ({
   return (
     <div className="flex items-center gap-1 p-2 border-b bg-muted/30">
       {toolbarItems.map((item) => (
-        <Tooltip key={item.value}>
+        <Tooltip key={item.value} delayDuration={250}>
           <TooltipTrigger asChild>
             <DataStatePropInterceptor>
               <Toggle

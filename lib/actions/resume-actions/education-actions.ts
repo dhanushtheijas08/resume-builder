@@ -2,6 +2,7 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, educationSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
@@ -42,7 +43,9 @@ export const createEducationAction = safeAction
           startDate: parsedInput.startDate,
           endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
           isCurrent: parsedInput.isCurrent,
-          description: parsedInput.description ?? "",
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : "",
           resumeId: parsedInput.resumeId,
         },
       });
@@ -96,7 +99,9 @@ export const editEducationAction = safeAction
           startDate: parsedInput.startDate,
           endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
           isCurrent: parsedInput.isCurrent,
-          description: parsedInput.description ?? "",
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : "",
         },
       });
     } catch (error) {

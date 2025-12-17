@@ -2,11 +2,9 @@
 import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
-import {
-  objectIdSchemaFn,
-  publicationSchema,
-} from "@/lib/validations/resume";
+import { objectIdSchemaFn, publicationSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
 
@@ -43,7 +41,9 @@ export const createPublicationAction = safeAction
           publisher: parsedInput.publisher,
           url:
             parsedInput.url && parsedInput.url !== "" ? parsedInput.url : null,
-          summary: parsedInput.summary ?? null,
+          summary: parsedInput.summary
+            ? sanitizeServerHtml(parsedInput.summary)
+            : null,
           resumeId: parsedInput.resumeId,
         },
       });
@@ -95,7 +95,9 @@ export const editPublicationAction = safeAction
           publisher: parsedInput.publisher,
           url:
             parsedInput.url && parsedInput.url !== "" ? parsedInput.url : null,
-          summary: parsedInput.summary ?? null,
+          summary: parsedInput.summary
+            ? sanitizeServerHtml(parsedInput.summary)
+            : null,
         },
       });
     } catch (error) {
@@ -160,4 +162,3 @@ export const deletePublicationAction = safeAction
       statusCode: 200,
     };
   });
-

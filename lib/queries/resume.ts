@@ -19,6 +19,7 @@ export const fetchUserResume = async (resumeId: string) => {
         template: {
           select: {
             metaData: true,
+            // link: true,
           },
         },
         profile: true,
@@ -55,6 +56,8 @@ export const fetchUserResume = async (resumeId: string) => {
         },
       },
     });
+
+    console.log({ resume });
 
     if (!resume) {
       throw new ActionError("Resume not found or access denied", 404);
