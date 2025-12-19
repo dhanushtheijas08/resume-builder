@@ -19,7 +19,6 @@ export const fetchUserResume = async (resumeId: string) => {
         template: {
           select: {
             metaData: true,
-            // link: true,
           },
         },
         profile: true,
