@@ -1,7 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { GitHubIcon } from "@/components/icons/github";
-import { LinkedinIcon } from "@/components/icons/linkedin";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -9,22 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Building2,
-  Calendar,
-  Globe,
-  GraduationCap,
-  Link2,
-  Mail,
-  MapPin,
-  Phone,
-  RefreshCcw,
-  Share2,
-  ZoomInIcon,
-  ZoomOutIcon,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { RefreshCcw, Share2, ZoomInIcon, ZoomOutIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   TransformComponent,
@@ -331,6 +314,54 @@ const processResumeData = (
   };
 };
 
+const ResumeToolbar = () => {
+  const { zoomIn, zoomOut, resetTransform } = useControls();
+
+  return (
+    <ButtonGroup className="[--radius:1.05rem]">
+      <Tooltip delayDuration={250}>
+        <TooltipTrigger asChild>
+          <Button variant="outline" onClick={() => zoomIn(0.1)}>
+            <ZoomInIcon className="w-4 h-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Zoom In</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip delayDuration={250}>
+        <TooltipTrigger asChild>
+          <Button variant="outline" onClick={() => zoomOut(0.1)}>
+            <ZoomOutIcon className="w-4 h-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Zoom Out</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip delayDuration={250}>
+        <TooltipTrigger asChild>
+          <Button variant="outline" onClick={() => resetTransform()}>
+            <RefreshCcw className="w-4 h-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Reset View</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip delayDuration={250}>
+        <TooltipTrigger asChild>
+          <Button variant="outline">
+            <Share2 className="w-4 h-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Share</p>
+        </TooltipContent>
+      </Tooltip>
+    </ButtonGroup>
+  );
+};
 const A4_HEIGHT_PX = 1123;
 const PADDING_PX = 24;
 const USABLE_HEIGHT = A4_HEIGHT_PX - PADDING_PX * 2;
@@ -348,12 +379,9 @@ const ClassicTemplate = ({
   data: ReturnType<typeof processResumeData>;
   templateMeta: typeof dummyTemplateMeta;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const rightColumnRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<PageContent[]>([]);
   const [isPaginated, setIsPaginated] = useState(false);
-
-  console.log(pages);
 
   const paginateContent = () => {
     if (!rightColumnRef.current) return;
@@ -406,6 +434,7 @@ const ClassicTemplate = ({
     setPages(pagesArray);
     setIsPaginated(true);
   };
+  console.log({ pages });
 
   useEffect(() => {
     if (rightColumnRef.current) {
@@ -578,7 +607,6 @@ const ClassicTemplate = ({
     </div>
   );
 
-  // Render right column content (for measurement)
   const renderRightColumn = () => (
     <div className="col-span-12 md:col-span-8 p-6" ref={rightColumnRef}>
       <div className="space-y-8">
@@ -892,7 +920,7 @@ const ClassicTemplate = ({
         className="absolute opacity-0 pointer-events-none"
         style={{ width: "210mm" }}
       >
-        <div ref={containerRef} className="grid grid-cols-12 gap-0">
+        <div className="grid grid-cols-12 gap-0">
           {renderLeftColumn()}
           {renderRightColumn()}
         </div>
@@ -951,56 +979,6 @@ const ClassicTemplate = ({
     </div>
   );
 };
-
-const ResumeToolbar = () => {
-  const { zoomIn, zoomOut, resetTransform } = useControls();
-
-  return (
-    <ButtonGroup className="[--radius:1.05rem]">
-      <Tooltip delayDuration={250}>
-        <TooltipTrigger asChild>
-          <Button variant="outline" onClick={() => zoomIn(0.1)}>
-            <ZoomInIcon className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Zoom In</p>
-        </TooltipContent>
-      </Tooltip>
-      <Tooltip delayDuration={250}>
-        <TooltipTrigger asChild>
-          <Button variant="outline" onClick={() => zoomOut(0.1)}>
-            <ZoomOutIcon className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Zoom Out</p>
-        </TooltipContent>
-      </Tooltip>
-      <Tooltip delayDuration={250}>
-        <TooltipTrigger asChild>
-          <Button variant="outline" onClick={() => resetTransform()}>
-            <RefreshCcw className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Reset View</p>
-        </TooltipContent>
-      </Tooltip>
-      <Tooltip delayDuration={250}>
-        <TooltipTrigger asChild>
-          <Button variant="outline">
-            <Share2 className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Share</p>
-        </TooltipContent>
-      </Tooltip>
-    </ButtonGroup>
-  );
-};
-
 export const ResumePreview = () => {
   const resumeRef = useRef(null);
 
@@ -1018,9 +996,331 @@ export const ResumePreview = () => {
           <ResumeToolbar />
         </div>
         <TransformComponent>
-          <ClassicTemplate />
+          <ResumeNew />
         </TransformComponent>
       </TransformWrapper>
     </div>
   );
 };
+const resumeData = {
+  personal: {
+    name: "Dhanush Theijas",
+    title: "Software Development Engineer (SDE-1)",
+    location: "Bengaluru, India",
+    phone: "+91 9XXXXXXXXX",
+    email: "dhanush@email.com",
+    github: "github.com/dhanushtheijas08",
+  },
+
+  summary:
+    "SDE-1 with hands-on experience building scalable web applications using React, Next.js, and Node.js. Strong understanding of system design fundamentals, clean architecture, and performance optimization. Passionate about writing maintainable code and learning through real-world projects.",
+
+  skills: [
+    {
+      label: "Languages",
+      values: ["TypeScript", "JavaScript", "Python"],
+    },
+    {
+      label: "Frontend",
+      values: ["React", "Next.js", "Tailwind CSS"],
+    },
+    {
+      label: "Backend",
+      values: ["Node.js", "Express", "Firebase"],
+    },
+    {
+      label: "Database",
+      values: ["PostgreSQL", "MongoDB", "Firestore"],
+    },
+    {
+      label: "Tools",
+      values: ["Git", "Docker", "Supabase"],
+    },
+    {
+      label: "Concepts",
+      values: ["REST APIs", "System Design Basics"],
+    },
+  ],
+
+  experience: [
+    {
+      role: "Frontend Engineer Intern",
+      company: "Acme Corp",
+      location: "Bengaluru",
+      duration: "Jan 2024 – Present",
+      points: [
+        "Built reusable UI components using React and Tailwind, improving development speed by 30%.",
+        "Integrated REST APIs and optimized rendering using memoization techniques.",
+        "Collaborated with backend engineers to design clean API contracts.",
+      ],
+    },
+    {
+      role: "Frontend Engineer Intern",
+      company: "Acme Corp",
+      location: "Bengaluru",
+      duration: "Jan 2024 – Present",
+      points: [
+        "Built reusable UI components using React and Tailwind, improving development speed by 30%.",
+        "Integrated REST APIs and optimized rendering using memoization techniques.",
+        "Collaborated with backend engineers to design clean API contracts.",
+      ],
+    },
+    {
+      role: "Frontend Engineer Intern",
+      company: "Acme Corp",
+      location: "Bengaluru",
+      duration: "Jan 2024 – Present",
+      points: [
+        "Built reusable UI components using React and Tailwind, improving development speed by 30%.",
+        "Integrated REST APIs and optimized rendering using memoization techniques.",
+        "Collaborated with backend engineers to design clean API contracts.",
+      ],
+    },
+    {
+      role: "Frontend Engineer Intern",
+      company: "Acme Corp",
+      location: "Bengaluru",
+      duration: "Jan 2024 – Present",
+      points: [
+        "Built reusable UI components using React and Tailwind, improving development speed by 30%.",
+        "Integrated REST APIs and optimized rendering using memoization techniques.",
+        "Collaborated with backend engineers to design clean API contracts.",
+      ],
+    },
+    {
+      role: "Frontend Engineer Intern",
+      company: "Acme Corp",
+      location: "Bengaluru",
+      duration: "Jan 2024 – Present",
+      points: [
+        "Built reusable UI components using React and Tailwind, improving development speed by 30%.",
+        "Integrated REST APIs and optimized rendering using memoization techniques.",
+        "Collaborated with backend engineers to design clean API contracts.",
+      ],
+    },
+  ],
+
+  projects: [
+    {
+      title: "Resume Builder Platform",
+      year: "2024",
+      points: [
+        "Built a resume builder with live preview, section reordering, and PDF export using Puppeteer.",
+        "Implemented rate limiting and sandboxed code execution using Docker.",
+        "Tech Stack: React, Tailwind, Node.js, Supabase, Docker.",
+      ],
+    },
+  ],
+
+  education: {
+    degree: "Bachelor of Computer Science",
+    duration: "2020 – 2024",
+    institution: "XYZ University, India",
+  },
+};
+
+function ResumeNew() {
+  const resumeRef = useRef(null);
+  const [resumePage, setResumePage] = useState<HTMLElement[][]>([]);
+
+  const renderResumeContent = () => {
+    return (
+      <div
+        ref={resumeRef}
+        className="w-[210mm] min-h-[297mm] bg-white text-gray-900 p-10 shadow-lg"
+      >
+        {/* Header */}
+        <section className="mb-6">
+          <h1 className="text-3xl font-bold tracking-tight">
+            {resumeData.personal.name}
+          </h1>
+          <p className="text-sm text-gray-600 mt-1">
+            {resumeData.personal.title}
+          </p>
+
+          <div className="flex flex-wrap gap-4 text-sm text-gray-700 mt-3">
+            <span>{resumeData.personal.location}</span>
+            <span>•</span>
+            <span>{resumeData.personal.phone}</span>
+            <span>•</span>
+            <span>{resumeData.personal.email}</span>
+            <span>•</span>
+            <span>{resumeData.personal.github}</span>
+          </div>
+        </section>
+
+        {/* Summary */}
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Summary
+          </h2>
+          <p className="text-sm leading-relaxed text-gray-800">
+            {resumeData.summary}
+          </p>
+        </section>
+
+        {/* Skills */}
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Skills
+          </h2>
+          <div className="text-sm grid grid-cols-2 gap-y-2">
+            {resumeData.skills.map((skill) => (
+              <div key={skill.label}>
+                <span className="font-medium">{skill.label}:</span>{" "}
+                {skill.values.join(", ")}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Experience */}
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Experience
+          </h2>
+
+          {resumeData.experience.map((exp, index) => (
+            <div key={index} className="mb-4">
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-sm">{exp.role}</h3>
+                <span className="text-xs text-gray-600">{exp.duration}</span>
+              </div>
+              <p className="text-xs text-gray-600">
+                {exp.company}, {exp.location}
+              </p>
+
+              <ul className="list-disc ml-5 mt-2 text-sm space-y-1">
+                {exp.points.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        {/* Projects */}
+        <section className="mb-6">
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Projects
+          </h2>
+
+          {resumeData.projects.map((project, index) => (
+            <div key={index} className="mb-4">
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-sm">{project.title}</h3>
+                <span className="text-xs text-gray-600">{project.year}</span>
+              </div>
+
+              <ul className="list-disc ml-5 mt-2 text-sm space-y-1">
+                {project.points.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        {/* Education */}
+        <section>
+          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+            Education
+          </h2>
+
+          <div className="flex justify-between items-center text-sm">
+            <h3 className="font-semibold">{resumeData.education.degree}</h3>
+            <span className="text-xs text-gray-600">
+              {resumeData.education.duration}
+            </span>
+          </div>
+          <p className="text-xs text-gray-600">
+            {resumeData.education.institution}
+          </p>
+        </section>
+      </div>
+    );
+  };
+
+  const getFullHeight = (element: HTMLElement) => {
+    const styles = window.getComputedStyle(element);
+    const marginTop = parseFloat(styles.marginTop);
+    const marginBottom = parseFloat(styles.marginBottom);
+    return element.offsetHeight + marginTop + marginBottom;
+  };
+
+  const pageSplit = () => {
+    const A4_HEIGHT_PX = 1123;
+    const PADDING_PX = 40;
+    const USABLE_HEIGHT = A4_HEIGHT_PX - PADDING_PX * 2;
+
+    if (!resumeRef.current) return [];
+
+    const sections = Array.from(
+      (resumeRef.current as HTMLElement).querySelectorAll("section")
+    );
+
+    const pages: HTMLElement[][] = [];
+    let currentPage: HTMLElement[] = [];
+    let usedHeight = 0;
+
+    for (const section of sections) {
+      const sectionHeight = getFullHeight(section);
+
+      if (usedHeight + sectionHeight <= USABLE_HEIGHT) {
+        currentPage.push(section);
+        usedHeight += sectionHeight;
+        continue;
+      }
+
+      for (const child of Array.from(section.children) as HTMLElement[]) {
+        const h = getFullHeight(child);
+
+        if (usedHeight + h > USABLE_HEIGHT) {
+          pages.push([...currentPage]);
+          currentPage = [];
+          usedHeight = 0;
+        }
+
+        currentPage.push(child);
+        usedHeight += h;
+      }
+    }
+
+    if (currentPage.length) pages.push([...currentPage]);
+
+    setResumePage(pages);
+  };
+
+  useEffect(() => {
+    if (resumeRef.current) {
+      pageSplit();
+    }
+  }, [resumeRef, resumeData]);
+
+  return (
+    <>
+      <div
+        className="absolute opacity-0 pointer-events-none"
+        style={{ width: "210mm" }}
+      >
+        {renderResumeContent()}
+      </div>
+
+      {resumePage.map((page, index) => (
+        <div
+          key={index}
+          className="mx-auto bg-white p-8 mb-8"
+          style={{ width: "210mm", minHeight: "297mm" }}
+        >
+          {page.map((section, idx) => (
+            <div
+              key={idx}
+              className=" bg-white text-black"
+              dangerouslySetInnerHTML={{ __html: section.outerHTML }}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
+}
