@@ -33,6 +33,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { ResumePreview } from "@/components/resume/resume-preview";
+import { TemplateId } from "@/components/resume-templates";
 
 const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   const { resumeId } = await params;
@@ -305,8 +306,8 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
           </ScrollArea>
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
-        <ResizablePanel minSize={50} defaultSize={58}>
-          <ResumePreview />
+        <ResizablePanel minSize={50} defaultSize={58} className="w-full">
+          <ResumePreview templateId={resume.templateId as TemplateId} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
