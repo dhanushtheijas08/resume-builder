@@ -306,7 +306,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
         <ResizablePanel minSize={50} defaultSize={58}>
-          <ResumePreview resume={resume} templateMeta={templateMeta} />
+          <ResumePreview />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
