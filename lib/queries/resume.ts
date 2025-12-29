@@ -53,6 +53,11 @@ export const fetchUserResume = async (resumeId: string) => {
             order: "asc",
           },
         },
+        customSection: {
+          orderBy: {
+            order: "asc",
+          },
+        },
       },
     });
 

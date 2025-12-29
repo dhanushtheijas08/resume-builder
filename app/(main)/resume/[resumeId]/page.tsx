@@ -6,6 +6,7 @@ import { WorkExperienceSection } from "@/components/resume/sections/work-experie
 import { CertificationSection } from "@/components/resume/sections/certification/certification";
 import { AwardSection } from "@/components/resume/sections/award/award";
 import { PublicationSection } from "@/components/resume/sections/publication/publication";
+import { CustomSectionComponent } from "@/components/resume/sections/custom-section/custom-section";
 import {
   Accordion,
   AccordionContent,
@@ -31,6 +32,7 @@ import {
   Award,
   Trophy,
   BookOpen,
+  FileText,
 } from "lucide-react";
 import { ResumePreview } from "@/components/resume/resume-preview";
 import { TemplateId } from "@/components/resume-templates";
@@ -302,6 +304,32 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
                   </div>
                 </AccordionContent>
               </AccordionItem>
+
+              <AccordionItem
+                value="custom-sections"
+                className="border rounded-xl bg-card shadow-sm overflow-hidden"
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                      <FileText className="size-4 text-blue-500" />
+                    </div>
+                    <div className="text-left">
+                      <span className="font-medium">Custom Sections</span>
+                      <p className="text-xs text-muted-foreground font-normal">
+                        Additional sections
+                      </p>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-0 pb-0">
+                  <div className="px-5 pb-5 pt-2">
+                    <CustomSectionComponent
+                      customSections={resume?.customSection ?? []}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
             </Accordion>
           </ScrollArea>
         </ResizablePanel>
@@ -318,6 +346,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
               certifications: resume.certifications,
               awards: resume.awards,
               publications: resume.publications,
+              customSections: resume.customSection ?? [],
             }}
           />
         </ResizablePanel>

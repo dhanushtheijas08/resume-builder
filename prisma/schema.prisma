@@ -260,6 +260,7 @@ model CustomSection {
 }
 
 enum SectionType {
+  SUMMARY
   EXPERIENCE
   EDUCATION
   PROJECT

@@ -11,6 +11,7 @@ import type {
   Project,
   Certification,
   Publication,
+  CustomSection,
 } from "@/app/generated/prisma/client";
 
 export type ResumeData = {
@@ -22,6 +23,7 @@ export type ResumeData = {
   certifications: Certification[];
   awards: string | null;
   publications: Publication[];
+  customSections: CustomSection[];
 };
 
 export const ResumePreview = ({

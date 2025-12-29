@@ -305,6 +305,16 @@ export const publicationSchema = z.object({
     .optional(),
 });
 
+export const customSectionSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100, "Title must be at most 100 characters"),
+  type: z.enum(["SUMMARY", "EXPERIENCE", "EDUCATION", "PROJECT", "SKILL"]),
+  order: z.number().int().min(1, "Order is required"),
+  content: z.any(),
+});
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;
@@ -314,3 +324,4 @@ export type ProjectFormData = z.infer<typeof projectSchema>;
 export type CertificationFormData = z.infer<typeof certificationSchema>;
 export type AwardFormData = z.infer<typeof awardSchema>;
 export type PublicationFormData = z.infer<typeof publicationSchema>;
+export type CustomSectionFormData = z.infer<typeof customSectionSchema>;
