@@ -5,6 +5,3 @@ export const TEMPLATE_REGISTRY = {
 } as const;
 
 export type TemplateId = keyof typeof TEMPLATE_REGISTRY;
-
-// Export skeleton loaders
-export { ResumeSkeletonOneColumn, ResumeSkeletonTwoColumn } from "./template-1";

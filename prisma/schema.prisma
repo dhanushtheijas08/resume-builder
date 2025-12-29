@@ -108,6 +108,7 @@ model Resume {
   certifications  Certification[]
   awards          String?
   publications    Publication[]
+  customSection   CustomSection[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -159,9 +160,9 @@ model Education {
 
   degree      String
   institution String
-  location    String?
+  location    String?                                                                     
   startDate   String
-  endDate     String?
+  endDate     String?                                                                                                                                                                                                                                                                                       
   isCurrent   Boolean @default(false)
   description String?
 
@@ -229,7 +230,6 @@ model Certification {
   @@map("certification")
 }
 
-
 model Publication {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   order     Int
@@ -245,4 +245,23 @@ model Publication {
   updatedAt DateTime @updatedAt
 
   @@map("publication")
+}
+
+model CustomSection {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   
+  type        SectionType 
+  order       Int
+  content     Json   
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  @@map("customSection")
+}
+
+enum SectionType {
+  EXPERIENCE
+  EDUCATION
+  PROJECT
+  SKILL
 }

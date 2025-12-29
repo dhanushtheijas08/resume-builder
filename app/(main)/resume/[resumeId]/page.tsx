@@ -307,7 +307,19 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
         <ResizablePanel minSize={50} defaultSize={58} className="w-full">
-          <ResumePreview templateId={resume.templateId as TemplateId} />
+          <ResumePreview
+            templateId={resume.templateId as TemplateId}
+            resumeData={{
+              profile: resume.profile,
+              workExperiences: resume.workExperiences,
+              educations: resume.educations,
+              skills: resume.skills,
+              projects: resume.projects,
+              certifications: resume.certifications,
+              awards: resume.awards,
+              publications: resume.publications,
+            }}
+          />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

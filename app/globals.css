@@ -187,3 +187,15 @@ body {
 .resume-li {
   @apply leading-6;
 }
+
+.resume ul {
+  @apply list-disc pl-6 my-2;
+}
+
+.resume ol {
+  @apply list-decimal pl-6 my-2;
+}
+
+.resume li {
+  @apply leading-6;
+}

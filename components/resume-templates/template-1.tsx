@@ -1,6 +1,6 @@
 "use client";
 import { LinkedinIcon } from "@/components/icons/linkedin";
-import { Globe, Mail, Phone } from "lucide-react";
+import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import {
   Fragment,
   useCallback,
@@ -9,283 +9,296 @@ import {
   useState,
 } from "react";
 import { GitHubIcon } from "../icons/github";
-import { Skeleton } from "@/components/ui/skeleton";
+import { sanitizeClientHtml } from "@/lib/sanitize-html-input";
+import type { ResumeData } from "@/components/resume/resume-preview";
 
-const resumeData = {
-  personal: {
-    name: "Arjun Kumar",
-    title: "Software Engineer (Frontend)",
-    location: "Bengaluru, India",
-    phone: "+91 98765 43210",
-    email: "arjun.kumar@example.com",
-    github: "github.com/arjunkumar-dev",
-    linkedin: "linkedin.com/in/arjun-kumar-dev",
-    portfolio: "arjunkumar.vercel.app",
-  },
+const formatDateRange = (
+  startDate: string,
+  endDate: string | null,
+  isCurrent: boolean
+): string => {
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "";
+    // Try to parse date string (could be "2024-01", "2024-01-15", or "Jan 2024" format)
+    // Handle YYYY-MM format
+    if (/^\d{4}-\d{2}$/.test(dateStr)) {
+      const [year, month] = dateStr.split("-");
+      const date = new Date(parseInt(year), parseInt(month) - 1);
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    }
+    // Try standard date parsing
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    }
+    // If not a valid date, return as is
+    return dateStr;
+  };
 
-  summary:
-    "Frontend-focused Software Engineer with experience building modern, responsive web applications using React and Next.js. Comfortable working across the stack, collaborating with backend teams, and translating product requirements into clean, user-friendly interfaces.",
-
-  skills: [
-    {
-      label: "Languages",
-      values: ["JavaScript", "TypeScript"],
-    },
-    {
-      label: "Frontend",
-      values: ["React", "Next.js", "Tailwind CSS", "Framer Motion"],
-    },
-    {
-      label: "Backend",
-      values: ["Node.js", "Express"],
-    },
-    {
-      label: "Database",
-      values: ["MongoDB", "PostgreSQL"],
-    },
-    {
-      label: "Tools",
-      values: ["Git", "Docker", "Vercel"],
-    },
-  ],
-
-  experience: [
-    {
-      role: "Software Engineer",
-      company: "TechNova Solutions",
-      location: "Bengaluru, India",
-      duration: "Jul 2024 – Present",
-      points: [
-        "Built and enhanced customer-facing dashboards using React and Next.js with a strong focus on performance.",
-        "Worked closely with designers to implement pixel-perfect UI components using Tailwind CSS.",
-        "Collaborated with backend teams to integrate REST APIs and handle async data flows.",
-      ],
-    },
-    {
-      role: "Frontend Engineer Intern",
-      company: "InnoLabs",
-      location: "Remote",
-      duration: "Jan 2024 – Jun 2024",
-      points: [
-        "Developed reusable UI components and layouts for an internal admin portal.",
-        "Improved page load times by optimizing component rendering and API usage.",
-        "Gained hands-on experience with code reviews, Git workflows, and agile practices.",
-      ],
-    },
-  ],
-
-  projects: [
-    {
-      title: "Task Management Dashboard",
-      year: "2024",
-      points: [
-        "Built a Kanban-style task management app with drag-and-drop functionality.",
-        "Implemented authentication, protected routes, and role-based UI rendering.",
-        "Tech Stack: React, TypeScript, Tailwind CSS, Node.js, MongoDB.",
-      ],
-      repo: "https://github.com/arjunkumar-dev/task-manager",
-    },
-    {
-      title: "E-commerce Storefront",
-      year: "2024",
-      points: [
-        "Developed a responsive e-commerce frontend with product listings, filters, and cart functionality.",
-        "Integrated REST APIs for product data, checkout flow, and order history.",
-        "Tech Stack: Next.js, React Query, Tailwind CSS.",
-      ],
-      repo: "https://github.com/arjunkumar-dev/ecommerce-frontend",
-    },
-  ],
-
-  education: {
-    degree: "Bachelor of Engineering in Information Technology",
-    duration: "2020 – 2024",
-    institution: "Anna University",
-    location: "Chennai, India",
-  },
+  const start = formatDate(startDate);
+  const end = isCurrent ? "Present" : endDate ? formatDate(endDate) : "Present";
+  return `${start} - ${end}`;
 };
 
-const Template1 = () => {
+const groupSkillsByCategory = (skills: ResumeData["skills"]) => {
+  const grouped: Record<string, string[]> = {};
+
+  skills.forEach((skill) => {
+    const category = skill.category || "Others";
+    if (!grouped[category]) {
+      grouped[category] = [];
+    }
+    grouped[category].push(skill.name);
+  });
+
+  return Object.entries(grouped).map(([label, values]) => ({
+    label,
+    values,
+  }));
+};
+
+interface Template1Props {
+  resumeData: ResumeData;
+}
+
+const Template1 = ({ resumeData }: Template1Props) => {
   const resumeRef = useRef<HTMLDivElement>(null);
   const [resumePage, setResumePage] = useState<HTMLElement[][]>([]);
 
   const renderResumeContent = () => {
+    const profile = resumeData.profile;
+    const groupedSkills = groupSkillsByCategory(resumeData.skills);
+    const primaryEducation = resumeData.educations[0];
+
     return (
       <div
         ref={resumeRef}
-        className="w-[210mm] min-h-[297mm] p-8 bg-white text-gray-900 shadow-lg"
+        className="w-[210mm] min-h-[297mm] p-8 bg-white text-gray-900 shadow-lg "
       >
         {/* Header */}
         <section className="mb-3.5">
           <h1 className="text-3xl font-bold tracking-tight">
-            {resumeData.personal.name}
+            {profile?.name || "Your Name"}
           </h1>
           <p className="text-sm text-gray-600 mt-1">
-            {resumeData.personal.title}
+            {profile?.designation || "Your Title"}
           </p>
 
           <div className="flex flex-wrap gap-4 text-sm text-gray-700 mt-3 items-center">
-            {/* Location */}
-
-            {/* Coimbatore, India */}
-            {/* <div className="flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5" />
-              <span>{resumeData.personal.location}</span>
-            </div> */}
-            <a
-              href={resumeData.personal.portfolio}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>Portfolio</span>
-            </a>
-            <a
-              href={`tel:${resumeData.personal.phone.replace(/\s+/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              <span>{resumeData.personal.phone}</span>
-            </a>
-            {/* <span>•</span> */}
-            <a
-              href={`mailto:${resumeData.personal.email}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <Mail className="w-3.5 h-3.5" />
-              <span>{resumeData.personal.email}</span>
-            </a>
-            {/* <span>•</span> */}
-            <a
-              href={`https://${resumeData.personal.github}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <GitHubIcon className="w-3.5 h-3.5" />
-              <span>GitHub</span>
-            </a>
-            {/* <span>•</span> */}
-            <a
-              href={resumeData.personal.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <LinkedinIcon className="w-3.5 h-3.5" />
-              <span>LinkedIn</span>
-            </a>
-            {/* <span>•</span> */}
-            {/* <a
-              href={resumeData.personal.portfolio}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>Portfolio</span>
-            </a> */}
+            {profile?.portfolio && (
+              <a
+                href={
+                  profile.portfolio.startsWith("http")
+                    ? profile.portfolio
+                    : `https://${profile.portfolio}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>Portfolio</span>
+              </a>
+            )}
+            {profile?.phoneNumber && (
+              <a
+                href={`tel:${profile.phoneNumber.replace(/\s+/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>{profile.phoneNumber}</span>
+              </a>
+            )}
+            {profile?.email && (
+              <a
+                href={`mailto:${profile.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>{profile.email}</span>
+              </a>
+            )}
+            {profile?.github && (
+              <a
+                href={
+                  profile.github.startsWith("http")
+                    ? profile.github
+                    : `https://${profile.github}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+              >
+                <GitHubIcon className="w-3.5 h-3.5" />
+                <span>GitHub</span>
+              </a>
+            )}
+            {profile?.linkedin && (
+              <a
+                href={
+                  profile.linkedin.startsWith("http")
+                    ? profile.linkedin
+                    : `https://${profile.linkedin}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+              >
+                <LinkedinIcon className="w-3.5 h-3.5" />
+                <span>LinkedIn</span>
+              </a>
+            )}
+            {profile?.location && (
+              <div className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{profile.location}</span>
+              </div>
+            )}
           </div>
         </section>
-
-        {/* Summary */}
 
         {/* Experience */}
-        <section className="">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-            Experience
-          </h2>
+        {resumeData.workExperiences.length > 0 && (
+          <section className="">
+            <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+              Experience
+            </h2>
 
-          {resumeData.experience.map((exp, index) => (
-            <div key={index} className="mb-4">
-              <div className="flex justify-between items-center">
-                <h3 className="font-semibold text-sm">{exp.role}</h3>
-                <span className="text-xs text-gray-600">{exp.duration}</span>
-              </div>
-              <p className="text-xs text-gray-600">
-                {exp.company}, {exp.location}
-              </p>
+            {resumeData.workExperiences.map((exp, index) => {
+              const duration = formatDateRange(
+                exp.startDate,
+                exp.endDate,
+                exp.isCurrent
+              );
 
-              <ul className="list-disc ml-5 mt-2 text-sm space-y-1">
-                {exp.points.map((point, i) => (
-                  <li key={i}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </section>
+              return (
+                <div key={exp.id || index} className="mb-4 resume">
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-semibold text-sm">{exp.jobTitle}</h3>
+                    <span className="text-xs text-gray-600">{duration}</span>
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    {exp.company}
+                    {exp.location && `, ${exp.location}`}
+                  </p>
 
-        {/* Projects */}
-        <section className="">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-            Projects
-          </h2>
-
-          {resumeData.projects.map((project, index) => (
-            <Fragment key={index}>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-sm">{project.title}</h3>
-                  {project.repo && (
-                    <a
-                      href={project.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center hover:text-gray-900 transition-colors"
-                      title="View Repository"
-                    >
-                      <GitHubIcon className="w-4 h-4" />
-                    </a>
+                  {exp.description && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeClientHtml(exp.description),
+                      }}
+                    />
                   )}
                 </div>
-                <span className="text-xs text-gray-600">{project.year}</span>
-              </div>
+              );
+            })}
+          </section>
+        )}
 
-              <ul className="list-disc ml-5 mt-2 text-sm space-y-1 mb-4">
-                {project.points.map((point, i) => (
-                  <li key={i}>{point}</li>
-                ))}
-              </ul>
-            </Fragment>
-          ))}
-        </section>
+        {/* Projects */}
+        {resumeData.projects.length > 0 && (
+          <section className="">
+            <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+              Projects
+            </h2>
+
+            {resumeData.projects.map((project, index) => {
+              const year = project.endDate
+                ? new Date(project.endDate).getFullYear().toString()
+                : project.startDate
+                ? new Date(project.startDate).getFullYear().toString()
+                : "";
+
+              return (
+                <Fragment key={project.id || index}>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-sm">{project.name}</h3>
+                      {project.github && (
+                        <a
+                          href={
+                            project.github.startsWith("http")
+                              ? project.github
+                              : `https://${project.github}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center hover:text-gray-900 transition-colors"
+                          title="View Repository"
+                        >
+                          <GitHubIcon className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+                    {year && (
+                      <span className="text-xs text-gray-600">{year}</span>
+                    )}
+                  </div>
+
+                  {project.description && (
+                    <div
+                      className="resume"
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeClientHtml(project.description),
+                      }}
+                    />
+                  )}
+                </Fragment>
+              );
+            })}
+          </section>
+        )}
 
         {/* Skills */}
-        <section className="mb-3.5">
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-            Skills
-          </h2>
-          <div className="text-sm grid grid-cols-2 gap-y-2">
-            {resumeData.skills.map((skill) => (
-              <div key={skill.label}>
-                <span className="font-medium">{skill.label}:</span>{" "}
-                {skill.values.join(", ")}
-              </div>
-            ))}
-          </div>
-        </section>
+        {groupedSkills.length > 0 && (
+          <section className="mb-3.5">
+            <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+              Skills
+            </h2>
+            <div className="text-sm grid grid-cols-2 gap-y-2">
+              {groupedSkills.map((skill, index) => (
+                <div key={`${skill.label}-${index}`}>
+                  <span className="font-medium">{skill.label}:</span>{" "}
+                  {skill.values.join(", ")}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Education */}
-        <section>
-          <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
-            Education
-          </h2>
+        {primaryEducation && (
+          <section>
+            <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+              Education
+            </h2>
 
-          <div className="flex justify-between items-center text-sm">
-            <h3 className="font-semibold">{resumeData.education.degree}</h3>
-            <span className="text-xs text-gray-600">
-              {resumeData.education.duration}
-            </span>
-          </div>
-          <p className="text-xs text-gray-600">
-            {resumeData.education.institution}
-          </p>
-        </section>
+            <div className="flex justify-between items-center text-sm">
+              <h3 className="font-semibold">{primaryEducation.degree}</h3>
+              <span className="text-xs text-gray-600">
+                {formatDateRange(
+                  primaryEducation.startDate,
+                  primaryEducation.endDate,
+                  primaryEducation.isCurrent
+                )}
+              </span>
+            </div>
+            <p className="text-xs text-gray-600">
+              {primaryEducation.institution}
+              {primaryEducation.location && `, ${primaryEducation.location}`}
+            </p>
+          </section>
+        )}
       </div>
     );
   };
@@ -337,7 +350,6 @@ const Template1 = () => {
 
     if (currentPage.length) pages.push([...currentPage]);
 
-    // Defer state update to avoid synchronous setState warning
     requestAnimationFrame(() => {
       setResumePage(pages);
     });

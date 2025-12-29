@@ -24,7 +24,7 @@ export const PersonalInfoForm = ({
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-4 pt-4">
+        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-3 pt-4">
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -39,12 +39,33 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2">
+                  <div className="h-2 -mt-2.5">
                     <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="designation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Designation</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Software Engineer"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <div className="h-2 -mt-2.5">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="email"
@@ -59,14 +80,13 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2">
+                  <div className="h-2 -mt-2.5">
                     <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+
             <FormField
               control={form.control}
               name="phoneNumber"
@@ -80,12 +100,14 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2">
+                  <div className="h-2 -mt-2.5">
                     <FormMessage />
                   </div>
                 </FormItem>
               )}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="location"
@@ -99,47 +121,7 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2">
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <FormField
-              control={form.control}
-              name="linkedin"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LinkedIn</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="linkedin.com/in/username"
-                      {...field}
-                      disabled={isLoading}
-                    />
-                  </FormControl>
-                  <div className="h-2">
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="github"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>GitHub</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="github.com/username"
-                      {...field}
-                      disabled={isLoading}
-                    />
-                  </FormControl>
-                  <div className="h-2">
+                  <div className="h-2 -mt-2.5">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -158,7 +140,47 @@ export const PersonalInfoForm = ({
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <div className="h-2">
+                  <div className="h-2 -mt-2.5">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="linkedin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>LinkedIn</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="linkedin.com/in/username"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <div className="h-2 -mt-2.5">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="github"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>GitHub</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="github.com/username"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                  <div className="h-2 -mt-2.5">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -178,7 +200,7 @@ export const PersonalInfoForm = ({
                     onChange={field.onChange}
                   />
                 </FormControl>
-                <div className="h-2">
+                <div className="h-2 -mt-2.5">
                   <FormMessage />
                 </div>
               </FormItem>
