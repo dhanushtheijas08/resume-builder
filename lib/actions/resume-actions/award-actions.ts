@@ -7,6 +7,7 @@ import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, awardSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const upsertAwardAction = safeAction
   .inputSchema(
@@ -49,6 +50,8 @@ export const upsertAwardAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Awards saved successfully",
@@ -88,6 +91,8 @@ export const deleteAwardAction = safeAction
           awards: null,
         },
       });
+
+      revalidatePath(`/resume/${parsedInput.resumeId}`);
     } catch (error) {
       if (error instanceof ActionError) {
         throw error;

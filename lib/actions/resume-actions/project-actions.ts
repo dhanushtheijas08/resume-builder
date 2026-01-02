@@ -7,6 +7,7 @@ import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, projectSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createProjectAction = safeAction
   .inputSchema(
@@ -72,6 +73,8 @@ export const createProjectAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Project created successfully",
@@ -87,6 +90,8 @@ export const editProjectAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const project = await prisma.project.findUnique({
@@ -104,6 +109,8 @@ export const editProjectAction = safeAction
           403
         );
       }
+
+      resumeId = project.resumeId;
 
       const technologiesArray = parsedInput.technologies
         ? parsedInput.technologies
@@ -146,6 +153,10 @@ export const editProjectAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Project updated successfully",
@@ -161,6 +172,8 @@ export const deleteProjectAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const project = await prisma.project.findUnique({
@@ -179,6 +192,8 @@ export const deleteProjectAction = safeAction
         );
       }
 
+      resumeId = project.resumeId;
+
       await prisma.project.delete({
         where: { id: parsedInput.id },
       });
@@ -190,6 +205,10 @@ export const deleteProjectAction = safeAction
         throw new ActionError("Failed to delete project", 500);
       }
       throw error;
+    }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
     }
 
     return {

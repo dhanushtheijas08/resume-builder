@@ -7,6 +7,7 @@ import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, publicationSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createPublicationAction = safeAction
   .inputSchema(
@@ -54,6 +55,8 @@ export const createPublicationAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Publication created successfully",
@@ -69,6 +72,8 @@ export const editPublicationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const publication = await prisma.publication.findUnique({
@@ -86,6 +91,8 @@ export const editPublicationAction = safeAction
           403
         );
       }
+
+      resumeId = publication.resumeId;
 
       await prisma.publication.update({
         where: { id: parsedInput.id },
@@ -110,6 +117,10 @@ export const editPublicationAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Publication updated successfully",
@@ -125,6 +136,8 @@ export const deletePublicationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const publication = await prisma.publication.findUnique({
@@ -143,6 +156,8 @@ export const deletePublicationAction = safeAction
         );
       }
 
+      resumeId = publication.resumeId;
+
       await prisma.publication.delete({
         where: { id: parsedInput.id },
       });
@@ -154,6 +169,10 @@ export const deletePublicationAction = safeAction
         throw new ActionError("Failed to delete publication", 500);
       }
       throw error;
+    }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
     }
 
     return {

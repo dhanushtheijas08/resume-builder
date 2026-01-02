@@ -9,7 +9,7 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Certification } from "@/app/generated/prisma/client";
@@ -29,7 +29,6 @@ export const useCertification = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<CertificationFormData>({
     resolver: zodResolver(certificationSchema),
@@ -58,9 +57,6 @@ export const useCertification = (
           form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(data.message ?? "Certification created successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -80,9 +76,6 @@ export const useCertification = (
         if (data.success) {
           onSuccess?.();
           toast.success(data.message ?? "Certification updated successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -101,9 +94,6 @@ export const useCertification = (
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Certification deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -135,4 +125,3 @@ export const useCertification = (
       deleteStatus === "executing",
   };
 };
-

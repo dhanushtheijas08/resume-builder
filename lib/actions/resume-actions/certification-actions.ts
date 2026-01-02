@@ -10,6 +10,7 @@ import {
 } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createCertificationAction = safeAction
   .inputSchema(
@@ -59,6 +60,8 @@ export const createCertificationAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Certification created successfully",
@@ -74,6 +77,8 @@ export const editCertificationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const certification = await prisma.certification.findUnique({
@@ -91,6 +96,8 @@ export const editCertificationAction = safeAction
           403
         );
       }
+
+      resumeId = certification.resumeId;
 
       await prisma.certification.update({
         where: { id: parsedInput.id },
@@ -117,6 +124,10 @@ export const editCertificationAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Certification updated successfully",
@@ -132,6 +143,8 @@ export const deleteCertificationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const certification = await prisma.certification.findUnique({
@@ -150,6 +163,8 @@ export const deleteCertificationAction = safeAction
         );
       }
 
+      resumeId = certification.resumeId;
+
       await prisma.certification.delete({
         where: { id: parsedInput.id },
       });
@@ -163,10 +178,13 @@ export const deleteCertificationAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Certification deleted successfully",
       statusCode: 200,
     };
   });
-

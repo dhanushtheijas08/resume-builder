@@ -7,10 +7,11 @@ import { SkillFormData, skillSchema } from "@/lib/validations/resume";
 import { Skill } from "@/app/generated/prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { z } from "zod";
 
 export const defaultValues: SkillFormData = {
   name: "",
@@ -21,9 +22,8 @@ export const defaultValues: SkillFormData = {
 
 export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
-  const form = useForm<SkillFormData>({
+  const form = useForm<z.input<typeof skillSchema>>({
     resolver: zodResolver(skillSchema),
     defaultValues,
   });
@@ -48,9 +48,6 @@ export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
         form.reset(defaultValues);
         onSuccess?.();
         toast.success(data.message ?? "Skill created successfully!");
-        queueMicrotask(() => {
-          router.refresh();
-        });
       }
     },
     onError: ({ error }) => {
@@ -69,9 +66,6 @@ export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
         if (data.success) {
           onSuccess?.();
           toast.success(data.message ?? "Skill updated successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -90,9 +84,6 @@ export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Skill deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {

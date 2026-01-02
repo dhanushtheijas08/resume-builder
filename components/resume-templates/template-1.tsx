@@ -1,16 +1,17 @@
 "use client";
 import { LinkedinIcon } from "@/components/icons/linkedin";
+import type { ResumeData } from "@/components/resume/resume-preview";
+import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 import {
   Fragment,
   useCallback,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { GitHubIcon } from "../icons/github";
-import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
-import type { ResumeData } from "@/components/resume/resume-preview";
 
 const formatDateRange = (
   startDate: string,
@@ -74,7 +75,18 @@ const Template1 = ({ resumeData }: Template1Props) => {
   const renderResumeContent = () => {
     const profile = resumeData.profile;
     const groupedSkills = groupSkillsByCategory(resumeData.skills);
-    const primaryEducation = resumeData.educations[0];
+    // Sort educations by order field
+    const sortedEducations = [...resumeData.educations].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+    // Sort work experiences by order field
+    const sortedWorkExperiences = [...resumeData.workExperiences].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+    // Sort projects by order field
+    const sortedProjects = [...resumeData.projects].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
 
     return (
       <div
@@ -168,13 +180,13 @@ const Template1 = ({ resumeData }: Template1Props) => {
         </section>
 
         {/* Experience */}
-        {resumeData.workExperiences.length > 0 && (
+        {sortedWorkExperiences.length > 0 && (
           <section className="">
             <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
               Experience
             </h2>
 
-            {resumeData.workExperiences.map((exp, index) => {
+            {sortedWorkExperiences.map((exp, index) => {
               const duration = formatDateRange(
                 exp.startDate,
                 exp.endDate,
@@ -206,13 +218,13 @@ const Template1 = ({ resumeData }: Template1Props) => {
         )}
 
         {/* Projects */}
-        {resumeData.projects.length > 0 && (
+        {sortedProjects.length > 0 && (
           <section className="">
             <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
               Projects
             </h2>
 
-            {resumeData.projects.map((project, index) => {
+            {sortedProjects.map((project, index) => {
               const year = project.endDate
                 ? new Date(project.endDate).getFullYear().toString()
                 : project.startDate
@@ -277,26 +289,41 @@ const Template1 = ({ resumeData }: Template1Props) => {
         )}
 
         {/* Education */}
-        {primaryEducation && (
+        {sortedEducations.length > 0 && (
           <section>
             <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
               Education
             </h2>
 
-            <div className="flex justify-between items-center text-sm">
-              <h3 className="font-semibold">{primaryEducation.degree}</h3>
-              <span className="text-xs text-gray-600">
-                {formatDateRange(
-                  primaryEducation.startDate,
-                  primaryEducation.endDate,
-                  primaryEducation.isCurrent
+            {sortedEducations.map((education, index) => (
+              <div
+                key={education.id || index}
+                className={index > 0 ? "mt-4" : ""}
+              >
+                <div className="flex justify-between items-center text-sm">
+                  <h3 className="font-semibold">{education.degree}</h3>
+                  <span className="text-xs text-gray-600">
+                    {formatDateRange(
+                      education.startDate,
+                      education.endDate,
+                      education.isCurrent
+                    )}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  {education.institution}
+                  {education.location && `, ${education.location}`}
+                </p>
+                {education.description && (
+                  <div
+                    className="resume mt-1"
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeServerHtml(education.description),
+                    }}
+                  />
                 )}
-              </span>
-            </div>
-            <p className="text-xs text-gray-600">
-              {primaryEducation.institution}
-              {primaryEducation.location && `, ${primaryEducation.location}`}
-            </p>
+              </div>
+            ))}
           </section>
         )}
 
@@ -509,6 +536,23 @@ const Template1 = ({ resumeData }: Template1Props) => {
     return element.offsetHeight + marginTop + marginBottom;
   };
 
+  // Create a stable key from resumeData to detect changes
+  const resumeDataKey = useMemo(() => {
+    return JSON.stringify({
+      profileId: resumeData.profile?.id,
+      workExpCount: resumeData.workExperiences.length,
+      eduCount: resumeData.educations.length,
+      projectCount: resumeData.projects.length,
+      skillCount: resumeData.skills.length,
+      certCount: resumeData.certifications.length,
+      pubCount: resumeData.publications.length,
+      customSectionCount: resumeData.customSections.length,
+      workExpOrders: resumeData.workExperiences.map((e) => e.order),
+      eduOrders: resumeData.educations.map((e) => e.order),
+      projectOrders: resumeData.projects.map((p) => p.order),
+    });
+  }, [resumeData]);
+
   const pageSplit = useCallback(() => {
     const A4_HEIGHT_PX = 1123;
     const PADDING_PX = 40;
@@ -558,7 +602,7 @@ const Template1 = ({ resumeData }: Template1Props) => {
     if (resumeRef.current) {
       pageSplit();
     }
-  }, [pageSplit]);
+  }, [pageSplit, resumeDataKey]);
 
   return (
     <>

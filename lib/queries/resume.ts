@@ -25,12 +25,12 @@ export const fetchUserResume = async (resumeId: string) => {
         user: true,
         workExperiences: {
           orderBy: {
-            startDate: "desc",
+            order: "asc",
           },
         },
         educations: {
           orderBy: {
-            startDate: "desc",
+            order: "asc",
           },
         },
         skills: {

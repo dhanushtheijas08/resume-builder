@@ -6,7 +6,7 @@ import {
 import { EducationFormData, educationSchema } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Education } from "@/app/generated/prisma/client";
@@ -30,7 +30,6 @@ export const useEducation = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<EducationFormData>({
     resolver: zodResolver(educationSchema),
@@ -63,9 +62,6 @@ export const useEducation = (
           form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(data.message ?? "Education created successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -85,9 +81,6 @@ export const useEducation = (
         if (data.success) {
           onSuccess?.();
           toast.success(data.message ?? "Education updated successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -106,9 +99,6 @@ export const useEducation = (
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Education deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {

@@ -9,7 +9,7 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { CustomSection } from "@/app/generated/prisma/client";
@@ -28,7 +28,6 @@ export const useCustomSection = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<CustomSectionFormData>({
     resolver: zodResolver(customSectionSchema),
@@ -61,9 +60,6 @@ export const useCustomSection = (
           form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(data.message ?? "Custom section created successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -83,9 +79,6 @@ export const useCustomSection = (
         if (data.success) {
           onSuccess?.();
           toast.success(data.message ?? "Custom section updated successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -104,9 +97,6 @@ export const useCustomSection = (
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Custom section deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {

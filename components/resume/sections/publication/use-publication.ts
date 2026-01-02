@@ -9,7 +9,7 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Publication } from "@/app/generated/prisma/client";
@@ -29,7 +29,6 @@ export const usePublication = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<PublicationFormData>({
     resolver: zodResolver(publicationSchema),
@@ -58,9 +57,6 @@ export const usePublication = (
           form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(data.message ?? "Publication created successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -80,9 +76,6 @@ export const usePublication = (
         if (data.success) {
           onSuccess?.();
           toast.success(data.message ?? "Publication updated successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -101,9 +94,6 @@ export const usePublication = (
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Publication deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -135,4 +125,3 @@ export const usePublication = (
       deleteStatus === "executing",
   };
 };
-

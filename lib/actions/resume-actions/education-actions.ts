@@ -7,6 +7,7 @@ import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, educationSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createEducationAction = safeAction
   .inputSchema(
@@ -56,6 +57,8 @@ export const createEducationAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Education created successfully",
@@ -71,6 +74,8 @@ export const editEducationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const education = await prisma.education.findUnique({
@@ -88,6 +93,8 @@ export const editEducationAction = safeAction
           403
         );
       }
+
+      resumeId = education.resumeId;
 
       await prisma.education.update({
         where: { id: parsedInput.id },
@@ -114,6 +121,10 @@ export const editEducationAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Education updated successfully",
@@ -129,6 +140,8 @@ export const deleteEducationAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const education = await prisma.education.findUnique({
@@ -147,6 +160,8 @@ export const deleteEducationAction = safeAction
         );
       }
 
+      resumeId = education.resumeId;
+
       await prisma.education.delete({
         where: { id: parsedInput.id },
       });
@@ -158,6 +173,10 @@ export const deleteEducationAction = safeAction
         throw new ActionError("Failed to delete education", 500);
       }
       throw error;
+    }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
     }
 
     return {

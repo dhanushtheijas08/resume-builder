@@ -6,6 +6,7 @@ import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, skillSchema } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createSkillAction = safeAction
   .inputSchema(
@@ -49,6 +50,8 @@ export const createSkillAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Skill created successfully",
@@ -64,6 +67,8 @@ export const editSkillAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const skill = await prisma.skill.findUnique({
@@ -81,6 +86,8 @@ export const editSkillAction = safeAction
           403
         );
       }
+
+      resumeId = skill.resumeId;
 
       await prisma.skill.update({
         where: { id: parsedInput.id },
@@ -101,6 +108,10 @@ export const editSkillAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Skill updated successfully",
@@ -116,6 +127,8 @@ export const deleteSkillAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const skill = await prisma.skill.findUnique({
@@ -134,6 +147,8 @@ export const deleteSkillAction = safeAction
         );
       }
 
+      resumeId = skill.resumeId;
+
       await prisma.skill.delete({
         where: { id: parsedInput.id },
       });
@@ -145,6 +160,10 @@ export const deleteSkillAction = safeAction
         throw new ActionError("Failed to delete skill", 500);
       }
       throw error;
+    }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
     }
 
     return {

@@ -9,7 +9,7 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { WorkExperience } from "@/app/generated/prisma/client";
@@ -33,7 +33,6 @@ export const useWorkExperience = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<WorkExperienceFormData>({
     resolver: zodResolver(workExperienceSchema),
@@ -68,9 +67,6 @@ export const useWorkExperience = (
           toast.success(
             data.message ?? "Work experience created successfully!"
           );
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -92,9 +88,6 @@ export const useWorkExperience = (
           toast.success(
             data.message ?? "Work experience updated successfully!"
           );
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -115,9 +108,6 @@ export const useWorkExperience = (
           toast.success(
             data.message ?? "Work experience deleted successfully!"
           );
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {

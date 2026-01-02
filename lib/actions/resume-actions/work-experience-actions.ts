@@ -10,6 +10,7 @@ import {
 } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createWorkExperienceAction = safeAction
   .inputSchema(
@@ -20,23 +21,22 @@ export const createWorkExperienceAction = safeAction
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
 
-    const resume = await prisma.resume.findUnique({
-      where: { id: parsedInput.resumeId },
-      select: { userId: true },
-    });
-
-    if (!resume) {
-      throw new ActionError("Resume not found", 404);
-    }
-
-    if (resume.userId !== user.id) {
-      throw new ActionError(
-        "You do not have permission to edit this resume",
-        403
-      );
-    }
-
     try {
+      const resume = await prisma.resume.findUnique({
+        where: { id: parsedInput.resumeId },
+        select: { userId: true },
+      });
+
+      if (!resume) {
+        throw new ActionError("Resume not found", 404);
+      }
+
+      if (resume.userId !== user.id) {
+        throw new ActionError(
+          "You do not have permission to edit this resume",
+          403
+        );
+      }
       await prisma.workExperience.create({
         data: {
           order: parsedInput.order,
@@ -59,6 +59,8 @@ export const createWorkExperienceAction = safeAction
       throw error;
     }
 
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Work experience created successfully",
@@ -74,6 +76,8 @@ export const editWorkExperienceAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const workExperience = await prisma.workExperience.findUnique({
@@ -91,6 +95,8 @@ export const editWorkExperienceAction = safeAction
           403
         );
       }
+
+      resumeId = workExperience.resumeId;
 
       await prisma.workExperience.update({
         where: { id: parsedInput.id },
@@ -117,6 +123,10 @@ export const editWorkExperienceAction = safeAction
       throw error;
     }
 
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Work experience updated successfully",
@@ -132,6 +142,8 @@ export const deleteWorkExperienceAction = safeAction
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
       const workExperience = await prisma.workExperience.findUnique({
@@ -150,6 +162,8 @@ export const deleteWorkExperienceAction = safeAction
         );
       }
 
+      resumeId = workExperience.resumeId;
+
       await prisma.workExperience.delete({
         where: { id: parsedInput.id },
       });
@@ -161,6 +175,10 @@ export const deleteWorkExperienceAction = safeAction
         throw new ActionError("Failed to delete work experience", 500);
       }
       throw error;
+    }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
     }
 
     return {

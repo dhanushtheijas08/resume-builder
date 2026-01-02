@@ -5,7 +5,7 @@ import {
 import { AwardFormData, awardSchema } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -16,7 +16,6 @@ export const defaultValues: AwardFormData = {
 
 export const useAward = (awards: string | null, onSuccess?: () => void) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const form = useForm<AwardFormData>({
     resolver: zodResolver(awardSchema),
@@ -41,9 +40,6 @@ export const useAward = (awards: string | null, onSuccess?: () => void) => {
           form.reset({ ...defaultValues });
           onSuccess?.();
           toast.success(data.message ?? "Awards saved successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {
@@ -62,9 +58,6 @@ export const useAward = (awards: string | null, onSuccess?: () => void) => {
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(data.message ?? "Awards deleted successfully!");
-          queueMicrotask(() => {
-            router.refresh();
-          });
         }
       },
       onError: ({ error }) => {

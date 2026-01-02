@@ -8,7 +8,7 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Profile } from "@/app/generated/prisma/client";
@@ -31,7 +31,6 @@ export const usePersonalInfo = (
   onSuccess?: () => void
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
-  const router = useRouter();
 
   const formDefaultValues = profile
     ? {
@@ -55,7 +54,6 @@ export const usePersonalInfo = (
 
   const { execute: createProfile, status } = useAction(createProfileAction, {
     onSuccess: ({ data }) => {
-      router.refresh();
       if (data.success) {
         toast.success(data.message ?? "Profile created successfully!");
         onSuccess?.();
@@ -74,7 +72,6 @@ export const usePersonalInfo = (
     editProfileAction,
     {
       onSuccess: ({ data }) => {
-        router.refresh();
         if (data.success) {
           toast.success(data.message ?? "Profile updated successfully!");
           onSuccess?.();

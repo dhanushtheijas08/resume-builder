@@ -6,6 +6,7 @@ import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { ResponseData } from "@/lib/validations/auth";
 import { objectIdSchemaFn, personalInfoSchme } from "@/lib/validations/resume";
 import { validateUser } from "../validate-user";
+import { revalidatePath } from "next/cache";
 
 export const createProfileAction = safeAction
   .inputSchema(
@@ -33,7 +34,7 @@ export const createProfileAction = safeAction
     }
 
     try {
-      const resume = await prisma.resume.update({
+      await prisma.resume.update({
         where: { id: parsedInput.resumeId },
         data: {
           profile: {
@@ -51,9 +52,6 @@ export const createProfileAction = safeAction
             },
           },
         },
-        include: {
-          profile: true,
-        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -64,6 +62,9 @@ export const createProfileAction = safeAction
         }
       }
     }
+
+    revalidatePath(`/resume/${parsedInput.resumeId}`);
+
     return {
       success: true,
       message: "Profile created successfully",
@@ -77,10 +78,25 @@ export const editProfileAction = safeAction
     })
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
-    const user = await validateUser();
+    await validateUser();
+
+    let resumeId: string | null = null;
 
     try {
-      const profile = await prisma.profile.update({
+      const profile = await prisma.profile.findUnique({
+        where: { id: parsedInput.id },
+        include: { resumes: { select: { id: true }, take: 1 } },
+      });
+
+      if (!profile) {
+        throw new ActionError("Profile not found", 404);
+      }
+
+      if (profile.resumes[0]) {
+        resumeId = profile.resumes[0].id;
+      }
+
+      await prisma.profile.update({
         where: { id: parsedInput.id },
         data: {
           name: parsedInput.name,
@@ -96,14 +112,22 @@ export const editProfileAction = safeAction
         },
       });
     } catch (error) {
+      if (error instanceof ActionError) {
+        throw error;
+      }
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ActionError("Profile already exists for this resume", 409);
         } else {
-          throw new ActionError("Failed to create profile", 500);
+          throw new ActionError("Failed to update profile", 500);
         }
       }
     }
+
+    if (resumeId) {
+      revalidatePath(`/resume/${resumeId}`);
+    }
+
     return {
       success: true,
       message: "Profile updated successfully",
