@@ -1,9 +1,15 @@
 "use client";
 
 import { Project } from "@/app/generated/prisma/client";
-import { FolderKanban, Plus } from "lucide-react";
-import { ProjectCard } from "./project-card";
+import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
+import { updateOrderAction } from "@/lib/actions/resume-actions";
+import { FolderKanban, Plus } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { ProjectCard } from "./project-card";
 
 type ProjectDisplayProps = {
   projects: Project[];
@@ -22,6 +28,58 @@ export const ProjectDisplay = ({
   showTechUsed = true,
   isDeleting = false,
 }: ProjectDisplayProps) => {
+  const router = useRouter();
+
+  const { execute: updateOrder, status } = useAction(updateOrderAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Project order updated successfully!");
+        router.refresh();
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to update project order";
+      toast.error(message);
+    },
+  });
+
+  const handleReorder = useCallback(
+    (
+      _reorderedItems: Project[],
+      updatedOrders: { id: string; order: number }[]
+    ) => {
+      if (status === "executing") return;
+      updateOrder({ type: "PROJECT", updatedOrder: updatedOrders });
+    },
+    [status, updateOrder]
+  );
+
+  const renderProjectCard = useCallback(
+    (project: Project) => (
+      <ProjectCard
+        project={project}
+        onEditClick={() => onEditClick(project)}
+        onDeleteClick={() => onDeleteClick(project.id)}
+        showTechUsed={showTechUsed}
+        isDeleting={isDeleting}
+      />
+    ),
+    [onEditClick, onDeleteClick, showTechUsed, isDeleting]
+  );
+
+  const renderOverlayCard = (project: Project) => (
+    <ProjectCard
+      project={project}
+      onEditClick={() => {}}
+      onDeleteClick={() => {}}
+      showTechUsed={showTechUsed}
+      isDeleting={false}
+    />
+  );
+
   if (projects.length === 0) {
     return null;
   }
@@ -41,18 +99,13 @@ export const ProjectDisplay = ({
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onEditClick={() => onEditClick(project)}
-            onDeleteClick={() => onDeleteClick(project.id)}
-            showTechUsed={showTechUsed}
-            isDeleting={isDeleting}
-          />
-        ))}
-      </div>
+      <SortableList
+        items={projects}
+        onReorder={handleReorder}
+        renderItem={renderProjectCard}
+        renderOverlayItem={renderOverlayCard}
+        isDisabled={status === "executing"}
+      />
     </div>
   );
 };

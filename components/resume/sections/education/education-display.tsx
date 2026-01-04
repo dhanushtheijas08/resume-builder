@@ -1,9 +1,15 @@
 "use client";
 
 import { Education } from "@/app/generated/prisma/client";
-import { GraduationCap, Plus } from "lucide-react";
-import { EducationCard } from "./education-card";
+import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
+import { updateOrderAction } from "@/lib/actions/resume-actions";
+import { GraduationCap, Plus } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { EducationCard } from "./education-card";
 
 type EducationDisplayProps = {
   educations: Education[];
@@ -20,6 +26,56 @@ export const EducationDisplay = ({
   onDeleteClick,
   isDeleting = false,
 }: EducationDisplayProps) => {
+  const router = useRouter();
+
+  const { execute: updateOrder, status } = useAction(updateOrderAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Education order updated successfully!");
+        router.refresh();
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to update education order";
+      toast.error(message);
+    },
+  });
+
+  const handleReorder = useCallback(
+    (
+      _reorderedItems: Education[],
+      updatedOrders: { id: string; order: number }[]
+    ) => {
+      if (status === "executing") return;
+      updateOrder({ type: "EDUCATION", updatedOrder: updatedOrders });
+    },
+    [status, updateOrder]
+  );
+
+  const renderEducationCard = useCallback(
+    (education: Education) => (
+      <EducationCard
+        education={education}
+        onEditClick={() => onEditClick(education)}
+        onDeleteClick={() => onDeleteClick(education.id)}
+        isDeleting={isDeleting}
+      />
+    ),
+    [onEditClick, onDeleteClick, isDeleting]
+  );
+
+  const renderOverlayCard = (education: Education) => (
+    <EducationCard
+      education={education}
+      onEditClick={() => {}}
+      onDeleteClick={() => {}}
+      isDeleting={false}
+    />
+  );
+
   if (educations.length === 0) {
     return null;
   }
@@ -39,17 +95,13 @@ export const EducationDisplay = ({
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {educations.map((education) => (
-          <EducationCard
-            key={education.id}
-            education={education}
-            onEditClick={() => onEditClick(education)}
-            onDeleteClick={() => onDeleteClick(education.id)}
-            isDeleting={isDeleting}
-          />
-        ))}
-      </div>
+      <SortableList
+        items={educations}
+        onReorder={handleReorder}
+        renderItem={renderEducationCard}
+        renderOverlayItem={renderOverlayCard}
+        isDisabled={status === "executing"}
+      />
     </div>
   );
 };

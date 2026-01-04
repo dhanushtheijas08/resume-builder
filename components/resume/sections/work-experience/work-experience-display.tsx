@@ -1,9 +1,15 @@
 "use client";
 
 import { WorkExperience } from "@/app/generated/prisma/client";
-import { Briefcase, Plus } from "lucide-react";
-import { WorkExperienceCard } from "./work-experience-card";
+import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
+import { updateOrderAction } from "@/lib/actions/resume-actions";
+import { Briefcase, Plus } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { WorkExperienceCard } from "./work-experience-card";
 
 type WorkExperienceDisplayProps = {
   experiences: WorkExperience[];
@@ -20,6 +26,56 @@ export const WorkExperienceDisplay = ({
   onDeleteClick,
   isDeleting = false,
 }: WorkExperienceDisplayProps) => {
+  const router = useRouter();
+
+  const { execute: updateOrder, status } = useAction(updateOrderAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Work experience order updated successfully!");
+        router.refresh();
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to update work experience order";
+      toast.error(message);
+    },
+  });
+
+  const handleReorder = useCallback(
+    (
+      _reorderedItems: WorkExperience[],
+      updatedOrders: { id: string; order: number }[]
+    ) => {
+      if (status === "executing") return;
+      updateOrder({ type: "EXPERIENCE", updatedOrder: updatedOrders });
+    },
+    [status, updateOrder]
+  );
+
+  const renderExperienceCard = useCallback(
+    (experience: WorkExperience) => (
+      <WorkExperienceCard
+        experience={experience}
+        onEditClick={() => onEditClick(experience)}
+        onDeleteClick={() => onDeleteClick(experience.id)}
+        isDeleting={isDeleting}
+      />
+    ),
+    [onEditClick, onDeleteClick, isDeleting]
+  );
+
+  const renderOverlayCard = (experience: WorkExperience) => (
+    <WorkExperienceCard
+      experience={experience}
+      onEditClick={() => {}}
+      onDeleteClick={() => {}}
+      isDeleting={false}
+    />
+  );
+
   if (experiences.length === 0) {
     return null;
   }
@@ -39,17 +95,13 @@ export const WorkExperienceDisplay = ({
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {experiences.map((experience) => (
-          <WorkExperienceCard
-            key={experience.id}
-            experience={experience}
-            onEditClick={() => onEditClick(experience)}
-            onDeleteClick={() => onDeleteClick(experience.id)}
-            isDeleting={isDeleting}
-          />
-        ))}
-      </div>
+      <SortableList
+        items={experiences}
+        onReorder={handleReorder}
+        renderItem={renderExperienceCard}
+        renderOverlayItem={renderOverlayCard}
+        isDisabled={status === "executing"}
+      />
     </div>
   );
 };

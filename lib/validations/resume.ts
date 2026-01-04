@@ -3,6 +3,18 @@ import { z } from "zod";
 export const objectIdSchemaFn = (message: string) =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, message);
 
+export const sectionTypeSchema = z.enum([
+  "SUMMARY",
+  "EXPERIENCE",
+  "EDUCATION",
+  "PROJECT",
+  "SKILL",
+  "CERTIFICATION",
+  "AWARD",
+  "PUBLICATION",
+  "CUSTOM_SECTION",
+]);
+
 export const createResumeSchema = z.object({
   title: z
     .string()
@@ -310,11 +322,20 @@ export const customSectionSchema = z.object({
     .string()
     .min(1, "Title is required")
     .max(100, "Title must be at most 100 characters"),
-  type: z.enum(["SUMMARY", "EXPERIENCE", "EDUCATION", "PROJECT", "SKILL"]),
+  type: sectionTypeSchema.exclude(["CUSTOM_SECTION"]),
   order: z.number().int().min(1, "Order is required"),
   content: z.any(),
 });
 
+export const updatedOrderSchema = z.object({
+  type: sectionTypeSchema,
+  updatedOrder: z.array(
+    z.object({
+      order: z.number().int().min(1, "Order is required"),
+      id: objectIdSchemaFn("Invalid section ID"),
+    })
+  ),
+});
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;

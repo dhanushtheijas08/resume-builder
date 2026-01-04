@@ -1,9 +1,15 @@
 "use client";
 
 import { Publication } from "@/app/generated/prisma/client";
-import { BookOpen, Plus } from "lucide-react";
-import { PublicationCard } from "./publication-card";
+import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
+import { updateOrderAction } from "@/lib/actions/resume-actions";
+import { BookOpen, Plus } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { PublicationCard } from "./publication-card";
 
 type PublicationDisplayProps = {
   publications: Publication[];
@@ -20,6 +26,56 @@ export const PublicationDisplay = ({
   onDeleteClick,
   isDeleting = false,
 }: PublicationDisplayProps) => {
+  const router = useRouter();
+
+  const { execute: updateOrder, status } = useAction(updateOrderAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Publication order updated successfully!");
+        router.refresh();
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to update publication order";
+      toast.error(message);
+    },
+  });
+
+  const handleReorder = useCallback(
+    (
+      _reorderedItems: Publication[],
+      updatedOrders: { id: string; order: number }[]
+    ) => {
+      if (status === "executing") return;
+      updateOrder({ type: "PUBLICATION", updatedOrder: updatedOrders });
+    },
+    [status, updateOrder]
+  );
+
+  const renderPublicationCard = useCallback(
+    (publication: Publication) => (
+      <PublicationCard
+        publication={publication}
+        onEditClick={() => onEditClick(publication)}
+        onDeleteClick={() => onDeleteClick(publication.id)}
+        isDeleting={isDeleting}
+      />
+    ),
+    [onEditClick, onDeleteClick, isDeleting]
+  );
+
+  const renderOverlayCard = (publication: Publication) => (
+    <PublicationCard
+      publication={publication}
+      onEditClick={() => {}}
+      onDeleteClick={() => {}}
+      isDeleting={false}
+    />
+  );
+
   if (publications.length === 0) {
     return null;
   }
@@ -40,17 +96,13 @@ export const PublicationDisplay = ({
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {publications.map((publication) => (
-          <PublicationCard
-            key={publication.id}
-            publication={publication}
-            onEditClick={() => onEditClick(publication)}
-            onDeleteClick={() => onDeleteClick(publication.id)}
-            isDeleting={isDeleting}
-          />
-        ))}
-      </div>
+      <SortableList
+        items={publications}
+        onReorder={handleReorder}
+        renderItem={renderPublicationCard}
+        renderOverlayItem={renderOverlayCard}
+        isDisabled={status === "executing"}
+      />
     </div>
   );
 };

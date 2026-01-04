@@ -61,8 +61,6 @@ export const fetchUserResume = async (resumeId: string) => {
       },
     });
 
-    console.log({ resume });
-
     if (!resume) {
       throw new ActionError("Resume not found or access denied", 404);
     }

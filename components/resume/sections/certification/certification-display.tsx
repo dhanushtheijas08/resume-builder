@@ -1,9 +1,15 @@
 "use client";
 
 import { Certification } from "@/app/generated/prisma/client";
-import { Award, Plus } from "lucide-react";
-import { CertificationCard } from "./certification-card";
+import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
+import { updateOrderAction } from "@/lib/actions/resume-actions";
+import { Award, Plus } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { CertificationCard } from "./certification-card";
 
 type CertificationDisplayProps = {
   certifications: Certification[];
@@ -20,6 +26,56 @@ export const CertificationDisplay = ({
   onDeleteClick,
   isDeleting = false,
 }: CertificationDisplayProps) => {
+  const router = useRouter();
+
+  const { execute: updateOrder, status } = useAction(updateOrderAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Certification order updated successfully!");
+        router.refresh();
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to update certification order";
+      toast.error(message);
+    },
+  });
+
+  const handleReorder = useCallback(
+    (
+      _reorderedItems: Certification[],
+      updatedOrders: { id: string; order: number }[]
+    ) => {
+      if (status === "executing") return;
+      updateOrder({ type: "CERTIFICATION", updatedOrder: updatedOrders });
+    },
+    [status, updateOrder]
+  );
+
+  const renderCertificationCard = useCallback(
+    (certification: Certification) => (
+      <CertificationCard
+        certification={certification}
+        onEditClick={() => onEditClick(certification)}
+        onDeleteClick={() => onDeleteClick(certification.id)}
+        isDeleting={isDeleting}
+      />
+    ),
+    [onEditClick, onDeleteClick, isDeleting]
+  );
+
+  const renderOverlayCard = (certification: Certification) => (
+    <CertificationCard
+      certification={certification}
+      onEditClick={() => {}}
+      onDeleteClick={() => {}}
+      isDeleting={false}
+    />
+  );
+
   if (certifications.length === 0) {
     return null;
   }
@@ -40,17 +96,13 @@ export const CertificationDisplay = ({
         </Button>
       </div>
 
-      <div className="space-y-3">
-        {certifications.map((certification) => (
-          <CertificationCard
-            key={certification.id}
-            certification={certification}
-            onEditClick={() => onEditClick(certification)}
-            onDeleteClick={() => onDeleteClick(certification.id)}
-            isDeleting={isDeleting}
-          />
-        ))}
-      </div>
+      <SortableList
+        items={certifications}
+        onReorder={handleReorder}
+        renderItem={renderCertificationCard}
+        renderOverlayItem={renderOverlayCard}
+        isDisabled={status === "executing"}
+      />
     </div>
   );
 };

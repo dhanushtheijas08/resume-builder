@@ -1,9 +1,6 @@
 "use client";
 
 import { Education } from "@/app/generated/prisma/client";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Calendar, MapPin, Edit2, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +12,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, Edit2, GraduationCap, MapPin, Trash2 } from "lucide-react";
 
 type EducationCardProps = {
   education: Education;
@@ -36,7 +36,7 @@ export const EducationCard = ({
 
   return (
     <div className="border rounded-lg p-5 bg-background/40 hover:bg-background/60 transition-colors group">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 relative">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-lg font-semibold">{education.degree}</h3>

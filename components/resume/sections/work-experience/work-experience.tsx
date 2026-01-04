@@ -22,8 +22,6 @@ export const WorkExperienceSection = ({
   const sortedExperiences = experiences.sort((a, b) => a.order - b.order);
   const maxOrder = (sortedExperiences.at(-1)?.order ?? 0) + 1;
 
-  console.log(maxOrder);
-
   const {
     form,
     saveWorkExperience,
