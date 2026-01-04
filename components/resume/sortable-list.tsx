@@ -87,9 +87,11 @@ export function SortableList<T extends { id: string }>({
     setActiveId(null);
   }, []);
 
-  const activeItem = activeId
-    ? sortedItems.find((item) => item.id === activeId)
-    : null;
+  const activeIndex = activeId
+    ? sortedItems.findIndex((item) => item.id === activeId)
+    : -1;
+  const activeItem = activeIndex !== -1 ? sortedItems[activeIndex] : null;
+  const activeOrder = activeIndex !== -1 ? activeIndex + 1 : null;
 
   return (
     <div
@@ -104,8 +106,14 @@ export function SortableList<T extends { id: string }>({
         onDragCancel={handleDragCancel}
       >
         <SortableContext items={sortedItems.map((item) => item.id)}>
-          {sortedItems.map((item) => (
-            <SortableItem key={item.id} id={item.id}>
+          {sortedItems.map((item, index) => (
+            <SortableItem
+              key={item.id}
+              id={item.id}
+              activeId={activeId}
+              activeOrder={activeOrder}
+              order={index + 1}
+            >
               {renderItem(item)}
             </SortableItem>
           ))}
