@@ -1,8 +1,6 @@
 "use client";
 
 import { Award } from "@/app/generated/prisma/client";
-import { Button } from "@/components/ui/button";
-import { Trophy, Edit2, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +12,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Edit2, Trash2, Trophy } from "lucide-react";
 
 type AwardCardProps = {
   award: Award;

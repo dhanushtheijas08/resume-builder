@@ -35,12 +35,18 @@ export const upsertAwardAction = safeAction
     }
 
     try {
-      await prisma.resume.update({
-        where: { id: parsedInput.resumeId },
-        data: {
-          awards: parsedInput.description
+      await prisma.award.upsert({
+        where: { resumeId: parsedInput.resumeId },
+        create: {
+          resumeId: parsedInput.resumeId,
+          description: parsedInput.description
             ? sanitizeServerHtml(parsedInput.description)
-            : null,
+            : "",
+        },
+        update: {
+          description: parsedInput.description
+            ? sanitizeServerHtml(parsedInput.description)
+            : "",
         },
       });
     } catch (error) {
@@ -85,17 +91,22 @@ export const deleteAwardAction = safeAction
         );
       }
 
-      await prisma.resume.update({
-        where: { id: parsedInput.resumeId },
-        data: {
-          awards: null,
-        },
+      await prisma.award.delete({
+        where: { resumeId: parsedInput.resumeId },
       });
 
       revalidatePath(`/resume/${parsedInput.resumeId}`);
     } catch (error) {
       if (error instanceof ActionError) {
         throw error;
+      }
+      // If record not found, we can consider it successful deletion
+      if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+         return {
+          success: true,
+          message: "Awards deleted successfully",
+          statusCode: 200,
+        };
       }
       if (error instanceof PrismaClientKnownRequestError) {
         throw new ActionError("Failed to delete awards", 500);

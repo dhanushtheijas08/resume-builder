@@ -1,8 +1,7 @@
 "use client";
 
 import { Profile } from "@/app/generated/prisma/client";
-import { GitHubIcon } from "@/components/icons/github";
-import { LinkedinIcon } from "@/components/icons/linkedin";
+import { GitHubIcon, LinkedinIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Edit2, Globe, Mail, MapPin, Phone, User } from "lucide-react";

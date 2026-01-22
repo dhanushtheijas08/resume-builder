@@ -1,6 +1,6 @@
 "use client";
 
-import { GitHubIcon } from "@/components/icons/github";
+import { GitHubIcon } from "@/components/icons";
 import { TextEditor } from "@/components/resume/sections/text-editor";
 import { Button } from "@/components/ui/button";
 import {

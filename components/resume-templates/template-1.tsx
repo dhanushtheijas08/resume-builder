@@ -1,5 +1,5 @@
 "use client";
-import { LinkedinIcon } from "@/components/icons/linkedin";
+import { GitHubIcon, LinkedinIcon } from "@/components/icons";
 import type { ResumeData } from "@/components/resume/resume-preview";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
@@ -11,7 +11,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { GitHubIcon } from "../icons/github";
 
 const formatDateRange = (
   startDate: string,
@@ -228,8 +227,8 @@ const Template1 = ({ resumeData }: Template1Props) => {
               const year = project.endDate
                 ? new Date(project.endDate).getFullYear().toString()
                 : project.startDate
-                ? new Date(project.startDate).getFullYear().toString()
-                : "";
+                  ? new Date(project.startDate).getFullYear().toString()
+                  : "";
 
               return (
                 <Fragment key={project.id || index}>
@@ -450,8 +449,8 @@ const Template1 = ({ resumeData }: Template1Props) => {
               const year = proj.endDate
                 ? new Date(proj.endDate).getFullYear().toString()
                 : proj.startDate
-                ? new Date(proj.startDate).getFullYear().toString()
-                : "";
+                  ? new Date(proj.startDate).getFullYear().toString()
+                  : "";
 
               return (
                 <section key={customSection.id} className="mb-3.5">

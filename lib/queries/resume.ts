@@ -58,6 +58,7 @@ export const fetchUserResume = async (resumeId: string) => {
             order: "asc",
           },
         },
+        awards: true,
       },
     });
 

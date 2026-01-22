@@ -9,12 +9,13 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { Award } from "@/app/generated/prisma/client";
 
 export const defaultValues: AwardFormData = {
   description: "",
 };
 
-export const useAward = (awards: string | null, onSuccess?: () => void) => {
+export const useAward = (awards: Award | null, onSuccess?: () => void) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
   const form = useForm<AwardFormData>({
@@ -25,7 +26,7 @@ export const useAward = (awards: string | null, onSuccess?: () => void) => {
   useEffect(() => {
     if (awards) {
       form.reset({
-        description: awards || "",
+        description: awards.description || "",
       });
     } else {
       form.reset({ ...defaultValues });

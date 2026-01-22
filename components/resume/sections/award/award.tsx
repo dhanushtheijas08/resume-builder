@@ -17,15 +17,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Award } from "@/app/generated/prisma/client";
 
-export const AwardSection = ({ awards }: { awards: string | null }) => {
+export const AwardSection = ({ awards }: { awards: Award | null }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { form, saveAward, updateAward, removeAward, isLoading } = useAward(
     awards,
     () => {
       setIsOpen(false);
-    }
+    },
   );
 
   const handleOpenChange = (open: boolean) => {
@@ -50,7 +51,7 @@ export const AwardSection = ({ awards }: { awards: string | null }) => {
                 <div
                   className="text-sm text-muted-foreground leading-relaxed flex-1"
                   dangerouslySetInnerHTML={{
-                    __html: awards,
+                    __html: awards.description,
                   }}
                 />
               </div>

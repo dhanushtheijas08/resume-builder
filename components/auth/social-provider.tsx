@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { GitHubIcon } from "@/components/icons/github";
-import { GoogleIcon } from "@/components/icons/google";
+import { GitHubIcon, GoogleIcon } from "@/components/icons";
 import { socialLoginAction } from "@/lib/actions/auth-actions";
 import { useAction } from "next-safe-action/hooks";
 

@@ -199,3 +199,13 @@ body {
 .resume li {
   @apply leading-6;
 }
+.blur-effect {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.val {
+  /* transform: translate(2%) rotateX(37deg) rotateY(25deg) rotate(327deg); */
+  /* transform: translate(10%) rotateX(40deg) rotateY(25deg) rotate(327deg); */
+  transform: translate(20%) scale(1.1) rotateX(47deg) rotateY(15deg) rotate(327deg);
+}

@@ -106,7 +106,7 @@ model Resume {
   skills          Skill[]
   projects        Project[]
   certifications  Certification[]
-  awards          String?
+  awards          Award?
   publications    Publication[]
   customSection   CustomSection[]
 
@@ -247,6 +247,19 @@ model Publication {
   @@map("publication")
 }
 
+model Award {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+
+  resumeId String @unique @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("award")
+}
+
 model CustomSection {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String   
@@ -265,4 +278,7 @@ enum SectionType {
   EDUCATION
   PROJECT
   SKILL
+  CERTIFICATION
+  AWARD
+  PUBLICATION
 }
