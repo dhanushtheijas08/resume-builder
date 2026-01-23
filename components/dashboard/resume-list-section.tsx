@@ -18,7 +18,7 @@ export type ResumeCardData = {
   title: string;
   lastEdited: string;
   type: "resume" | "cover-letter";
-  gradient: string;
+  previewImageUrl?: string;
 };
 
 type ViewMode = "grid" | "list";

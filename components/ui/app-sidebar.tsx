@@ -2,6 +2,14 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -11,16 +19,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   ChevronsUpDown,
   FileText,
@@ -31,15 +30,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { authClient } from "@/lib/auth-client";
+import { usePathname, useRouter } from "next/navigation";
 
 const menuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    url: "/",
+    url: "/dashboard",
   },
   {
     title: "Templates",
@@ -57,6 +56,7 @@ export function AppSidebar() {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const router = useRouter();
+  const pathname = usePathname();
 
   const logoutUser = async () => {
     await authClient.signOut({
@@ -70,13 +70,13 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="border-b border-sidebar-border p-4">
+      <SidebarHeader className="border-b border-sidebar-border px-4 py-[14.1px]">
         <div className="flex items-center gap-2">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <FileText className="size-4" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold">Resume Builder</span>
+            <span className="text-base font-bold text-white">Coders CV</span>
             <span className="text-xs text-muted-foreground">
               Create & Manage
             </span>
@@ -92,11 +92,12 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={item.title === "Dashboard"}
+                    isActive={item.url.split("/")[1] === pathname.split("/")[1]}
+                    className="relative h-9 px-4 transition-all duration-200 hover:bg-sidebar-accent/50 active:scale-[0.98]"
                   >
                     <Link href={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span className="text-[15px]">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -133,9 +134,9 @@ export function AppSidebar() {
                       <AvatarFallback className="rounded-lg">
                         {user?.name
                           ? user.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
                           : "U"}
                       </AvatarFallback>
                     </Avatar>
@@ -166,9 +167,9 @@ export function AppSidebar() {
                         <AvatarFallback className="rounded-lg">
                           {user?.name
                             ? user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
                             : "U"}
                         </AvatarFallback>
                       </Avatar>

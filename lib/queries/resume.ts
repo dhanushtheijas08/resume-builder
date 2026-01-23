@@ -4,9 +4,9 @@ import { OBJECT_ID_REGEX } from "../const";
 import prisma from "../prisma";
 import { ActionError } from "../safe-action";
 
-export const fetchUserResume = async (resumeId: string) => {
+export const fetchResumeById = async (resumeId: string) => {
   try {
-    await validateUser();
+   const user =  await validateUser();
 
     if (!resumeId || !OBJECT_ID_REGEX.test(resumeId))
       throw new ActionError("Invalid resume ID format", 400);
@@ -62,7 +62,7 @@ export const fetchUserResume = async (resumeId: string) => {
       },
     });
 
-    if (!resume) {
+    if (!resume || resume.userId !== user.id) {
       throw new ActionError("Resume not found or access denied", 404);
     }
 
@@ -75,6 +75,41 @@ export const fetchUserResume = async (resumeId: string) => {
     }
     throw new ActionError(
       "Failed to fetch resume. Please try again later.",
+      500
+    );
+  }
+};
+
+export const fetchUserResumes = async () => {
+  try {
+    const user = await validateUser();
+
+    const resumes = await prisma.resume.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        template: {
+          select: {
+            title: true,
+            previewImageUrl: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    return resumes;
+  } catch (error) {
+    console.log({ error });
+
+    if (error instanceof ActionError) {
+      throw error;
+    }
+    throw new ActionError(
+      "Failed to fetch resumes. Please try again later.",
       500
     );
   }

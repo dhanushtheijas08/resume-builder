@@ -3,9 +3,10 @@ import { APIError } from "better-auth";
 import prisma from "../prisma";
 import { ActionError, safeAction } from "../safe-action";
 import { ResponseData } from "../validations/auth";
-import { createResumeSchema, updatedOrderSchema } from "../validations/resume";
+import { createResumeSchema, duplicateResumeSchema, objectIdSchemaFn, updatedOrderSchema } from "../validations/resume";
 import { validateUser } from "./validate-user";
 import { revalidatePath } from "next/cache";
+import { z } from "zod"
 
 export const createResumeAction = safeAction
   .inputSchema(createResumeSchema)
@@ -183,5 +184,186 @@ export const updateOrderAction = safeAction
         message: sectionMessages[type] || "Order updated successfully",
         statusCode: 200,
       };
+    }
+  );
+
+
+  const deleteResumeById = async (resumeId: string) => {
+     const user = await validateUser();
+
+  try {
+    const resume = await prisma.resume.delete({
+      where: {
+        id: resumeId,
+        userId: user.id
+      }
+    })
+
+    if (!resume) {
+      throw new ActionError("Resume not found or access denied", 404);
+    }
+
+    
+  } catch (error) {
+    console.log({ error });
+
+    if (error instanceof ActionError) {
+      throw error;
+    }
+    throw new ActionError(
+      "Failed to delete resume. Please try again later.",
+      500
+    );
+  }
+}
+
+export const deleteResumeAction = safeAction
+  .inputSchema(z.object({resumeId: objectIdSchemaFn("Invalid resume ID format")}))
+  .action(
+    async ({ parsedInput: { resumeId } }): Promise<ResponseData> => {
+      try {
+        await deleteResumeById(resumeId);
+        revalidatePath("/dashboard");
+
+        return {
+          message: "Resume deleted successfully",
+          statusCode: 204,
+          success: true,
+          redirectUrl: "/dashboard",
+        };
+      } catch (error) {
+        if (error instanceof APIError) {
+          throw new ActionError(error.message, error.statusCode);
+        }
+        if (error instanceof ActionError) {
+          throw error;
+        }
+        throw new ActionError("Failed to delete resume", 500);
+      }
+    }
+  );
+export const duplicateResumeAction = safeAction
+  .inputSchema(duplicateResumeSchema)
+  .action(
+    async ({ parsedInput: { resumeId, title } }): Promise<ResponseData> => {
+      try {
+        const user = await validateUser();
+        if (!user) {
+          throw new ActionError("User not found", 404);
+        }
+
+        const originalResume = await prisma.resume.findUnique({
+          where: { id: resumeId },
+          include: {
+            workExperiences: true,
+            educations: true,
+            skills: true,
+            projects: true,
+            certifications: true,
+            awards: true,
+            publications: true,
+            customSection: true,
+          },
+        });
+
+        if (!originalResume || originalResume.userId !== user.id) {
+          throw new ActionError("Resume not found", 404);
+        }
+
+        const newResume = await prisma.resume.create({
+          data: {
+            title,
+            templateId: originalResume.templateId,
+            userId: user.id,
+            profileId: originalResume.profileId,
+          },
+        });
+
+        if (originalResume.workExperiences.length > 0) {
+          await prisma.workExperience.createMany({
+            data: originalResume.workExperiences.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+            })),
+          });
+        }
+
+        if (originalResume.educations.length > 0) {
+          await prisma.education.createMany({
+            data: originalResume.educations.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+            })),
+          });
+        }
+
+        if (originalResume.skills.length > 0) {
+          await prisma.skill.createMany({
+            data: originalResume.skills.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+            })),
+          });
+        }
+
+        if (originalResume.projects.length > 0) {
+          await prisma.project.createMany({
+            data: originalResume.projects.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+              technologies: rest.technologies || [],
+            })),
+          });
+        }
+
+        if (originalResume.certifications.length > 0) {
+          await prisma.certification.createMany({
+            data: originalResume.certifications.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+            })),
+          });
+        }
+
+        if (originalResume.publications.length > 0) {
+          await prisma.publication.createMany({
+            data: originalResume.publications.map(({ id, resumeId, createdAt, updatedAt, ...rest }) => ({
+              ...rest,
+              resumeId: newResume.id,
+            })),
+          });
+        }
+
+        if (originalResume.awards) {
+          const { id, resumeId, createdAt, updatedAt, ...awardRest } = originalResume.awards;
+          await prisma.award.create({
+            data: {
+              ...awardRest,
+              resumeId: newResume.id,
+            },
+          });
+        }
+
+        // Handle Custom Sections
+        // if (originalResume.customSection.length > 0) {
+        //   await prisma.customSection.createMany({
+        //     data: originalResume.customSection.map(({ id, resumeId, ...rest }) => ({
+        //       ...rest,
+        //       resumeId: newResume.id,
+        //     })),
+        //   });
+        // }
+
+        return {
+          message: "Resume duplicated successfully",
+          statusCode: 201,
+          success: true,
+          redirectUrl: `/resume/${newResume.id}`,
+        };
+      } catch (error) {
+        if (error instanceof ActionError) throw error;
+        console.error("Duplication error:", error);
+        throw new ActionError("Failed to duplicate resume", 500);
+      }
     }
   );

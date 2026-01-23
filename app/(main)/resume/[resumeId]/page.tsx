@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { OBJECT_ID_REGEX } from "@/lib/const";
-import { fetchUserResume } from "@/lib/queries/resume";
+import { fetchResumeById } from "@/lib/queries/resume";
 import {
   Briefcase,
   Code,
@@ -35,15 +35,24 @@ import {
   FileText,
 } from "lucide-react";
 import { ResumePreview } from "@/components/resume/resume-preview";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { TemplateId } from "@/components/resume-templates";
 
 const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    redirect("/login");
+  }
+
   const { resumeId } = await params;
 
   if (!resumeId || !OBJECT_ID_REGEX.test(resumeId)) {
     throw new Error("Invalid resume ID format");
   }
-  const resume = await fetchUserResume(resumeId);
+  const resume = await fetchResumeById(resumeId);
 
   if (!resume) {
     throw new Error("Resume not found");
@@ -84,7 +93,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   return (
     <div className="flex flex-col h-screen">
       <nav className="flex items-center justify-between px-4 py-2.5 border-b">
-        <h1 className="text-xl font-bold">Resume Builder</h1>
+        <h1 className="text-xl font-bold">Coders CV</h1>
         <Button variant="primary" className="w-fit h-8.5">
           <Download className="size-4 mr-0.5" />
           Export PDF
