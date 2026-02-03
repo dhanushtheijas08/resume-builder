@@ -115,7 +115,6 @@ export const fetchUserResumes = async () => {
   }
 };
 
-// Must be validated before calling this function
 export const updateResumeExportedUrl = async (
   resumeId: string,
   url: string,
