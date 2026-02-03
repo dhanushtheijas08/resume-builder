@@ -9,12 +9,14 @@ import { LaunchOptions } from "puppeteer-core";
 let cachedExecutablePath: string | null = null;
 let downloadPromise: Promise<string> | null = null;
 
+const CHROMIUM_PACK_URL = process.env.CHROMIUM_PACK_URL;
+
 const getChromiumPath = async (): Promise<string | null> => {
   if (cachedExecutablePath) return cachedExecutablePath;
   if (!downloadPromise) {
     const chromium = (await import("@sparticuz/chromium-min")).default;
     downloadPromise = chromium
-      .executablePath()
+      .executablePath(CHROMIUM_PACK_URL)
       .then((path) => {
         cachedExecutablePath = path;
         console.log("Chromium path resolved:", path);
