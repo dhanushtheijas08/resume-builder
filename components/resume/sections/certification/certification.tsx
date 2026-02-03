@@ -1,6 +1,6 @@
 "use client";
 
-import { Certification } from "@/app/generated/prisma/client";
+import { Certification } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Award, Plus } from "lucide-react";
 import { useState } from "react";
@@ -92,4 +92,3 @@ export const CertificationSection = ({
     </div>
   );
 };
-

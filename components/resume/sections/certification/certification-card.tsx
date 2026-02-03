@@ -1,6 +1,6 @@
 "use client";
 
-import { Certification } from "@/app/generated/prisma/client";
+import { Certification } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Award, Edit2, Trash2, Link2 } from "lucide-react";
 import {
@@ -113,4 +113,3 @@ export const CertificationCard = ({
     </div>
   );
 };
-

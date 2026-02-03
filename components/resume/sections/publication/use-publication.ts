@@ -12,7 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Publication } from "@/app/generated/prisma/client";
+import { Publication } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: PublicationFormData = {
@@ -26,7 +26,7 @@ export const defaultValues: PublicationFormData = {
 export const usePublication = (
   publication: Publication | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -66,7 +66,7 @@ export const usePublication = (
           "Failed to create publication";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: editPublication, status: editStatus } = useAction(
@@ -85,7 +85,7 @@ export const usePublication = (
           "Failed to update publication";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deletePublication, status: deleteStatus } = useAction(
@@ -103,7 +103,7 @@ export const usePublication = (
           "Failed to delete publication";
         toast.error(message);
       },
-    }
+    },
   );
 
   const savePublication = (values: PublicationFormData) =>

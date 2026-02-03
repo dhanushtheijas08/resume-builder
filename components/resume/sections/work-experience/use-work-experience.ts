@@ -12,7 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { WorkExperience } from "@/app/generated/prisma/client";
+import { WorkExperience } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: WorkExperienceFormData = {
@@ -30,7 +30,7 @@ export const defaultValues: WorkExperienceFormData = {
 export const useWorkExperience = (
   workExperience: WorkExperience | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -65,7 +65,7 @@ export const useWorkExperience = (
           form.reset({ ...defaultValues, order: maxOrder });
           onSuccess?.();
           toast.success(
-            data.message ?? "Work experience created successfully!"
+            data.message ?? "Work experience created successfully!",
           );
         }
       },
@@ -76,7 +76,7 @@ export const useWorkExperience = (
           "Failed to create work experience";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: editWorkExperience, status: editStatus } = useAction(
@@ -86,7 +86,7 @@ export const useWorkExperience = (
         if (data.success) {
           onSuccess?.();
           toast.success(
-            data.message ?? "Work experience updated successfully!"
+            data.message ?? "Work experience updated successfully!",
           );
         }
       },
@@ -97,7 +97,7 @@ export const useWorkExperience = (
           "Failed to update work experience";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteWorkExperience, status: deleteStatus } = useAction(
@@ -106,7 +106,7 @@ export const useWorkExperience = (
       onSuccess: ({ data }) => {
         if (data.success) {
           toast.success(
-            data.message ?? "Work experience deleted successfully!"
+            data.message ?? "Work experience deleted successfully!",
           );
         }
       },
@@ -117,7 +117,7 @@ export const useWorkExperience = (
           "Failed to delete work experience";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveWorkExperience = (values: WorkExperienceFormData) =>

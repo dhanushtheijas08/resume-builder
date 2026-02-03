@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "@/app/generated/prisma/client";
+import { Project } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -49,12 +49,12 @@ export const ProjectDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: Project[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "PROJECT", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderProjectCard = useCallback(
@@ -67,7 +67,7 @@ export const ProjectDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, showTechUsed, isDeleting]
+    [onEditClick, onDeleteClick, showTechUsed, isDeleting],
   );
 
   const renderOverlayCard = (project: Project) => (

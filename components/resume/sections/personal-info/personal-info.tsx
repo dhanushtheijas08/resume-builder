@@ -6,7 +6,7 @@ import { useState } from "react";
 import { EmptySection } from "../empty-section";
 import { PersonalInfoDialog } from "./personal-info-dialog";
 import { PersonalInfoDisplay } from "./personal-info-display";
-import { Profile } from "@/app/generated/prisma/client";
+import { Profile } from "@prisma/client";
 import { usePersonalInfo } from "./use-personal-info";
 
 export const PersonalInfo = ({

@@ -1,6 +1,6 @@
 "use client";
 
-import { Certification } from "@/app/generated/prisma/client";
+import { Certification } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -31,7 +31,9 @@ export const CertificationDisplay = ({
   const { execute: updateOrder, status } = useAction(updateOrderAction, {
     onSuccess: ({ data }) => {
       if (data.success) {
-        toast.success(data.message ?? "Certification order updated successfully!");
+        toast.success(
+          data.message ?? "Certification order updated successfully!",
+        );
         router.refresh();
       }
     },
@@ -47,12 +49,12 @@ export const CertificationDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: Certification[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "CERTIFICATION", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderCertificationCard = useCallback(
@@ -64,7 +66,7 @@ export const CertificationDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, isDeleting]
+    [onEditClick, onDeleteClick, isDeleting],
   );
 
   const renderOverlayCard = (certification: Certification) => (
@@ -106,4 +108,3 @@ export const CertificationDisplay = ({
     </div>
   );
 };
-

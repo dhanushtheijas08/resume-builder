@@ -1,5 +1,5 @@
 import { GitHubIcon } from "@/components/icons";
-import type { Project } from "@/app/generated/prisma/client";
+import type { Project } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { Fragment } from "react";
 
@@ -44,9 +44,7 @@ export const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                   </a>
                 )}
               </div>
-              {year && (
-                <span className="text-xs text-gray-600">{year}</span>
-              )}
+              {year && <span className="text-xs text-gray-600">{year}</span>}
             </div>
 
             {project.description && (

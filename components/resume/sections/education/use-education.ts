@@ -9,7 +9,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Education } from "@/app/generated/prisma/client";
+import { Education } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: EducationFormData = {
@@ -27,7 +27,7 @@ export const defaultValues: EducationFormData = {
 export const useEducation = (
   education: Education | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -71,7 +71,7 @@ export const useEducation = (
           "Failed to create education";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: editEducation, status: editStatus } = useAction(
@@ -90,7 +90,7 @@ export const useEducation = (
           "Failed to update education";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteEducation, status: deleteStatus } = useAction(
@@ -108,7 +108,7 @@ export const useEducation = (
           "Failed to delete education";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveEducation = (values: EducationFormData) =>

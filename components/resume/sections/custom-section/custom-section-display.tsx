@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomSection } from "@/app/generated/prisma/client";
+import { CustomSection } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -31,7 +31,9 @@ export const CustomSectionDisplay = ({
   const { execute: updateOrder, status } = useAction(updateOrderAction, {
     onSuccess: ({ data }) => {
       if (data.success) {
-        toast.success(data.message ?? "Custom section order updated successfully!");
+        toast.success(
+          data.message ?? "Custom section order updated successfully!",
+        );
         router.refresh();
       }
     },
@@ -47,12 +49,12 @@ export const CustomSectionDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: CustomSection[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "CUSTOM_SECTION", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderCustomSectionCard = useCallback(
@@ -64,7 +66,7 @@ export const CustomSectionDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, isDeleting]
+    [onEditClick, onDeleteClick, isDeleting],
   );
 
   const renderOverlayCard = (customSection: CustomSection) => (

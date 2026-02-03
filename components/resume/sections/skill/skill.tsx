@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { EmptySection } from "../empty-section";
 import { SkillDialog, SkillType } from "./skill-dialog";
 import { SkillDisplay } from "./skill-display";
-import { Skill } from "@/app/generated/prisma/client";
+import { Skill } from "@prisma/client";
 
 export const SkillSection = ({
   skills,

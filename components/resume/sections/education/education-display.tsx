@@ -1,6 +1,6 @@
 "use client";
 
-import { Education } from "@/app/generated/prisma/client";
+import { Education } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -47,12 +47,12 @@ export const EducationDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: Education[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "EDUCATION", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderEducationCard = useCallback(
@@ -64,7 +64,7 @@ export const EducationDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, isDeleting]
+    [onEditClick, onDeleteClick, isDeleting],
   );
 
   const renderOverlayCard = (education: Education) => (

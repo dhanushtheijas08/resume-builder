@@ -13,7 +13,7 @@ import type {
   Publication,
   CustomSection,
   Award,
-} from "@/app/generated/prisma/client";
+} from "@prisma/client";
 
 export type ResumeData = {
   profile: Profile | null;

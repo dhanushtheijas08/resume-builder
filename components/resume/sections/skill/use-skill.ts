@@ -4,7 +4,7 @@ import {
   editSkillAction,
 } from "@/lib/actions/resume-actions/skill-actions";
 import { SkillFormData, skillSchema } from "@/lib/validations/resume";
-import { Skill } from "@/app/generated/prisma/client";
+import { Skill } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
@@ -75,7 +75,7 @@ export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
           "Failed to update skill";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteSkill, status: deleteStatus } = useAction(
@@ -93,7 +93,7 @@ export const useSkill = (skill: Skill | null, onSuccess?: () => void) => {
           "Failed to delete skill";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveSkill = (values: SkillFormData) =>

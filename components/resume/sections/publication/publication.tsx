@@ -1,6 +1,6 @@
 "use client";
 
-import { Publication } from "@/app/generated/prisma/client";
+import { Publication } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Plus } from "lucide-react";
 import { useState } from "react";
@@ -90,4 +90,3 @@ export const PublicationSection = ({
     </div>
   );
 };
-

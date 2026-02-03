@@ -3,7 +3,7 @@
 import { Code } from "lucide-react";
 import { ResumeDialog } from "../resume-dialog";
 import { SkillForm } from "./skill-form";
-import { Skill } from "@/app/generated/prisma/client";
+import { Skill } from "@prisma/client";
 
 export type SkillType = "badge" | "progress" | "category";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Publication } from "@/app/generated/prisma/client";
+import { Publication } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -31,7 +31,9 @@ export const PublicationDisplay = ({
   const { execute: updateOrder, status } = useAction(updateOrderAction, {
     onSuccess: ({ data }) => {
       if (data.success) {
-        toast.success(data.message ?? "Publication order updated successfully!");
+        toast.success(
+          data.message ?? "Publication order updated successfully!",
+        );
         router.refresh();
       }
     },
@@ -47,12 +49,12 @@ export const PublicationDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: Publication[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "PUBLICATION", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderPublicationCard = useCallback(
@@ -64,7 +66,7 @@ export const PublicationDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, isDeleting]
+    [onEditClick, onDeleteClick, isDeleting],
   );
 
   const renderOverlayCard = (publication: Publication) => (
@@ -106,4 +108,3 @@ export const PublicationDisplay = ({
     </div>
   );
 };
-

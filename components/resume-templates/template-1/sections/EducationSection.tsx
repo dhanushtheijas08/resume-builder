@@ -1,4 +1,4 @@
-import type { Education } from "@/app/generated/prisma/client";
+import type { Education } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { formatDateRange } from "../utils";
 
@@ -16,10 +16,7 @@ export const EducationSection = ({ educations }: EducationSectionProps) => {
       </h2>
 
       {educations.map((education, index) => (
-        <div
-          key={education.id || index}
-          className={index > 0 ? "mt-4" : ""}
-        >
+        <div key={education.id || index} className={index > 0 ? "mt-4" : ""}>
           <div className="flex justify-between items-center text-sm">
             <h3 className="font-semibold">{education.degree}</h3>
             <span className="text-xs text-gray-600">

@@ -1,5 +1,5 @@
 import { GitHubIcon } from "@/components/icons";
-import type { CustomSection as CustomSectionType } from "@/app/generated/prisma/client";
+import type { CustomSection as CustomSectionType } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { formatDateRange } from "../utils";
 

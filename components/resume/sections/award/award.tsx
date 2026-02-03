@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Award } from "@/app/generated/prisma/client";
+import { Award } from "@prisma/client";
 
 export const AwardSection = ({ awards }: { awards: Award | null }) => {
   const [isOpen, setIsOpen] = useState(false);

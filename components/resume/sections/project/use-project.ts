@@ -9,7 +9,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Project } from "@/app/generated/prisma/client";
+import { Project } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: ProjectFormData = {
@@ -28,7 +28,7 @@ export const defaultValues: ProjectFormData = {
 export const useProject = (
   project: Project | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -89,7 +89,7 @@ export const useProject = (
           "Failed to update project";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteProject, status: deleteStatus } = useAction(
@@ -107,7 +107,7 @@ export const useProject = (
           "Failed to delete project";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveProject = (values: ProjectFormData) =>

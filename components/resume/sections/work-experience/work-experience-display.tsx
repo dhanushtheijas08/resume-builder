@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkExperience } from "@/app/generated/prisma/client";
+import { WorkExperience } from "@prisma/client";
 import { SortableList } from "@/components/resume/sortable-list";
 import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/lib/actions/resume-actions";
@@ -31,7 +31,9 @@ export const WorkExperienceDisplay = ({
   const { execute: updateOrder, status } = useAction(updateOrderAction, {
     onSuccess: ({ data }) => {
       if (data.success) {
-        toast.success(data.message ?? "Work experience order updated successfully!");
+        toast.success(
+          data.message ?? "Work experience order updated successfully!",
+        );
         router.refresh();
       }
     },
@@ -47,12 +49,12 @@ export const WorkExperienceDisplay = ({
   const handleReorder = useCallback(
     (
       _reorderedItems: WorkExperience[],
-      updatedOrders: { id: string; order: number }[]
+      updatedOrders: { id: string; order: number }[],
     ) => {
       if (status === "executing") return;
       updateOrder({ type: "EXPERIENCE", updatedOrder: updatedOrders });
     },
-    [status, updateOrder]
+    [status, updateOrder],
   );
 
   const renderExperienceCard = useCallback(
@@ -64,7 +66,7 @@ export const WorkExperienceDisplay = ({
         isDeleting={isDeleting}
       />
     ),
-    [onEditClick, onDeleteClick, isDeleting]
+    [onEditClick, onDeleteClick, isDeleting],
   );
 
   const renderOverlayCard = (experience: WorkExperience) => (

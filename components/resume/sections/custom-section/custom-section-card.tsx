@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomSection } from "@/app/generated/prisma/client";
+import { CustomSection } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit2, Trash2 } from "lucide-react";
@@ -68,8 +68,8 @@ export const CustomSectionCard = ({
     typeof content === "string"
       ? content.replace(/<[^>]*>/g, "").substring(0, 100)
       : typeof content === "object" && content !== null
-      ? JSON.stringify(content).substring(0, 100)
-      : String(content).substring(0, 100);
+        ? JSON.stringify(content).substring(0, 100)
+        : String(content).substring(0, 100);
 
   return (
     <div className="border rounded-lg p-5 bg-background/40 hover:bg-background/60 transition-colors group">

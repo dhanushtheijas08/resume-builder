@@ -11,7 +11,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Profile } from "@/app/generated/prisma/client";
+import { Profile } from "@prisma/client";
 
 export const defaultValues: PersonalInfoFormData = {
   name: "",
@@ -28,7 +28,7 @@ export const defaultValues: PersonalInfoFormData = {
 
 export const usePersonalInfo = (
   profile: Profile | null,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -84,7 +84,7 @@ export const usePersonalInfo = (
           "Failed to update profile";
         toast.error(message);
       },
-    }
+    },
   );
 
   const savePersonalInfo = (values: PersonalInfoFormData) =>

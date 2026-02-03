@@ -1,6 +1,6 @@
 "use client";
 
-import { Education } from "@/app/generated/prisma/client";
+import { Education } from "@prisma/client";
 import {
   AlertDialog,
   AlertDialogAction,

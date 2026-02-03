@@ -1,6 +1,6 @@
 "use client";
 
-import { Profile } from "@/app/generated/prisma/client";
+import { Profile } from "@prisma/client";
 import { GitHubIcon, LinkedinIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";

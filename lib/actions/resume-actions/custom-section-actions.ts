@@ -1,6 +1,6 @@
 "use server";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { Prisma } from "@/app/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";

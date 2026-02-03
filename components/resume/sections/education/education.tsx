@@ -1,6 +1,6 @@
 "use client";
 
-import { Education } from "@/app/generated/prisma/client";
+import { Education } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Plus } from "lucide-react";
 import { useState } from "react";
@@ -16,7 +16,7 @@ export const EducationSection = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [editingEducation, setEditingEducation] = useState<Education | null>(
-    null
+    null,
   );
 
   const hasData = educations.length > 0;

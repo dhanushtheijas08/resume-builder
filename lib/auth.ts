@@ -1,4 +1,3 @@
-// import { PrismaClient } from "@/app/generated/prisma/client";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "@/app/generated/prisma/client";
+import { Project } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { FolderKanban, Plus } from "lucide-react";
 import { useState } from "react";

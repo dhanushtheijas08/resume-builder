@@ -1,4 +1,4 @@
-import type { WorkExperience } from "@/app/generated/prisma/client";
+import type { WorkExperience } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
 import { formatDateRange } from "../utils";
 

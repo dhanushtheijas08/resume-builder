@@ -1,6 +1,6 @@
 "use client";
 
-import { Award } from "@/app/generated/prisma/client";
+import { Award } from "@prisma/client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -89,4 +89,3 @@ export const AwardCard = ({
     </div>
   );
 };
-

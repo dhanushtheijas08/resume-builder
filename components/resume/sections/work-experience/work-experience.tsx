@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkExperience } from "@/app/generated/prisma/client";
+import { WorkExperience } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Plus } from "lucide-react";
 import { useState } from "react";

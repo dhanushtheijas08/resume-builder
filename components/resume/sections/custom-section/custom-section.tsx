@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomSection } from "@/app/generated/prisma/client";
+import { CustomSection } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { FileText, Plus } from "lucide-react";
 import { useState } from "react";

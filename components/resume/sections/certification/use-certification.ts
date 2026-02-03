@@ -12,7 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Certification } from "@/app/generated/prisma/client";
+import { Certification } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: CertificationFormData = {
@@ -26,7 +26,7 @@ export const defaultValues: CertificationFormData = {
 export const useCertification = (
   certification: Certification | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -66,7 +66,7 @@ export const useCertification = (
           "Failed to create certification";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: editCertification, status: editStatus } = useAction(
@@ -85,7 +85,7 @@ export const useCertification = (
           "Failed to update certification";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteCertification, status: deleteStatus } = useAction(
@@ -103,7 +103,7 @@ export const useCertification = (
           "Failed to delete certification";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveCertification = (values: CertificationFormData) =>

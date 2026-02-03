@@ -12,7 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { CustomSection } from "@/app/generated/prisma/client";
+import { CustomSection } from "@prisma/client";
 import { useEffect } from "react";
 
 export const defaultValues: CustomSectionFormData = {
@@ -25,7 +25,7 @@ export const defaultValues: CustomSectionFormData = {
 export const useCustomSection = (
   customSection: CustomSection | null,
   maxOrder: number,
-  onSuccess?: () => void
+  onSuccess?: () => void,
 ) => {
   const { resumeId } = useParams<{ resumeId: string }>();
 
@@ -69,7 +69,7 @@ export const useCustomSection = (
           "Failed to create custom section";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: editCustomSection, status: editStatus } = useAction(
@@ -88,7 +88,7 @@ export const useCustomSection = (
           "Failed to update custom section";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteCustomSection, status: deleteStatus } = useAction(
@@ -106,7 +106,7 @@ export const useCustomSection = (
           "Failed to delete custom section";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveCustomSection = (values: CustomSectionFormData) =>

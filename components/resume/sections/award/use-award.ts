@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { Award } from "@/app/generated/prisma/client";
+import { Award } from "@prisma/client";
 
 export const defaultValues: AwardFormData = {
   description: "",
@@ -50,7 +50,7 @@ export const useAward = (awards: Award | null, onSuccess?: () => void) => {
           "Failed to save awards";
         toast.error(message);
       },
-    }
+    },
   );
 
   const { execute: deleteAward, status: deleteStatus } = useAction(
@@ -68,7 +68,7 @@ export const useAward = (awards: Award | null, onSuccess?: () => void) => {
           "Failed to delete awards";
         toast.error(message);
       },
-    }
+    },
   );
 
   const saveAward = (values: AwardFormData) =>

@@ -1,5 +1,5 @@
 import { GitHubIcon, LinkedinIcon } from "@/components/icons";
-import type { Profile } from "@/app/generated/prisma/client";
+import type { Profile } from "@prisma/client";
 import { Globe, Mail, MapPin, Phone } from "lucide-react";
 
 interface HeaderSectionProps {

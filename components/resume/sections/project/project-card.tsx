@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "@/app/generated/prisma/client";
+import { Project } from "@prisma/client";
 import { GitHubIcon } from "@/components/icons";
 import {
   AlertDialog,

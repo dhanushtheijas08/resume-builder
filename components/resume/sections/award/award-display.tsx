@@ -1,6 +1,6 @@
 "use client";
 
-import { Award } from "@/app/generated/prisma/client";
+import { Award } from "@prisma/client";
 import { Trophy, Plus } from "lucide-react";
 import { AwardCard } from "./award-card";
 import { Button } from "@/components/ui/button";
@@ -54,4 +54,3 @@ export const AwardDisplay = ({
     </div>
   );
 };
-
