@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { DeleteResumeDialog } from "./delete-resume-dialog";
 import { DuplicateResumeDialog } from "./duplicate-resume-dialog";
+import { useExportResumeMutation } from "@/lib/mutations/export-resume";
 
 interface ResumeCardProps {
   id: string;
@@ -32,11 +33,14 @@ export function ResumeCard({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
 
+  const { mutate: exportPdfMutation, isPending } = useExportResumeMutation({
+    isToastLoading: true,
+  });
+
   return (
     <>
       <Link href={`/resume/${id}`}>
         <Card className="group relative pt-0 overflow-hidden border-muted/40 bg-card transition-all duration-300 hover:shadow-xl hover:border-border/80 hover:-translate-y-1 ">
-          {/* Preview Area */}
           <div className="relative h-[350px] w-full overflow-hidden bg-muted/10 transition-colors group-hover:bg-muted/20">
             {previewImageUrl ? (
               <div className="relative h-full w-full overflow-hidden">
@@ -75,7 +79,6 @@ export function ResumeCard({
             )}
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between p-4">
             <div className="min-w-0 flex-1 space-y-1">
               <h3 className="truncate font-semibold text-sm text-foreground/90 group-hover:text-primary transition-colors">
@@ -91,6 +94,7 @@ export function ResumeCard({
                 asChild
                 onClick={(e) => e.stopPropagation()}
                 className="z-30 absolute bottom-10 right-5"
+                disabled={isPending}
               >
                 <Button
                   variant="ghost"
@@ -113,7 +117,11 @@ export function ResumeCard({
                   <Copy className="mr-2 h-4 w-4" />
                   Duplicate
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => exportPdfMutation(id)}
+                  disabled={isPending}
+                >
                   <Download className="mr-2 h-4 w-4" />
                   Download PDF
                 </DropdownMenuItem>

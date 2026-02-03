@@ -36,8 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
 import { TemplateCard, TemplateCardSkeleton } from "./template-card";
-import { RESUME_TEMPLATES_API_URL } from "@/lib/env";
-import Image from "next/image";
+import { getEnv } from "@/lib/env";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -104,7 +103,7 @@ async function fetchResumeTemplates(params: {
     searchParams.set("company", params.company);
   }
 
-  const url = `${RESUME_TEMPLATES_API_URL}?${searchParams.toString()}`;
+  const url = `${getEnv("NEXT_PUBLIC_RESUME_TEMPLATES_API_URL")}?${searchParams.toString()}`;
 
   const response = await fetch(url);
 
@@ -210,7 +209,7 @@ export function CreateResume() {
     form.setValue(
       "templateId",
       selectedTemplate === templateId ? "" : templateId,
-      { shouldDirty: true, shouldTouch: true, shouldValidate: true }
+      { shouldDirty: true, shouldTouch: true, shouldValidate: true },
     );
   };
 
@@ -358,7 +357,7 @@ export function CreateResume() {
                   </span>
                   <span className="font-medium truncate max-w-[120px]">
                     {uiTemplates.find(
-                      (template) => template.id === selectedTemplate
+                      (template) => template.id === selectedTemplate,
                     )?.name ?? "None"}
                   </span>
                 </div>

@@ -38,7 +38,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { TemplateId } from "@/components/resume-templates";
-import { ExportResume } from "@/components/resume/export-resume";
+import { ExportResumeButton } from "@/components/resume/export-resume-button";
 
 const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -94,7 +94,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
     <div className="flex flex-col h-screen">
       <nav className="flex items-center justify-between px-4 py-2.5 border-b">
         <h1 className="text-xl font-bold">Coder CV</h1>
-        <ExportResume />
+        <ExportResumeButton />
       </nav>
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel minSize={40} defaultSize={42}>
