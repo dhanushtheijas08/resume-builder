@@ -37,6 +37,7 @@ export const LoginForm = () => {
       }
     },
     onError: ({ error }) => {
+      console.log(error);
       toast.error(error.serverError?.message);
       if (error.serverError?.redirectUrl) {
         router.push(error.serverError?.redirectUrl);
