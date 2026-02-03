@@ -1,5 +1,5 @@
 "use server";
-import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Prisma } from "@/app/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
@@ -17,7 +17,7 @@ export const createCustomSectionAction = safeAction
   .inputSchema(
     customSectionSchema.safeExtend({
       resumeId: objectIdSchemaFn("Invalid resume ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -34,7 +34,7 @@ export const createCustomSectionAction = safeAction
     if (resume.userId !== user.id) {
       throw new ActionError(
         "You do not have permission to edit this resume",
-        403
+        403,
       );
     }
 
@@ -91,7 +91,7 @@ export const editCustomSectionAction = safeAction
   .inputSchema(
     customSectionSchema.safeExtend({
       id: objectIdSchemaFn("Invalid custom section ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -111,7 +111,7 @@ export const editCustomSectionAction = safeAction
       if (customSection.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to edit this custom section",
-          403
+          403,
         );
       }
 
@@ -174,7 +174,7 @@ export const deleteCustomSectionAction = safeAction
   .inputSchema(
     z.object({
       id: objectIdSchemaFn("Invalid custom section ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -194,7 +194,7 @@ export const deleteCustomSectionAction = safeAction
       if (customSection.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to delete this custom section",
-          403
+          403,
         );
       }
 

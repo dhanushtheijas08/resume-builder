@@ -1,16 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Heart
-} from "lucide-react";
+import { Heart } from "lucide-react";
 import { GitHubIcon, LinkedinIcon, XIcon } from "../icons";
 import { cn } from "@/lib/utils";
 
 const socialLinks = [
   { name: "GitHub", icon: GitHubIcon, href: "#", className: "" },
-  { name: "Twitter", icon: XIcon, href: "#", className: "fill-white/40 hover:fill-white size-4" }, // Using X for modern feel
-  { name: "LinkedIn", icon: LinkedinIcon, href: "#", },
+  {
+    name: "Twitter",
+    icon: XIcon,
+    href: "#",
+    className: "fill-white/40 hover:fill-white size-4",
+  }, // Using X for modern feel
+  { name: "LinkedIn", icon: LinkedinIcon, href: "#" },
 ];
 
 export const Footer = () => {
@@ -37,7 +40,7 @@ export const Footer = () => {
       >
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
           <p className="text-white/40 text-sm">
-            Copyright © {new Date().getFullYear()} Coders CV
+            Copyright © {new Date().getFullYear()} Coder CV
           </p>
           <div className="flex items-center gap-2 text-sm text-white/40">
             Made with <Heart className="w-4 h-4 text-red-400 fill-red-400" /> by

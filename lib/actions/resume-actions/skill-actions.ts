@@ -1,5 +1,5 @@
 "use server";
-import { PrismaClientKnownRequestError } from "@/app/generated/prisma/internal/prismaNamespace";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import prisma from "@/lib/prisma";
 import { ActionError, safeAction } from "@/lib/safe-action";
 import { ResponseData } from "@/lib/validations/auth";

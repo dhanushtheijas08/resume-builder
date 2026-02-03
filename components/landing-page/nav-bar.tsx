@@ -3,8 +3,21 @@
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Menu, LogOut, LayoutDashboard, FileText, ChevronsUpDown, User2, Settings } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  Menu,
+  LogOut,
+  LayoutDashboard,
+  FileText,
+  ChevronsUpDown,
+  User2,
+  Settings,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +51,7 @@ export const NavBar = () => {
       <nav className="container mx-auto  flex items-center justify-between px-4 md:px-6 h-full">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold flex items-center gap-2">
-          Coders CV
+          Coder CV
         </Link>
 
         {/* Right Side */}
@@ -63,9 +76,9 @@ export const NavBar = () => {
                     <AvatarFallback className="rounded-lg">
                       {user?.name
                         ? user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
                         : "U"}
                     </AvatarFallback>
                   </Avatar>
@@ -86,9 +99,9 @@ export const NavBar = () => {
                         <AvatarFallback className="rounded-lg">
                           {user?.name
                             ? user.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")
                             : "U"}
                         </AvatarFallback>
                       </Avatar>

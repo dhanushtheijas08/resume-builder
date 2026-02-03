@@ -76,7 +76,7 @@ export function AppSidebar() {
             <FileText className="size-4" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-bold text-white">Coders CV</span>
+            <span className="text-base font-bold text-white">Coder CV</span>
             <span className="text-xs text-muted-foreground">
               Create & Manage
             </span>
@@ -134,9 +134,9 @@ export function AppSidebar() {
                       <AvatarFallback className="rounded-lg">
                         {user?.name
                           ? user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
                           : "U"}
                       </AvatarFallback>
                     </Avatar>
@@ -167,9 +167,9 @@ export function AppSidebar() {
                         <AvatarFallback className="rounded-lg">
                           {user?.name
                             ? user.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")
                             : "U"}
                         </AvatarFallback>
                       </Avatar>
