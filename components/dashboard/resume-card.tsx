@@ -50,9 +50,7 @@ export function ResumeCard({
               </div>
             ) : (
               <div className="relative h-full w-full p-6">
-                {/* Document Mockup */}
                 <div className="relative h-full w-full origin-top rounded-md bg-background shadow-sm ring-1 ring-border/10 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-md">
-                  {/* Document Header */}
                   <div className="flex items-center gap-3 border-b border-border/5 p-4">
                     <div className="h-8 w-8 rounded-full bg-primary/10" />
                     <div className="space-y-1.5 flex-1">
@@ -61,7 +59,6 @@ export function ResumeCard({
                     </div>
                   </div>
 
-                  {/* Document Body Skeleton */}
                   <div className="space-y-3 p-4 opacity-50">
                     <div className="space-y-1.5">
                       <div className="h-1.5 w-full rounded-full bg-muted-foreground/10" />

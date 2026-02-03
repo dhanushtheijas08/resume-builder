@@ -53,7 +53,7 @@ export function ResumeListSection({ resumes }: ResumeListSectionProps) {
             value={sortBy}
             onValueChange={(value: SortOption) => setSortBy(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[190px]">
               <Filter className="mr-2 size-4" />
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

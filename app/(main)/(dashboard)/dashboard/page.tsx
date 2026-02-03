@@ -7,7 +7,6 @@ import {
 import { fetchUserResumes } from "@/lib/queries/resume";
 import { formatDistanceToNow } from "date-fns";
 
-
 export default async function UserDashboardPage() {
   const userResumes = await fetchUserResumes();
 
@@ -33,4 +32,3 @@ export default async function UserDashboardPage() {
     </div>
   );
 }
-

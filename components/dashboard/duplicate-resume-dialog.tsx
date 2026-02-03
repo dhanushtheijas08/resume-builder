@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { duplicateResumeAction } from "@/lib/actions/resume-actions";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,21 +30,17 @@ export function DuplicateResumeDialog({
   open,
   onOpenChange,
 }: DuplicateResumeDialogProps) {
-  const router = useRouter();
   const [title, setTitle] = useState(`${originalTitle} (Copy)`);
 
   useEffect(() => {
-    if (open) {
-      setTitle(`${originalTitle} (Copy)`);
-    }
-  }, [open, originalTitle]);
+    setTitle(`${originalTitle} (Copy)`);
+  }, [originalTitle]);
 
   const { execute, status } = useAction(duplicateResumeAction, {
     onSuccess: ({ data }) => {
       if (data?.success && data.redirectUrl) {
         toast.success(data.message);
         onOpenChange(false);
-        router.push(data.redirectUrl);
       }
     },
     onError: ({ error }) => {
@@ -71,7 +66,8 @@ export function DuplicateResumeDialog({
           <DialogHeader>
             <DialogTitle>Duplicate Resume</DialogTitle>
             <DialogDescription>
-              Create a copy of <strong>{originalTitle}</strong>. Enter a name for the new resume.
+              Create a copy of <strong>{originalTitle}</strong>. Enter a name
+              for the new resume.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

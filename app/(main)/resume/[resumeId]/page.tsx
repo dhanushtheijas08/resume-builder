@@ -25,7 +25,6 @@ import { fetchResumeById } from "@/lib/queries/resume";
 import {
   Briefcase,
   Code,
-  Download,
   FolderKanban,
   GraduationCap,
   User,
@@ -39,6 +38,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { TemplateId } from "@/components/resume-templates";
+import { ExportResume } from "@/components/resume/export-resume";
 
 const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -54,8 +54,8 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
   }
   const resume = await fetchResumeById(resumeId);
 
-  if (!resume) {
-    throw new Error("Resume not found");
+  if (!resume || resume.userId !== session.user.id) {
+    throw new Error("Resume not found or access denied");
   }
 
   const parseTemplateMeta = (meta?: string) => {
@@ -94,10 +94,7 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
     <div className="flex flex-col h-screen">
       <nav className="flex items-center justify-between px-4 py-2.5 border-b">
         <h1 className="text-xl font-bold">Coders CV</h1>
-        <Button variant="primary" className="w-fit h-8.5">
-          <Download className="size-4 mr-0.5" />
-          Export PDF
-        </Button>
+        <ExportResume />
       </nav>
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel minSize={40} defaultSize={42}>
