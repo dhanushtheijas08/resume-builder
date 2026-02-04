@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const page = Math.max(parseInt(pageParam, 10) || 1, 1);
     const pageSize = Math.max(
       parseInt(pageSizeParam, 10) || DEFAULT_PAGE_SIZE,
-      1
+      1,
     );
 
     const role = searchParams.get("role");
@@ -71,6 +71,8 @@ export async function GET(request: NextRequest) {
 
     const totalPages = Math.max(Math.ceil(total / pageSize), 1);
 
+    console.log({ templates });
+
     return NextResponse.json({
       data: {
         templates,
@@ -87,7 +89,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to fetch resume templates" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

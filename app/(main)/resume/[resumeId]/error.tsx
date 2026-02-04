@@ -48,7 +48,7 @@ export default function ResumeError({
   return (
     <div className="flex flex-col h-screen">
       <nav className="flex items-center justify-between px-4 py-2.5 border-b">
-        <h1 className="text-xl font-bold">Resume Builder</h1>
+        <h1 className="text-xl font-bold">Coder CV</h1>
       </nav>
       <div className="flex items-center justify-center h-[calc(100vh-3.75rem)]">
         <div className="flex flex-col items-center gap-4 max-w-md text-center px-4">

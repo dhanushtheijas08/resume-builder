@@ -104,7 +104,6 @@ async function fetchResumeTemplates(params: {
   }
 
   const url = `${getEnv("NEXT_PUBLIC_RESUME_TEMPLATES_API_URL")}?${searchParams.toString()}`;
-
   const response = await fetch(url);
 
   if (!response.ok) {

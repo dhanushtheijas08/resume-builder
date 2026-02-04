@@ -38,9 +38,8 @@ const Template1 = ({ resumeData }: Template1Props) => {
         <HeaderSection profile={profile} />
         <ExperienceSection workExperiences={sortedWorkExperiences} />
         <ProjectsSection projects={sortedProjects} />
+        <EducationSection educations={sortedEducations} />
         <SkillsSection groupedSkills={groupedSkills} />
-        <EducationSection educations={sortedEducations} />
-        <EducationSection educations={sortedEducations} />
         {resumeData.customSections
           .sort((a, b) => a.order - b.order)
           .map((customSection) => (
