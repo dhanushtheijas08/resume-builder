@@ -49,10 +49,10 @@ export const FormFillingVisual = () => {
   ];
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center p-6 lg:p-12">
+    <div className="relative w-full h-full flex items-center justify-center p-4 lg:p-12">
       <motion.div
         layout
-        className="w-full max-w-md bg-background rounded-lg border border-border shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] overflow-hidden p-5 space-y-4"
+        className="w-full max-w-full lg:max-w-md bg-background rounded-lg border border-border shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] dark:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] overflow-hidden p-3 lg:p-5 space-y-3 lg:space-y-4"
       >
         {sections.map((section, idx) => (
           <motion.div
@@ -66,12 +66,13 @@ export const FormFillingVisual = () => {
                 activeTab === idx ? "0 4px 20px -2px rgba(0,0,0,0.05)" : "none",
             }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={`rounded-lg border transition-all duration-500 overflow-hidden ${activeTab === idx ? "ring-1 ring-primary/5" : ""
-              }`}
+            className={`rounded-lg border transition-all duration-500 overflow-hidden ${
+              activeTab === idx ? "ring-1 ring-primary/5" : ""
+            }`}
           >
             {/* Accordion Header */}
-            <div className="px-5 py-4 flex items-center justify-between cursor-default">
-              <div className="flex items-center gap-4 text-left">
+            <div className="px-3 py-3 lg:px-5 lg:py-4 flex items-center justify-between cursor-default">
+              <div className="flex items-center gap-3 lg:gap-4 text-left">
                 <motion.div
                   layout
                   className={`size-10 rounded-lg bg-${section.color}-500/10 flex items-center justify-center`}

@@ -84,7 +84,7 @@ export const ExportVisual = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full flex  justify-center p-8 overflow-hidden">
+    <div className="relative w-full h-full flex  justify-center p-4 lg:p-8 overflow-hidden">
       <div className="relative w-full h-full">
         <motion.div
           initial={{ y: 20, opacity: 0 }}

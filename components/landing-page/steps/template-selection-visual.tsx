@@ -16,13 +16,13 @@ export const TemplateSelectionVisual = () => {
   }, [isInView]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      className="relative w-full h-full flex items-center justify-center p-8 overflow-hidden"
+      className="relative w-full h-full flex items-center justify-center p-4 lg:p-8 overflow-hidden"
     >
       <div
-        className={`w-full max-w-md ${
-          selected ? "aspect-3/4" : "grid grid-cols-2 gap-4"
+        className={`w-full max-w-full lg:max-w-md transition-all duration-300 ${
+          selected ? "aspect-3/4" : "grid grid-cols-2 gap-3 lg:gap-4"
         }`}
       >
         <AnimatePresence mode="popLayout">
@@ -276,7 +276,7 @@ export const TemplateSelectionVisual = () => {
                     />
                   )}
                 </motion.div>
-              )
+              ),
           )}
         </AnimatePresence>
       </div>
