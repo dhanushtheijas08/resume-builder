@@ -19,7 +19,7 @@ export const LivePreviewCard = () => {
         </div>
 
         {/* Split-Screen Visualization */}
-        <div className="mt-auto translate-y-full translate-x-[55%] md:translate-x-[35%] absolute">
+        <div className="mt-auto translate-y-full md:translate-y-[110%] lg:translate-y-full translate-x-[55%] md:translate-x-[10%] lg:translate-x-[35%] absolute">
           <div className="w-[220px] md:w-[250px] mx-auto bg-background rounded-lg border-2 border-border/50 overflow-hidden shadow-lg">
             <div className="bg-background/50 px-2 py-1 border-t border-border/30 flex items-center justify-center">
               <div className="inline-flex items-center gap-1.5 text-[9px] font-semibold text-primary">

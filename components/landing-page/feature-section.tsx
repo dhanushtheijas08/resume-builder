@@ -26,6 +26,7 @@ export const FeatureSection = () => {
             <span className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70">
               Everything you need to build a
             </span>{" "}
+            <br className="hidden md:block" />
             <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
               winning resume
             </span>
