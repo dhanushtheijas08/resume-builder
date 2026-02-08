@@ -77,10 +77,10 @@ export const FAQSection = () => {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2 + index * 0.1 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
               >
                 <AccordionItem value={`item-${index}`} className="relative">
                   <AccordionTrigger className="text-left text-sm sm:text-base md:text-lg font-medium hover:no-underline hover:bg-muted/50 transition-all rounded-lg px-3 sm:px-4 py-4 sm:py-5 pr-12 sm:pr-14 border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden data-[state=open]:rounded-b-none duration-500 [&>svg]:hidden">

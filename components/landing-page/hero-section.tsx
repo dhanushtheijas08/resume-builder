@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export const HeroSection = () => {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-[95vh] overflow-hidden pt-32">
+    <section className="relative flex flex-col items-center justify-center overflow-hidden pt-10 md:pt-16">
       {/* Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-primary/25 blur-[160px] rounded-full opacity-40 contrast-150 saturate-200" />
@@ -24,20 +24,24 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-5xl md:text-6xl lg:text-6xl font-[520] tracking-normal  bg-clip-text text-transparent bg-linear-to-b from-foreground via-foreground/90 to-muted-foreground/50 pb-2 leading-14.5 mt-10"
+            className="text-4xl md:text-6xl lg:text-6xl font-[520] tracking-normal  bg-clip-text text-transparent bg-linear-to-b from-foreground via-foreground/90 to-muted-foreground/50 md:pb-2 leading-none md:leading-14.5 mt-10 md:mt-24"
           >
             <BlurEffect
               word="Build professional job ready"
-              className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70"
+              className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70 hidden md:block"
             />
             <BlurEffect
               word="resumes in 3 simple steps"
               delay={0.25}
-              className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70"
+              className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70 hidden md:block"
+            />
+            <BlurEffect
+              word="Build professional resumes in 3 steps"
+              className="bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70 block md:hidden"
             />
           </motion.h1>
 
-          <motion.p className="text-base md:text-xl text-muted-foreground max-w-2xl leading-relaxed md:leading-7">
+          <motion.p className="text-sm sm:text-base md:text-xl text-muted-foreground max-w-2xl sm:leading-relaxed md:leading-7">
             <BlurEffect
               word="ATS-friendly resumes using custom templates by role and experience with live preview and smart customization"
               type="line"
@@ -63,7 +67,7 @@ export const HeroSection = () => {
           </motion.div>
         </div>
       </div>
-      <div className="relative h-[600px] w-full sm:h-[850px] pointer-events-none select-none -mt-24 ">
+      <div className="relative h-[600px] w-full sm:h-[850px] pointer-events-none select-none  -mt-36 md:-mt-24 ">
         <HeroSectionResumePreview />
       </div>
     </section>

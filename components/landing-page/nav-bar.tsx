@@ -1,40 +1,44 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import {
-  Menu,
-  LogOut,
-  LayoutDashboard,
-  FileText,
-  ChevronsUpDown,
-  User2,
-  Settings,
-} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useRouter } from "next/navigation";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { authClient } from "@/lib/auth-client";
+import {
+  FileText,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Settings,
+  User2,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Kbd } from "../ui/kbd";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export const NavBar = () => {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const router = useRouter();
+
+  useHotkeys(["l", "shift+l", "ctrl+l", "command+l"], () => {
+    if (!user) router.push("/login");
+  });
 
   const logoutUser = async () => {
     await authClient.signOut({

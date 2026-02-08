@@ -21,22 +21,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { createResumeAction } from "@/lib/actions/resume-actions";
+import { getEnv } from "@/lib/env";
 import {
   CreateResumeFormData,
   createResumeSchema,
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { Layout, Plus, Sparkles, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
 import { TemplateCard, TemplateCardSkeleton } from "./template-card";
-import { getEnv } from "@/lib/env";
+import { Kbd } from "../ui/kbd";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -221,12 +223,23 @@ export function CreateResume() {
     setCurrentPage(1);
   };
 
+  useHotkeys(
+    ["ctrl+c", "c", "command+c"],
+    () => {
+      if (!open) setOpen(true);
+    },
+    { preventDefault: true },
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2 max-w-fit" variant="primary">
+        <Button className="gap-1.5 max-w-fit" variant="primary">
           <Plus className="size-4" />
           Create Resume
+          <Kbd className="text-xs bg-card/30 mt-0.5 text-primary-foreground">
+            c
+          </Kbd>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[90vw] w-full max-w-6xl h-[90vh] p-0 overflow-hidden border-none shadow-2xl bg-background/95 backdrop-blur-xl">

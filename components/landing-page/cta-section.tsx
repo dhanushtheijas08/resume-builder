@@ -35,45 +35,21 @@ export const CTASection = () => {
           <div className="relative flex flex-col lg:flex-row gap-12">
             <div className="flex flex-col gap-6 sm:gap-8 px-6 sm:px-8 py-8 sm:py-12 md:px-12 md:py-16 lg:px-16 lg:py-20">
               <div className="flex flex-col gap-4 md:gap-6 md:items-center lg:items-start">
-                <motion.span
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="text-primary-foreground/80 font-semibold tracking-wider text-xs sm:text-sm"
-                >
+                <motion.span className="text-primary-foreground/80 font-semibold tracking-wider text-xs sm:text-sm">
                   READY TO GET HIRED?
                 </motion.span>
-                <motion.h2
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl text-nowrap font-bold text-primary-foreground leading-[1.1]"
-                >
+                <motion.h2 className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl text-nowrap font-bold text-primary-foreground leading-[1.1]">
                   Your next job starts
                   <br className="block" />
                   with the right resume.
                 </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                  className="text-base sm:text-lg md:text-xl md:text-center lg:text-left  text-primary-foreground/80 max-w-xl"
-                >
+                <motion.p className="text-base sm:text-lg md:text-xl md:text-center lg:text-left  text-primary-foreground/80 max-w-xl">
                   Join thousands who have already created stunning resumes. No
                   experience needed, free forever.
                 </motion.p>
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-                className="flex flex-wrap gap-4 md:items-center md:justify-center lg:justify-start"
-              >
+              <motion.div className="flex flex-wrap gap-4 md:items-center md:justify-center lg:justify-start">
                 {features.map((feature, index) => (
                   <div
                     key={index}
@@ -87,13 +63,7 @@ export const CTASection = () => {
                 ))}
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-                className="pt-4"
-              >
+              <motion.div className="pt-4">
                 <Button
                   size="lg"
                   className="h-12.5 sm:h-14 px-6 sm:px-8 text-base md:text-xl font-semibold sm:font-bold w-full"

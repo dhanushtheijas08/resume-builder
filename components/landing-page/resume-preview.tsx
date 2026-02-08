@@ -29,7 +29,7 @@ export const HeroSectionResumePreview = () => {
       <div className="absolute w-screen pointer-events-none select-none">
         <div className="h-[600px] w-full pointer-events-none sm:h-[820px]">
           <div className="absolute inset-0 z-30 bg-linear-to-b from-transparent to-background w-full h-full" />
-          <div className="absolute inset-0 z-30 bg-linear-to-r from-transparent from-70% via-transparent to-background w-full h-full" />
+          <div className="absolute inset-0  z-30 bg-linear-to-r from-transparent from-70% via-transparent to-background w-full h-full" />
           <div
             className=" w-full h-full"
             style={{
@@ -39,14 +39,8 @@ export const HeroSectionResumePreview = () => {
               contain: "strict",
             }}
           >
-            <div
-              className="absolute translate-x-1/2 sm:translate-x-0 inset-0 w-[1000px] sm:w-[1600px] h-[900px] bg-background border rounded-xl mt-[220px] ml-auto sm:mt-[200px] sm:ml-[1%] sm:mr-auto sm:mb-auto pointer-events-auto overflow-hidden flex flex-col text-foreground transition-all duration-500 ease-in-out origin-top-left transform-3d backface-hidden transform-[translateX(2%)_scale(0.6)_rotateX(47deg)_rotateY(21deg)_rotate(330deg)] sm:transform-[translateX(1%)_scale(1.15)_rotateX(47deg)_rotateY(31deg)_rotate(326deg)]"
-              style={{
-                boxShadow:
-                  "0 50px 100px -20px rgba(0, 0, 0, 0.5), 0 30px 60px -30px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)",
-              }}
-            >
-              <nav className="flex items-center justify-between px-6 py-4 border-b bg-card/50 backdrop-blur-sm">
+            <div className="absolute translate-x-140 sm:translate-x-0 inset-0 w-[1000px] sm:w-[1600px] h-[900px] bg-background border rounded-xl mt-[220px] ml-auto sm:mt-[200px] sm:ml-[1%] sm:mr-auto sm:mb-auto pointer-events-auto overflow-hidden flex flex-col text-foreground transition-all duration-500 ease-in-out origin-top-left transform-3d backface-hidden transform-[translateX(2%)_scale(0.6)_rotateX(47deg)_rotateY(21deg)_rotate(330deg)] sm:transform-[translateX(1%)_scale(1.15)_rotateX(47deg)_rotateY(31deg)_rotate(326deg)]">
+              <nav className="flex items-center justify-between px-6 py-4  bg-card/50 backdrop-blur-sm">
                 <ResumePreviewAnimation duration={0.5} delay={1.5}>
                   <div className="flex items-center gap-3">
                     <div className="flex gap-1.5">
@@ -68,7 +62,7 @@ export const HeroSectionResumePreview = () => {
               </nav>
 
               <div className="flex flex-1 overflow-hidden">
-                <aside className="w-[650px] border-r bg-muted/5 flex flex-col">
+                <aside className="w-[850px] md:w-[650px] border-r bg-muted/5 flex flex-col">
                   <div className="flex-1 overflow-hidden p-6 pointer-events-none select-none">
                     <div className="w-full space-y-4">
                       {/* Personal Information */}
@@ -248,8 +242,7 @@ export const HeroSectionResumePreview = () => {
 
                 <OpacityAnimation delay={1.9}>
                   <main className="flex-1 bg-muted/20 overflow-hidden pt-5 flex justify-center relative">
-                    <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
-                    <div className="w-[250mm] min-h-[297mm] p-10 bg-white text-gray-900 shadow-2xl origin-top scale-[0.85]">
+                    <div className="md:w-[250mm] min-h-[297mm] p-10 bg-white text-gray-900 shadow-2xl origin-top scale-[0.85]">
                       <ResumePreviewAnimation delay={2.1} duration={0.6}>
                         <section className="mb-8">
                           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">
@@ -284,7 +277,6 @@ export const HeroSectionResumePreview = () => {
                         </section>
                       </ResumePreviewAnimation>
 
-                      {/* Experience Section */}
                       <ResumePreviewAnimation delay={2.2} duration={0.6}>
                         <section className="mb-8">
                           <h2 className="text-lg font-bold border-b-2 border-gray-900 pb-1.5 mb-4 text-gray-900 uppercase tracking-wider">
@@ -338,7 +330,6 @@ export const HeroSectionResumePreview = () => {
                         </section>
                       </ResumePreviewAnimation>
 
-                      {/* Projects Section */}
                       <ResumePreviewAnimation delay={2.4} duration={0.6}>
                         <section className="mb-8">
                           <h2 className="text-lg font-bold border-b-2 border-gray-900 pb-1.5 mb-4 text-gray-900 uppercase tracking-wider">
@@ -381,7 +372,6 @@ export const HeroSectionResumePreview = () => {
                         </section>
                       </ResumePreviewAnimation>
 
-                      {/* Education Section */}
                       <ResumePreviewAnimation delay={2.5} duration={0.6}>
                         <section className="mb-8">
                           <h2 className="text-lg font-bold border-b-2 border-gray-900 pb-1.5 mb-4 text-gray-900 uppercase tracking-wider">
@@ -408,7 +398,6 @@ export const HeroSectionResumePreview = () => {
                         </section>
                       </ResumePreviewAnimation>
 
-                      {/* Skills Section */}
                       <ResumePreviewAnimation delay={2.6} duration={0.6}>
                         <section className="mb-8">
                           <h2 className="text-lg font-bold border-b-2 border-gray-900 pb-1.5 mb-4 text-gray-900 uppercase tracking-wider">
