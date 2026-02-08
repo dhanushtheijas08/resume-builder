@@ -2,19 +2,17 @@
 
 import { motion } from "framer-motion";
 import {
+  ATSFriendlyCard,
   FreeForeverCard,
   LivePreviewCard,
   NoWatermarksCard,
   RealTemplatesCard,
   TailoredToYourLevelCard,
-  ATSFriendlyCard,
 } from "./features";
 
 export const FeatureSection = () => {
   return (
-    <section className="py-24 px-4 md:px-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-border to-transparent" />
-
+    <section className="py-24 md:py-14 px-4 md:px-6 relative overflow-hidden">
       <div className="container mx-auto max-w-6xl">
         <div className="mb-12 md:mb-16 text-center max-w-3xl mx-auto">
           <motion.h2
