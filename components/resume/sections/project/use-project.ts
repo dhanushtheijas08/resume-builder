@@ -18,10 +18,7 @@ export const defaultValues: ProjectFormData = {
   url: "",
   github: "",
   technologies: "",
-  dateFormat: "MMM YYYY",
-  startDate: "",
-  endDate: "",
-  isCurrent: false,
+  timePeriod: "",
   order: 1,
 };
 
@@ -45,10 +42,7 @@ export const useProject = (
         url: project.url || "",
         github: project.github || "",
         technologies: project.technologies?.join(", ") || "",
-        dateFormat: "MMM YYYY" as const,
-        startDate: project.startDate || "",
-        endDate: project.endDate || "",
-        isCurrent: project.isCurrent || false,
+        timePeriod: project.timePeriod || "",
         order: project.order || maxOrder,
       });
     } else {

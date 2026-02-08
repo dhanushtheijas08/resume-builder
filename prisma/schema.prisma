@@ -143,9 +143,7 @@ model WorkExperience {
   jobTitle    String
   company     String
   location    String?
-  startDate   String
-  endDate     String?
-  isCurrent   Boolean @default(false)
+  timePeriod  String?
   description String?
 
   resumeId String @db.ObjectId
@@ -164,9 +162,7 @@ model Education {
   degree      String
   institution String
   location    String?                                                                     
-  startDate   String
-  endDate     String?                                                                                                                                                                                                                                                                                       
-  isCurrent   Boolean @default(false)
+  timePeriod  String?
   description String?
 
   resumeId String @db.ObjectId
@@ -203,9 +199,7 @@ model Project {
   url          String?
   github       String?
   technologies String[] @default([])
-  startDate    String?
-  endDate      String?
-  isCurrent    Boolean  @default(false)
+  timePeriod   String?
 
   resumeId String @db.ObjectId
   resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)

@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { WorkExperienceFormData } from "@/lib/validations/resume";
 import { Loader2, Save } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { DateRangePicker } from "./date-range-picker";
 
 export const WorkExperienceForm = ({
   form,
@@ -101,26 +100,16 @@ export const WorkExperienceForm = ({
 
               <FormField
                 control={form.control}
-                name="startDate"
+                name="timePeriod"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Employment Period
+                      Time Period
                     </FormLabel>
                     <FormControl>
-                      <DateRangePicker
-                        startDate={field.value}
-                        endDate={form.watch("endDate") || ""}
-                        isCurrent={form.watch("isCurrent")}
-                        dateFormat={form.watch("dateFormat") || "MMM YYYY"}
-                        onDateFormatChange={(format) => {
-                          form.setValue("dateFormat", format);
-                        }}
-                        onChange={(data) => {
-                          form.setValue("startDate", data.startDate);
-                          form.setValue("endDate", data.endDate);
-                          form.setValue("isCurrent", data.isCurrent);
-                        }}
+                      <Input
+                        placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                        {...field}
                         disabled={isLoading}
                       />
                     </FormControl>

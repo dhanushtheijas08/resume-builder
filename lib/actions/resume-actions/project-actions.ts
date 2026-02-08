@@ -56,13 +56,7 @@ export const createProjectAction = safeAction
               ? parsedInput.github
               : null,
           technologies: technologiesArray,
-          startDate: parsedInput.startDate ?? null,
-          endDate: parsedInput.isCurrent
-            ? null
-            : parsedInput.endDate && parsedInput.endDate !== ""
-            ? parsedInput.endDate
-            : null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
           resumeId: parsedInput.resumeId,
         },
       });
@@ -134,13 +128,7 @@ export const editProjectAction = safeAction
               ? parsedInput.github
               : null,
           technologies: technologiesArray,
-          startDate: parsedInput.startDate ?? null,
-          endDate: parsedInput.isCurrent
-            ? null
-            : parsedInput.endDate && parsedInput.endDate !== ""
-            ? parsedInput.endDate
-            : null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
         },
       });
     } catch (error) {

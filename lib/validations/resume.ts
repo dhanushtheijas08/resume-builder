@@ -87,125 +87,53 @@ export const DATE_FORMATS = {
 
 export type DateFormatType = keyof typeof DATE_FORMATS;
 
-export const workExperienceSchema = z
-  .object({
-    order: z.number().int().min(1, "Order is required"),
-    jobTitle: z
-      .string()
-      .min(1, "Job title is required")
-      .max(100, "Job title must be at most 100 characters"),
-    company: z
-      .string()
-      .min(1, "Company name is required")
-      .max(100, "Company name must be at most 100 characters"),
-    location: z
-      .string()
-      .max(100, "Location must be at most 100 characters")
-      .optional(),
-    dateFormat: z.enum(["MMM YYYY", "MM/YYYY", "YYYY-MM", "MMMM YYYY"]),
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().optional().or(z.literal("")),
-    isCurrent: z.boolean(),
-    description: z
-      .string()
-      .max(5000, "Description must be at most 5000 characters")
-      .optional(),
-  })
-  .refine(
-    (data) => {
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.startDate);
-    },
-    {
-      message: "Start date format is invalid for selected format",
-      path: ["startDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent || !data.endDate || data.endDate === "") {
-        return true;
-      }
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.endDate);
-    },
-    {
-      message: "End date format is invalid for selected format",
-      path: ["endDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent) {
-        return true;
-      }
-      return data.endDate && data.endDate.trim() !== "";
-    },
-    {
-      message: "End date is required when not a current position",
-      path: ["endDate"],
-    }
-  );
+export const workExperienceSchema = z.object({
+  order: z.number().int().min(1, "Order is required"),
+  jobTitle: z
+    .string()
+    .min(1, "Job title is required")
+    .max(100, "Job title must be at most 100 characters"),
+  company: z
+    .string()
+    .min(1, "Company name is required")
+    .max(100, "Company name must be at most 100 characters"),
+  location: z
+    .string()
+    .max(100, "Location must be at most 100 characters")
+    .optional(),
+  timePeriod: z
+    .string()
+    .max(100, "Time period must be at most 100 characters")
+    .optional(),
+  description: z
+    .string()
+    .max(5000, "Description must be at most 5000 characters")
+    .optional(),
+});
 
-export const educationSchema = z
-  .object({
-    order: z.number().int().min(1, "Order is required"),
-    degree: z
-      .string()
-      .min(1, "Degree is required")
-      .max(100, "Degree must be at most 100 characters"),
-    institution: z
-      .string()
-      .min(1, "Institution name is required")
-      .max(100, "Institution name must be at most 100 characters"),
-    location: z
-      .string()
-      .max(100, "Location must be at most 100 characters")
-      .optional(),
-    dateFormat: z.enum(["MMM YYYY", "MM/YYYY", "YYYY-MM", "MMMM YYYY"]),
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().optional().or(z.literal("")),
-    isCurrent: z.boolean(),
-    description: z
-      .string()
-      .max(5000, "Description must be at most 5000 characters")
-      .optional(),
-  })
-  .refine(
-    (data) => {
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.startDate);
-    },
-    {
-      message: "Start date format is invalid for selected format",
-      path: ["startDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent || !data.endDate || data.endDate === "") {
-        return true;
-      }
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.endDate);
-    },
-    {
-      message: "End date format is invalid for selected format",
-      path: ["endDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent) {
-        return true;
-      }
-      return data.endDate && data.endDate.trim() !== "";
-    },
-    {
-      message: "End date is required when not currently studying",
-      path: ["endDate"],
-    }
-  );
+export const educationSchema = z.object({
+  order: z.number().int().min(1, "Order is required"),
+  degree: z
+    .string()
+    .min(1, "Degree is required")
+    .max(100, "Degree must be at most 100 characters"),
+  institution: z
+    .string()
+    .min(1, "Institution name is required")
+    .max(100, "Institution name must be at most 100 characters"),
+  location: z
+    .string()
+    .max(100, "Location must be at most 100 characters")
+    .optional(),
+  timePeriod: z
+    .string()
+    .max(100, "Time period must be at most 100 characters")
+    .optional(),
+  description: z
+    .string()
+    .max(5000, "Description must be at most 5000 characters")
+    .optional(),
+});
 
 export const skillSchema = z.object({
   name: z
@@ -225,64 +153,27 @@ export const skillSchema = z.object({
   displayType: z.enum(["badge", "progress", "category"]).default("badge"),
 });
 
-export const projectSchema = z
-  .object({
-    order: z.number().int().min(1, "Order is required"),
-    name: z
-      .string()
-      .min(1, "Project name is required")
-      .max(100, "Project name must be at most 100 characters"),
-    description: z
-      .string()
-      .max(5000, "Description must be at most 5000 characters")
-      .optional(),
-    url: z.url("Invalid URL").optional().or(z.literal("")),
-    github: z.url("Invalid GitHub URL").optional().or(z.literal("")),
-    technologies: z
-      .string()
-      .max(500, "Technologies list is too long")
-      .optional(),
-    dateFormat: z.enum(["MMM YYYY", "MM/YYYY", "YYYY-MM", "MMMM YYYY"]),
-    startDate: z.string().optional(),
-    endDate: z.string().optional().or(z.literal("")),
-    isCurrent: z.boolean(),
-  })
-  .refine(
-    (data) => {
-      if (!data.startDate) return true;
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.startDate);
-    },
-    {
-      message: "Start date format is invalid for selected format",
-      path: ["startDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent || !data.endDate || data.endDate === "") {
-        return true;
-      }
-      const formatConfig = DATE_FORMATS[data.dateFormat];
-      return formatConfig.regex.test(data.endDate);
-    },
-    {
-      message: "End date format is invalid for selected format",
-      path: ["endDate"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.isCurrent) {
-        return true;
-      }
-      return !data.startDate || data.endDate || data.endDate === "";
-    },
-    {
-      message: "End date is required when not an ongoing project",
-      path: ["endDate"],
-    }
-  );
+export const projectSchema = z.object({
+  order: z.number().int().min(1, "Order is required"),
+  name: z
+    .string()
+    .min(1, "Project name is required")
+    .max(100, "Project name must be at most 100 characters"),
+  description: z
+    .string()
+    .max(5000, "Description must be at most 5000 characters")
+    .optional(),
+  url: z.url("Invalid URL").optional().or(z.literal("")),
+  github: z.url("Invalid GitHub URL").optional().or(z.literal("")),
+  technologies: z
+    .string()
+    .max(500, "Technologies list is too long")
+    .optional(),
+  timePeriod: z
+    .string()
+    .max(100, "Time period must be at most 100 characters")
+    .optional(),
+});
 
 export const certificationSchema = z.object({
   order: z.number().int().min(1, "Order is required"),

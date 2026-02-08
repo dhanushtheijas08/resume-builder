@@ -41,26 +41,15 @@ export const ProjectCard = ({
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-lg font-semibold">{project.name}</h3>
-                {project.isCurrent && (
-                  <Badge
-                    variant="default"
-                    className="bg-green-500/20 text-green-500 border-green-500/30"
-                  >
-                    Active
-                  </Badge>
-                )}
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-3">
-            {(project.startDate || project.endDate) && (
+            {project.timePeriod && (
               <div className="flex items-center gap-1.5">
                 <Calendar className="size-4 shrink-0" />
-                <span className="font-mono">
-                  {project.startDate || "N/A"} -{" "}
-                  {project.isCurrent ? "Present" : project.endDate || "N/A"}
-                </span>
+                <span>{project.timePeriod}</span>
               </div>
             )}
             {project.url && (

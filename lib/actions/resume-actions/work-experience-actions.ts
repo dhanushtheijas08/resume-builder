@@ -16,7 +16,7 @@ export const createWorkExperienceAction = safeAction
   .inputSchema(
     workExperienceSchema.safeExtend({
       resumeId: objectIdSchemaFn("Invalid resume ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -34,7 +34,7 @@ export const createWorkExperienceAction = safeAction
       if (resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to edit this resume",
-          403
+          403,
         );
       }
       await prisma.workExperience.create({
@@ -43,9 +43,7 @@ export const createWorkExperienceAction = safeAction
           jobTitle: parsedInput.jobTitle,
           company: parsedInput.company,
           location: parsedInput.location ?? "",
-          startDate: parsedInput.startDate,
-          endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
           description: parsedInput.description
             ? sanitizeServerHtml(parsedInput.description)
             : "",
@@ -72,7 +70,7 @@ export const editWorkExperienceAction = safeAction
   .inputSchema(
     workExperienceSchema.safeExtend({
       id: objectIdSchemaFn("Invalid work experience ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -92,7 +90,7 @@ export const editWorkExperienceAction = safeAction
       if (workExperience.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to edit this work experience",
-          403
+          403,
         );
       }
 
@@ -105,9 +103,7 @@ export const editWorkExperienceAction = safeAction
           jobTitle: parsedInput.jobTitle,
           company: parsedInput.company,
           location: parsedInput.location ?? "",
-          startDate: parsedInput.startDate,
-          endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
           description: parsedInput.description
             ? sanitizeServerHtml(parsedInput.description)
             : "",
@@ -138,7 +134,7 @@ export const deleteWorkExperienceAction = safeAction
   .inputSchema(
     z.object({
       id: objectIdSchemaFn("Invalid work experience ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -158,7 +154,7 @@ export const deleteWorkExperienceAction = safeAction
       if (workExperience.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to delete this work experience",
-          403
+          403,
         );
       }
 

@@ -1,6 +1,5 @@
 import type { WorkExperience } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
-import { formatDateRange } from "../utils";
 
 interface ExperienceSectionProps {
   workExperiences: WorkExperience[];
@@ -18,17 +17,13 @@ export const ExperienceSection = ({
       </h2>
 
       {workExperiences.map((exp, index) => {
-        const duration = formatDateRange(
-          exp.startDate,
-          exp.endDate,
-          exp.isCurrent,
-        );
-
         return (
           <div key={exp.id || index} className="mb-4 resume">
             <div className="flex justify-between items-center">
               <h3 className="font-semibold text-sm">{exp.jobTitle}</h3>
-              <span className="text-xs text-gray-600">{duration}</span>
+              {exp.timePeriod && (
+                <span className="text-xs text-gray-600">{exp.timePeriod}</span>
+              )}
             </div>
             <p className="text-xs text-gray-600">
               {exp.company}

@@ -32,11 +32,13 @@ import {
   Trophy,
   BookOpen,
   FileText,
+  ArrowLeft,
 } from "lucide-react";
 import { ResumePreview } from "@/components/resume/resume-preview";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { TemplateId } from "@/components/resume-templates";
 import { ExportResumeButton } from "@/components/resume/export-resume-button";
 
@@ -92,8 +94,15 @@ const ResumePage = async ({ params }: { params: { resumeId: string } }) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <nav className="flex items-center justify-between px-4 py-2.5 border-b">
-        <h1 className="text-xl font-bold">Coder CV</h1>
+      <nav className="flex items-center justify-between px-4 py-3 border-b bg-card">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+            <Link href="/dashboard">
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <h1 className="text-xl font-bold">Coder CV</h1>
+        </div>
         <ExportResumeButton />
       </nav>
       <ResizablePanelGroup direction="horizontal">

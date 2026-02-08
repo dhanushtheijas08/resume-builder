@@ -17,10 +17,7 @@ export const defaultValues: EducationFormData = {
   degree: "",
   institution: "",
   location: "",
-  dateFormat: "MMM YYYY",
-  startDate: "",
-  endDate: "",
-  isCurrent: false,
+  timePeriod: "",
   description: "",
 };
 
@@ -42,10 +39,7 @@ export const useEducation = (
         degree: education.degree || "",
         institution: education.institution || "",
         location: education.location || "",
-        dateFormat: "MMM YYYY" as const,
-        startDate: education.startDate || "",
-        endDate: education.endDate || "",
-        isCurrent: education.isCurrent || false,
+        timePeriod: education.timePeriod || "",
         description: education.description || "",
         order: education.order || maxOrder,
       });

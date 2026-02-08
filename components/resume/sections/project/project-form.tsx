@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { ProjectFormData } from "@/lib/validations/resume";
 import { Calendar, Code2, Globe, Loader2, Save } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { DateRangePicker } from "../work-experience/date-range-picker";
 
 export const ProjectForm = ({
   form,
@@ -128,29 +127,18 @@ export const ProjectForm = ({
 
             <FormField
               control={form.control}
-              name="startDate"
+              name="timePeriod"
               render={({ field }) => (
                 <FormItem className="space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1.5">
                     <Calendar className="size-4" />
-                    Project Timeline
+                    Time Period
                   </FormLabel>
                   <FormControl>
-                    <DateRangePicker
-                      startDate={field.value}
-                      endDate={form.watch("endDate") || ""}
-                      isCurrent={form.watch("isCurrent")}
-                      dateFormat={form.watch("dateFormat") || "MMM YYYY"}
-                      onDateFormatChange={(format) => {
-                        form.setValue("dateFormat", format);
-                      }}
-                      onChange={(data) => {
-                        form.setValue("startDate", data.startDate);
-                        form.setValue("endDate", data.endDate);
-                        form.setValue("isCurrent", data.isCurrent);
-                      }}
+                    <Input
+                      placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                      {...field}
                       disabled={isLoading}
-                      currentLabel="This is an ongoing project"
                     />
                   </FormControl>
                   <div className="h-0.5 -mt-2.5">

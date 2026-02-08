@@ -19,10 +19,7 @@ export const defaultValues: WorkExperienceFormData = {
   jobTitle: "",
   company: "",
   location: "",
-  dateFormat: "MMM YYYY",
-  startDate: "",
-  endDate: "",
-  isCurrent: false,
+  timePeriod: "",
   description: "",
   order: 1,
 };
@@ -45,10 +42,7 @@ export const useWorkExperience = (
         jobTitle: workExperience.jobTitle || "",
         company: workExperience.company || "",
         location: workExperience.location || "",
-        dateFormat: "MMM YYYY" as const,
-        startDate: workExperience.startDate || "",
-        endDate: workExperience.endDate || "",
-        isCurrent: workExperience.isCurrent || false,
+        timePeriod: workExperience.timePeriod || "",
         description: workExperience.description || "",
         order: workExperience.order || maxOrder,
       });

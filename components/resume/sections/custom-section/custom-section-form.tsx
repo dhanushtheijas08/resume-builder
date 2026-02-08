@@ -21,15 +21,12 @@ import {
 import { CustomSectionFormData } from "@/lib/validations/resume";
 import { Save, Loader2 } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { DateRangePicker } from "../work-experience/date-range-picker";
 
 type ExperienceContent = {
   jobTitle?: string;
   company?: string;
   location?: string;
-  startDate?: string;
-  endDate?: string;
-  isCurrent?: boolean;
+  timePeriod?: string;
   description?: string;
 };
 
@@ -37,9 +34,7 @@ type EducationContent = {
   degree?: string;
   institution?: string;
   location?: string;
-  startDate?: string;
-  endDate?: string;
-  isCurrent?: boolean;
+  timePeriod?: string;
   description?: string;
 };
 
@@ -49,9 +44,7 @@ type ProjectContent = {
   url?: string;
   github?: string;
   technologies?: string;
-  startDate?: string;
-  endDate?: string;
-  isCurrent?: boolean;
+  timePeriod?: string;
 };
 
 type SkillContent = {
@@ -90,9 +83,7 @@ export const CustomSectionForm = ({
         jobTitle: expData?.jobTitle || "",
         company: expData?.company || "",
         location: expData?.location || "",
-        startDate: expData?.startDate || "",
-        endDate: expData?.endDate || "",
-        isCurrent: expData?.isCurrent || false,
+        timePeriod: expData?.timePeriod || "",
         description: expData?.description || "",
       };
     } else if (sectionType === "EDUCATION") {
@@ -101,9 +92,7 @@ export const CustomSectionForm = ({
         degree: eduData?.degree || "",
         institution: eduData?.institution || "",
         location: eduData?.location || "",
-        startDate: eduData?.startDate || "",
-        endDate: eduData?.endDate || "",
-        isCurrent: eduData?.isCurrent || false,
+        timePeriod: eduData?.timePeriod || "",
         description: eduData?.description || "",
       };
     } else if (sectionType === "PROJECT") {
@@ -114,9 +103,7 @@ export const CustomSectionForm = ({
         url: projData?.url || "",
         github: projData?.github || "",
         technologies: projData?.technologies || "",
-        startDate: projData?.startDate || "",
-        endDate: projData?.endDate || "",
-        isCurrent: projData?.isCurrent || false,
+        timePeriod: projData?.timePeriod || "",
       };
     } else if (sectionType === "SKILL") {
       const skillData = values.content as SkillContent;
@@ -245,25 +232,19 @@ export const CustomSectionForm = ({
             render={() => (
               <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-medium text-foreground">
-                  Employment Period
+                  Time Period
                 </FormLabel>
                 <FormControl>
-                  <DateRangePicker
-                    startDate={content.startDate || ""}
-                    endDate={content.endDate || ""}
-                    isCurrent={content.isCurrent || false}
-                    dateFormat="MMM YYYY"
-                    onDateFormatChange={() => {}}
-                    onChange={(data) => {
+                  <Input
+                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    value={content.timePeriod || ""}
+                    onChange={(e) => {
                       form.setValue("content", {
                         ...content,
-                        startDate: data.startDate,
-                        endDate: data.endDate,
-                        isCurrent: data.isCurrent,
+                        timePeriod: e.target.value,
                       });
                     }}
                     disabled={isLoading}
-                    currentLabel="I currently work here"
                   />
                 </FormControl>
               </FormItem>
@@ -380,25 +361,19 @@ export const CustomSectionForm = ({
             render={() => (
               <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-medium text-foreground">
-                  Study Period
+                  Time Period
                 </FormLabel>
                 <FormControl>
-                  <DateRangePicker
-                    startDate={content.startDate || ""}
-                    endDate={content.endDate || ""}
-                    isCurrent={content.isCurrent || false}
-                    dateFormat="MMM YYYY"
-                    onDateFormatChange={() => {}}
-                    onChange={(data) => {
+                  <Input
+                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    value={content.timePeriod || ""}
+                    onChange={(e) => {
                       form.setValue("content", {
                         ...content,
-                        startDate: data.startDate,
-                        endDate: data.endDate,
-                        isCurrent: data.isCurrent,
+                        timePeriod: e.target.value,
                       });
                     }}
                     disabled={isLoading}
-                    currentLabel="I'm currently studying here"
                   />
                 </FormControl>
               </FormItem>
@@ -525,6 +500,30 @@ export const CustomSectionForm = ({
                       form.setValue("content", {
                         ...content,
                         technologies: e.target.value,
+                      });
+                    }}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="content"
+            render={() => (
+              <FormItem className="space-y-2">
+                <FormLabel className="text-sm font-medium text-foreground">
+                  Time Period
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    value={content.timePeriod || ""}
+                    onChange={(e) => {
+                      form.setValue("content", {
+                        ...content,
+                        timePeriod: e.target.value,
                       });
                     }}
                     disabled={isLoading}

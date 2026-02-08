@@ -41,9 +41,7 @@ export const createEducationAction = safeAction
           degree: parsedInput.degree,
           institution: parsedInput.institution,
           location: parsedInput.location ?? "",
-          startDate: parsedInput.startDate,
-          endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
           description: parsedInput.description
             ? sanitizeServerHtml(parsedInput.description)
             : "",
@@ -103,9 +101,7 @@ export const editEducationAction = safeAction
           degree: parsedInput.degree,
           institution: parsedInput.institution,
           location: parsedInput.location ?? "",
-          startDate: parsedInput.startDate,
-          endDate: parsedInput.isCurrent ? null : parsedInput.endDate ?? null,
-          isCurrent: parsedInput.isCurrent,
+          timePeriod: parsedInput.timePeriod ?? null,
           description: parsedInput.description
             ? sanitizeServerHtml(parsedInput.description)
             : "",

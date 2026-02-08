@@ -17,12 +17,6 @@ export const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
       </h2>
 
       {projects.map((project, index) => {
-        const year = project.endDate
-          ? new Date(project.endDate).getFullYear().toString()
-          : project.startDate
-            ? new Date(project.startDate).getFullYear().toString()
-            : "";
-
         return (
           <Fragment key={project.id || index}>
             <div className="flex justify-between items-center">
@@ -44,7 +38,9 @@ export const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                   </a>
                 )}
               </div>
-              {year && <span className="text-xs text-gray-600">{year}</span>}
+              {project.timePeriod && (
+                <span className="text-xs text-gray-600">{project.timePeriod}</span>
+              )}
             </div>
 
             {project.description && (

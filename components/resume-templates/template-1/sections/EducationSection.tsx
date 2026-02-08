@@ -1,6 +1,5 @@
 import type { Education } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
-import { formatDateRange } from "../utils";
 
 interface EducationSectionProps {
   educations: Education[];
@@ -19,13 +18,11 @@ export const EducationSection = ({ educations }: EducationSectionProps) => {
         <div key={education.id || index} className={index > 0 ? "mt-4" : ""}>
           <div className="flex justify-between items-center text-sm">
             <h3 className="font-semibold">{education.degree}</h3>
-            <span className="text-xs text-gray-600">
-              {formatDateRange(
-                education.startDate,
-                education.endDate,
-                education.isCurrent,
-              )}
-            </span>
+            {education.timePeriod && (
+              <span className="text-xs text-gray-600">
+                {education.timePeriod}
+              </span>
+            )}
           </div>
           <p className="text-xs text-gray-600">
             {education.institution}

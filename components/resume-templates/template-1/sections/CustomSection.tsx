@@ -1,7 +1,6 @@
 import { GitHubIcon } from "@/components/icons";
 import type { CustomSection as CustomSectionType } from "@prisma/client";
 import { sanitizeServerHtml } from "@/lib/sanitize-html-input";
-import { formatDateRange } from "../utils";
 
 interface CustomSectionProps {
   customSection: CustomSectionType;
@@ -33,16 +32,9 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
       jobTitle?: string;
       company?: string;
       location?: string;
-      startDate?: string;
-      endDate?: string;
-      isCurrent?: boolean;
+      timePeriod?: string;
       description?: string;
     };
-    const duration = formatDateRange(
-      exp.startDate || "",
-      exp.endDate || null,
-      exp.isCurrent || false,
-    );
 
     return (
       <section key={customSection.id} className="mb-3.5">
@@ -52,7 +44,9 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
         <div className="mb-4 resume">
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-sm">{exp.jobTitle}</h3>
-            <span className="text-xs text-gray-600">{duration}</span>
+            {exp.timePeriod && (
+              <span className="text-xs text-gray-600">{exp.timePeriod}</span>
+            )}
           </div>
           <p className="text-xs text-gray-600">
             {exp.company}
@@ -75,16 +69,9 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
       degree?: string;
       institution?: string;
       location?: string;
-      startDate?: string;
-      endDate?: string;
-      isCurrent?: boolean;
+      timePeriod?: string;
       description?: string;
     };
-    const duration = formatDateRange(
-      edu.startDate || "",
-      edu.endDate || null,
-      edu.isCurrent || false,
-    );
 
     return (
       <section key={customSection.id} className="mb-3.5">
@@ -93,7 +80,9 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
         </h2>
         <div className="flex justify-between items-center text-sm">
           <h3 className="font-semibold">{edu.degree}</h3>
-          <span className="text-xs text-gray-600">{duration}</span>
+          {edu.timePeriod && (
+            <span className="text-xs text-gray-600">{edu.timePeriod}</span>
+          )}
         </div>
         <p className="text-xs text-gray-600">
           {edu.institution}
@@ -118,15 +107,8 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
       url?: string;
       github?: string;
       technologies?: string;
-      startDate?: string;
-      endDate?: string;
-      isCurrent?: boolean;
+      timePeriod?: string;
     };
-    const year = proj.endDate
-      ? new Date(proj.endDate).getFullYear().toString()
-      : proj.startDate
-        ? new Date(proj.startDate).getFullYear().toString()
-        : "";
 
     return (
       <section key={customSection.id} className="mb-3.5">
@@ -152,7 +134,9 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
               </a>
             )}
           </div>
-          {year && <span className="text-xs text-gray-600">{year}</span>}
+          {proj.timePeriod && (
+            <span className="text-xs text-gray-600">{proj.timePeriod}</span>
+          )}
         </div>
         {proj.description && (
           <div
