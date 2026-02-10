@@ -28,17 +28,17 @@ import {
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { Layout, Plus, Sparkles, X } from "lucide-react";
+import { Layout, Plus, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
+import { Kbd } from "../ui/kbd";
 import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
 import { TemplateCard, TemplateCardSkeleton } from "./template-card";
-import { Kbd } from "../ui/kbd";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -390,14 +390,7 @@ export function CreateResume() {
                     className="relative overflow-hidden"
                     variant="primary"
                   >
-                    {isPending ? (
-                      "Creating..."
-                    ) : (
-                      <>
-                        Create
-                        <Sparkles className="ml-2 size-3.5" />
-                      </>
-                    )}
+                    {isPending ? "Creating..." : "Create"}
                   </Button>
                 </div>
               </div>

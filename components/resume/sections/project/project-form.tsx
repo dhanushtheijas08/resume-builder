@@ -136,7 +136,7 @@ export const ProjectForm = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                      placeholder="Jan 2020 - Present"
                       {...field}
                       disabled={isLoading}
                     />

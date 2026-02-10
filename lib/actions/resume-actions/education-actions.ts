@@ -13,7 +13,7 @@ export const createEducationAction = safeAction
   .inputSchema(
     educationSchema.safeExtend({
       resumeId: objectIdSchemaFn("Invalid resume ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -30,7 +30,7 @@ export const createEducationAction = safeAction
     if (resume.userId !== user.id) {
       throw new ActionError(
         "You do not have permission to edit this resume",
-        403
+        403,
       );
     }
 
@@ -68,7 +68,7 @@ export const editEducationAction = safeAction
   .inputSchema(
     educationSchema.safeExtend({
       id: objectIdSchemaFn("Invalid education ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -88,7 +88,7 @@ export const editEducationAction = safeAction
       if (education.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to edit this education",
-          403
+          403,
         );
       }
 
@@ -132,7 +132,7 @@ export const deleteEducationAction = safeAction
   .inputSchema(
     z.object({
       id: objectIdSchemaFn("Invalid education ID"),
-    })
+    }),
   )
   .action(async ({ parsedInput }): Promise<ResponseData> => {
     const user = await validateUser();
@@ -152,7 +152,7 @@ export const deleteEducationAction = safeAction
       if (education.resume.userId !== user.id) {
         throw new ActionError(
           "You do not have permission to delete this education",
-          403
+          403,
         );
       }
 

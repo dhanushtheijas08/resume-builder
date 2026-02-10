@@ -1,3 +1,4 @@
+import { UserHeader } from "@/components/common/header";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
@@ -18,7 +19,10 @@ export default async function Layout({
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
-      <main className="w-full">{children}</main>
+      <main className="w-full">
+        <UserHeader />
+        {children}
+      </main>
     </SidebarProvider>
   );
 }

@@ -236,7 +236,7 @@ export const CustomSectionForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    placeholder="Jan 2020 - Present"
                     value={content.timePeriod || ""}
                     onChange={(e) => {
                       form.setValue("content", {
@@ -365,7 +365,7 @@ export const CustomSectionForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    placeholder="Jan 2020 - Present"
                     value={content.timePeriod || ""}
                     onChange={(e) => {
                       form.setValue("content", {
@@ -518,7 +518,7 @@ export const CustomSectionForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Jan 2020 - Feb 2025 or 12/23/2035 - 11/12/89"
+                    placeholder="Jan 2020 - Present"
                     value={content.timePeriod || ""}
                     onChange={(e) => {
                       form.setValue("content", {
