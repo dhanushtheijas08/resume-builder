@@ -1,10 +1,9 @@
 "use client";
 
+import { Filter } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Filter, Grid3x3, List } from "lucide-react";
 
 import { ResumeCard } from "@/components/dashboard/resume-card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -45,16 +44,18 @@ export function ResumeListSection({ resumes }: ResumeListSectionProps) {
   }, [resumes, sortBy]);
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h2 className="text-xl font-semibold mb-4">Your Resumes</h2>
+    <section className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+        <h2 className=" text-base sm:text-xl font-semibold mb-0 sm:mb-4 ">
+          Your Resumes
+        </h2>
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Select
             value={sortBy}
             onValueChange={(value: SortOption) => setSortBy(value)}
           >
             <SelectTrigger className="w-[190px]">
-              <Filter className="mr-2 size-4" />
+              <Filter className="size-4" />
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -64,7 +65,7 @@ export function ResumeListSection({ resumes }: ResumeListSectionProps) {
             </SelectContent>
           </Select>
 
-          <div className="flex items-center gap-1 border rounded-lg p-1">
+          {/* <div className="flex items-center gap-1 border rounded-lg p-1">
             <Button
               variant={viewMode === "grid" ? "secondary" : "ghost"}
               size="icon"
@@ -83,7 +84,7 @@ export function ResumeListSection({ resumes }: ResumeListSectionProps) {
               <List className="size-4" />
               <span className="sr-only">List view</span>
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
 

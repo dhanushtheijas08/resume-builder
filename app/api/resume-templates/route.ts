@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     const role = searchParams.get("role");
     const company = searchParams.get("company");
     const experienceLabel = searchParams.get("experience");
+    const location = searchParams.get("location");
 
     const where: Record<string, unknown> = {};
 
@@ -40,6 +41,9 @@ export async function GET(request: NextRequest) {
 
     if (company && company !== "All") {
       where.company = company;
+    }
+    if (location && location !== "All") {
+      where.location = location;
     }
 
     if (experienceLabel && experienceLabel !== "All") {
@@ -70,8 +74,6 @@ export async function GET(request: NextRequest) {
     ]);
 
     const totalPages = Math.max(Math.ceil(total / pageSize), 1);
-
-    console.log({ templates });
 
     return NextResponse.json({
       data: {

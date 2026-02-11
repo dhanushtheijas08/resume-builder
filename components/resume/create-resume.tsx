@@ -39,6 +39,8 @@ import { Kbd } from "../ui/kbd";
 import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
 import { TemplateCard, TemplateCardSkeleton } from "./template-card";
+import { TEMPLATE_COLORS } from "@/lib/const";
+import { fetchResumeTemplates } from "@/lib/api/resume.api";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -65,54 +67,12 @@ type ResumeTemplateApiResponse = {
   };
 };
 
-const TEMPLATE_COLORS = [
-  { color: "bg-slate-100", accent: "bg-slate-900" },
-  { color: "bg-blue-50", accent: "bg-blue-600" },
-  { color: "bg-purple-50", accent: "bg-purple-600" },
-  { color: "bg-emerald-50", accent: "bg-emerald-600" },
-  { color: "bg-red-50", accent: "bg-red-600" },
-  { color: "bg-orange-50", accent: "bg-orange-600" },
-  { color: "bg-indigo-50", accent: "bg-indigo-600" },
-];
-
 function getExperienceLabel(experience: number): string {
   if (experience < 2) return "Entry Level";
   if (experience < 5) return "Mid Level";
   if (experience < 8) return "Senior";
   if (experience < 12) return "Lead";
   return "Executive";
-}
-
-async function fetchResumeTemplates(params: {
-  page: number;
-  role: string;
-  exp: string;
-  company: string;
-}): Promise<ResumeTemplateApiResponse> {
-  const searchParams = new URLSearchParams();
-  searchParams.set("page", String(params.page));
-  searchParams.set("pageSize", String(ITEMS_PER_PAGE));
-
-  if (params.role && params.role !== "All") {
-    searchParams.set("role", params.role);
-  }
-
-  if (params.exp && params.exp !== "All") {
-    searchParams.set("experience", params.exp);
-  }
-
-  if (params.company && params.company !== "All") {
-    searchParams.set("company", params.company);
-  }
-
-  const url = `${getEnv("NEXT_PUBLIC_RESUME_TEMPLATES_API_URL")}?${searchParams.toString()}`;
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch resume templates");
-  }
-
-  return response.json();
 }
 
 export function CreateResume() {
@@ -224,7 +184,7 @@ export function CreateResume() {
   };
 
   useHotkeys(
-    ["ctrl+c", "c", "command+c"],
+    ["c", "shift+c"],
     () => {
       if (!open) setOpen(true);
     },
@@ -237,7 +197,7 @@ export function CreateResume() {
         <Button className="gap-1.5 max-w-fit" variant="primary">
           <Plus className="size-4" />
           Create Resume
-          <Kbd className="text-xs bg-card/30 mt-0.5 text-primary-foreground">
+          <Kbd className="hidden lg:flex text-xs bg-card/30 mt-0.5 text-primary-foreground">
             c
           </Kbd>
         </Button>
@@ -379,10 +339,10 @@ export function CreateResume() {
                   </p>
                 )}
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" onClick={() => setOpen(false)}>
+                <div className="grid grid-cols-1 gap-3">
+                  {/* <Button variant="outline" onClick={() => setOpen(false)}>
                     Cancel
-                  </Button>
+                  </Button> */}
                   <Button
                     type="submit"
                     form="create-resume-form"
@@ -436,18 +396,6 @@ export function CreateResume() {
                     </>
                   )}
                 </div>
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-10">
-                  {uiTemplates[0] && (
-                    <Image
-                      src={uiTemplates[0].previewImageUrl}
-                      alt="Selected Template"
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                      quality={100}
-                    />
-                  )}
-                </div> */}
               </ScrollArea>
 
               {totalPages > 1 && (

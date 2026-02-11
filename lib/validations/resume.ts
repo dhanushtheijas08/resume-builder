@@ -165,10 +165,7 @@ export const projectSchema = z.object({
     .optional(),
   url: z.url("Invalid URL").optional().or(z.literal("")),
   github: z.url("Invalid GitHub URL").optional().or(z.literal("")),
-  technologies: z
-    .string()
-    .max(500, "Technologies list is too long")
-    .optional(),
+  technologies: z.string().max(500, "Technologies list is too long").optional(),
   timePeriod: z
     .string()
     .max(100, "Time period must be at most 100 characters")
@@ -232,7 +229,7 @@ export const updatedOrderSchema = z.object({
     z.object({
       order: z.number().int().min(1, "Order is required"),
       id: objectIdSchemaFn("Invalid section ID"),
-    })
+    }),
   ),
 });
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;

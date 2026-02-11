@@ -11,12 +11,12 @@ export const UserWelcomeMessge = () => {
       {isPending ? (
         <Skeleton className="h-10 w-full rounded-lg max-w-68" />
       ) : (
-        <h3 className="text-3xl font-bold tracking-tight">
+        <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Hello, {user?.name || "Test User"}!
         </h3>
       )}
 
-      <p className="text-muted-foreground mt-1">
+      <p className="text-muted-foreground mt-1 text-sm sm:text-base">
         Welcome back. Lets create something amazing today.
       </p>
     </div>
