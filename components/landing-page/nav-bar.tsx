@@ -19,7 +19,9 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import {
+  ChevronsUpDown,
   FileText,
+  Home,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -27,7 +29,8 @@ import {
   User2,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { Kbd } from "../ui/kbd";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -35,6 +38,7 @@ export const NavBar = () => {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const router = useRouter();
+  const pathname = usePathname();
 
   useHotkeys(["l", "shift+l", "ctrl+l", "command+l"], () => {
     if (!user) router.push("/login");
@@ -52,9 +56,12 @@ export const NavBar = () => {
 
   return (
     <header className="flex justify-between items-center border-b border-border fixed top-0 left-0 right-0 z-50 blur-effect bg-background/50 h-16 w-full">
-      <nav className="container mx-auto  flex items-center justify-between px-4 md:px-6 h-full">
+      <nav className="container mx-auto flex items-center justify-between px-3 sm:px-4 md:px-6 h-full">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold flex items-center gap-2">
+        <Link
+          href="/"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold flex items-center gap-1 sm:gap-2 shrink-0"
+        >
           Coder CV
         </Link>
 
@@ -157,73 +164,171 @@ export const NavBar = () => {
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden">
+        <div className="md:hidden shrink-0">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <SheetTitle className="text-left text-lg font-bold">
-                Menu
-              </SheetTitle>
-              <div className="flex flex-col gap-6 mt-8">
-                <Link
-                  href="/templates"
-                  className="text-lg font-medium flex items-center gap-2 hover:text-primary transition-colors"
-                >
-                  <FileText className="w-5 h-5" />
-                  Templates
-                </Link>
-                {user ? (
-                  <>
-                    <div className="h-px bg-border w-full" />
-                    <div className="flex items-center gap-3 mb-2">
-                      <Avatar className="h-10 w-10 border border-border">
-                        <AvatarImage src={user.image || ""} />
-                        <AvatarFallback>
-                          {user.name?.charAt(0).toUpperCase() || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{user.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {user.email}
-                        </span>
-                      </div>
-                    </div>
+            <SheetContent
+              side="right"
+              className="w-[300px] sm:w-[350px] gap-2.5 p-0 border-l border-border bg-background flex flex-col h-full"
+            >
+              <div className="p-4 border-b border-border">
+                <SheetTitle className="text-left text-lg font-bold flex items-center gap-2">
+                  Coder CV
+                </SheetTitle>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-2">
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/"
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 text-muted-foreground text-sm font-medium hover:bg-muted rounded-md transition-colors",
+                      pathname === "/" && "bg-muted text-white/95",
+                    )}
+                  >
+                    <Home className="size-4" />
+                    Home
+                  </Link>
+                  {user && (
                     <Link
                       href="/dashboard"
-                      className="text-lg font-medium flex items-center gap-2 hover:text-primary transition-colors"
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 text-muted-foreground text-sm font-medium hover:bg-muted rounded-md transition-colors",
+                        pathname === "/dashboard" && "bg-muted text-white/95",
+                      )}
                     >
-                      <LayoutDashboard className="w-5 h-5" />
+                      <LayoutDashboard className="size-4" />
                       Dashboard
                     </Link>
-                    <Button
-                      onClick={logoutUser}
-                      variant="ghost"
-                      className="justify-start px-0 text-lg font-medium text-destructive hover:text-destructive/90 hover:bg-transparent"
+                  )}
+
+                  <Link
+                    href="/templates"
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 text-muted-foreground text-sm font-medium hover:bg-muted rounded-md transition-colors",
+                      pathname.startsWith("/templates") &&
+                        "bg-muted text-white/95",
+                    )}
+                  >
+                    <FileText className="size-4" />
+                    Templates
+                  </Link>
+
+                  {user && (
+                    <Link
+                      href="/settings"
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2 text-muted-foreground text-sm font-medium hover:bg-muted rounded-md transition-colors",
+                        pathname.startsWith("/settings") &&
+                          "bg-muted text-white/95",
+                      )}
                     >
-                      <LogOut className="mr-2 h-5 w-5" />
-                      Logout
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="h-px bg-border w-full" />
-                    <Link href="/login" className="w-full">
+                      <Settings className="size-4" />
+                      Settings
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              <div className="border-t border-border bg-muted/20">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                       <Button
-                        variant="outline"
-                        className="w-full justify-start"
+                        variant="ghost"
+                        size="lg"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground w-full h-15"
                       >
-                        Sign In
+                        <Avatar className="h-8 w-8 rounded-lg">
+                          <AvatarImage
+                            src={user?.image || "/diverse-user-avatars.png"}
+                            alt={user?.name || "User"}
+                          />
+                          <AvatarFallback className="rounded-lg">
+                            {user?.name
+                              ? user.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                              : "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="grid flex-1 text-left text-sm leading-tight">
+                          <span className="truncate font-semibold">
+                            {user?.name || "User"}
+                          </span>
+                          <span className="truncate text-xs">
+                            {user?.email || "user@example.com"}
+                          </span>
+                        </div>
+                        <ChevronsUpDown className="ml-auto size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className=" min-w-64 w-full rounded-lg ml-2"
+                      side="bottom"
+                      align="start"
+                      sideOffset={4}
+                    >
+                      <DropdownMenuLabel className="p-0 font-normal">
+                        <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                          <Avatar className="h-8 w-8 rounded-lg">
+                            <AvatarImage
+                              src={user?.image || "/diverse-user-avatars.png"}
+                              alt={user?.name || "User"}
+                            />
+                            <AvatarFallback className="rounded-lg">
+                              {user?.name
+                                ? user.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")
+                                : "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="grid flex-1 text-left text-sm leading-tight">
+                            <span className="truncate font-semibold">
+                              {user?.name || "User"}
+                            </span>
+                            <span className="truncate text-xs">
+                              {user?.email || "user@example.com"}
+                            </span>
+                          </div>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <User2 className="mr-2 size-4" />
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Settings className="mr-2 size-4" />
+                        Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={logoutUser}>
+                        <LogOut className="mr-2 size-4" />
+                        Log out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="flex flex-col gap-3 p-6">
+                    <Link href="/login" className="w-full">
+                      <Button variant="outline" className="w-full">
+                        Login
                       </Button>
                     </Link>
                     <Link href="/register" className="w-full">
-                      <Button className="w-full">Get Started</Button>
+                      <Button className="w-full" variant="primary">
+                        Get Started
+                      </Button>
                     </Link>
-                  </>
+                  </div>
                 )}
               </div>
             </SheetContent>

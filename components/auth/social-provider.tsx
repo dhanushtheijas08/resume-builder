@@ -11,7 +11,7 @@ export const SocialProvider = () => {
       <Button
         type="button"
         variant="outline-2"
-        className="flex-1 font-semibold"
+        className="flex-1 font-semibold bg-secondary/80 hover:bg-secondary/80 sm:bg-background"
         onClick={() => execute({ provider: "github" })}
         disabled={status === "executing"}
       >
@@ -21,7 +21,7 @@ export const SocialProvider = () => {
       <Button
         type="button"
         variant="outline-2"
-        className="flex-1 font-semibold"
+        className="flex-1 font-semibold bg-secondary/80 hover:bg-secondary/80 sm:bg-background"
         onClick={() => execute({ provider: "google" })}
         disabled={status === "executing"}
       >

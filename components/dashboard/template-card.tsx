@@ -6,7 +6,23 @@ import { Briefcase, Building2, Clock, Eye, MapPin, Plus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Template } from "./template-data";
-
+import { useAction } from "next-safe-action/hooks";
+import { createResumeAction } from "@/lib/actions/resume-actions";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Spinner } from "../ui/spinner";
 interface TemplateCardProps {
   template: Template;
   viewMode?: "grid" | "list";
@@ -137,18 +153,11 @@ export const TemplateCard = ({
           </div>
         </div>
         <div className="flex gap-1.5 sm:gap-2">
-          <Button
-            variant="primary"
-            size="sm"
-            className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
-            asChild
-          >
-            <Link href={`/resumes/new?templateId=${template.id}`}>
-              <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />{" "}
-              <span className="hidden sm:inline">Use This</span>
-              <span className="sm:hidden">Use</span>
-            </Link>
-          </Button>
+          <CreateResumeDialog
+            resumeTemplateId={template.id}
+            resumeTemplateName={template.name}
+          />
+
           <Button
             variant="outline"
             size="sm"
@@ -224,5 +233,123 @@ export const TemplateCardSkeleton = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const CreateResumeDialog = ({
+  resumeTemplateId,
+  resumeTemplateName,
+}: {
+  resumeTemplateId: string;
+  resumeTemplateName: string;
+}) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [resumeName, setResumeName] = useState("");
+
+  const { execute: createResume, status } = useAction(createResumeAction, {
+    onSuccess: ({ data }) => {
+      if (data.success) {
+        toast.success(data.message ?? "Resume created successfully!");
+        setOpen(false);
+        setResumeName("");
+
+        if (data.redirectUrl) {
+          router.push(data.redirectUrl);
+        }
+      } else {
+        toast.error(data.message ?? "Failed to create resume");
+      }
+    },
+    onError: ({ error }) => {
+      const message =
+        error.serverError?.message ||
+        error.validationErrors?.formErrors?.[0] ||
+        "Failed to create resume";
+
+      toast.error(message);
+
+      if (error.serverError?.redirectUrl) {
+        router.push(error.serverError.redirectUrl);
+      }
+    },
+  });
+
+  const createResumeHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!resumeName.trim()) {
+      toast.error("Resume name is required");
+      return;
+    }
+
+    createResume({
+      title: resumeName.trim(),
+      templateId: resumeTemplateId,
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="primary"
+          size="sm"
+          className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+        >
+          <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Use This</span>
+          <span className="sm:hidden">Use</span>
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <form onSubmit={createResumeHandler}>
+          <DialogHeader>
+            <DialogTitle>Create Resume</DialogTitle>
+            <DialogDescription>
+              Create a new resume using <strong>{resumeTemplateName}</strong>{" "}
+              template.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="resumeName">Resume Name</Label>
+              <Input
+                id="resumeName"
+                value={resumeName}
+                onChange={(e) => setResumeName(e.target.value)}
+                placeholder="My Resume"
+                disabled={status === "executing"}
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={status === "executing"}
+            >
+              Cancel
+            </Button>
+
+            <Button type="submit" disabled={status === "executing"}>
+              {status === "executing" ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4" />
+                  Creating...
+                </>
+              ) : (
+                "Create Resume"
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };

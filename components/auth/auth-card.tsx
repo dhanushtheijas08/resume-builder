@@ -12,43 +12,24 @@ import { SocialProvider } from "./social-provider";
 import Link from "next/link";
 
 export const AuthCard = ({ type }: { type: "login" | "register" }) => {
+  //         "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+
   return (
-    <Card className="w-full max-w-120">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">
+    <Card className="w-full max-w-120 border-none bg-transparent shadow-none sm:bg-card  sm:border sm:shadow-sm gap-3 sm:gap-6">
+      <CardHeader className="px-4 sm:px-6">
+        <CardTitle className="text-2xl font-bold text-center sm:text-left">
           {type === "login" ? "Login to your account" : "Create an account"}
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="hidden sm:block">
           {type === "login"
             ? "Enter your email below to login to your account"
             : "Enter your email below to create an account"}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {/* <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline-2"
-            className="flex-1 font-semibold"
-            // onClick={() => handleSocialLogin("github")}
-          >
-            <GitHubIcon />
-            GitHub
-          </Button>
-          <Button
-            type="button"
-            variant="outline-2"
-            className="flex-1 font-semibold"
-            // onClick={() => handleSocialLogin("google")}
-          >
-            <GoogleIcon />
-            Google
-          </Button>
-        </div> */}
+      <CardContent className="px-4 sm:px-6">
         <SocialProvider />
-
         {/* Separator */}
-        <div className="relative my-6">
+        <div className="relative my-4 sm:my-6">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
@@ -64,7 +45,7 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
       </CardContent>
 
       <CardFooter className="flex justify-center">
-        <p className="text-center text-sm text-muted-foreground border-t pt-1.5 w-full">
+        <p className="text-center text-sm text-muted-foreground border-none  sm:border-t pt-1.5 w-full">
           {type === "login"
             ? "Don't have an account?"
             : "Already have an account?"}
@@ -78,4 +59,4 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
       </CardFooter>
     </Card>
   );
-};
+};;

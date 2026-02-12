@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { duplicateResumeAction } from "@/lib/actions/resume-actions";
 import { useAction } from "next-safe-action/hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface DuplicateResumeDialogProps {
@@ -31,11 +31,6 @@ export function DuplicateResumeDialog({
   onOpenChange,
 }: DuplicateResumeDialogProps) {
   const [title, setTitle] = useState(`${originalTitle} (Copy)`);
-
-  useEffect(() => {
-    setTitle(`${originalTitle} (Copy)`);
-  }, [originalTitle]);
-
   const { execute, status } = useAction(duplicateResumeAction, {
     onSuccess: ({ data }) => {
       if (data?.success && data.redirectUrl) {
