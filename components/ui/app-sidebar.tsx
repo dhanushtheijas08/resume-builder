@@ -72,9 +72,6 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b border-sidebar-border px-4 py-[14.1px]">
         <div className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <FileText className="size-4" />
-          </div>
           <div className="flex flex-col">
             <span className="text-base font-bold text-white">Coder CV</span>
             <span className="text-xs text-muted-foreground">
