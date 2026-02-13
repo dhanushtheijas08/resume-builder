@@ -14,6 +14,7 @@ import type {
   CustomSection,
   Award,
 } from "@prisma/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export type ResumeData = {
   profile: Profile | null;
@@ -34,21 +35,25 @@ export const ResumePreview = ({
   templateId: TemplateId;
   resumeData: ResumeData;
 }) => {
-  const resumeRef = useRef(null);
+  const isMobile = useIsMobile();
 
+  const resumeRef = useRef(null);
   const TemplateComponent = TEMPLATE_REGISTRY[templateId as TemplateId];
 
   return (
     <div className="relative">
       <TransformWrapper
+        key={isMobile ? "mobile" : "desktop"}
         ref={resumeRef}
         smooth={false}
         maxScale={2}
         minScale={0.5}
-        centerOnInit={true}
+        initialScale={isMobile ? 0.5 : 1}
         limitToBounds={false}
+        centerOnInit={isMobile ? false : true}
+        initialPositionX={isMobile ? 15 : 0}
       >
-        <div className="absolute top-2.5 right-1/2 z-10">
+        <div className="absolute top-2.5 right-1/2 translate-x-1/2 sm:translate-x-0 z-10">
           <ResumeToolbar />
         </div>
         <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>

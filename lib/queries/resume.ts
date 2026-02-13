@@ -80,6 +80,10 @@ export const fetchResumeById = async (resumeId: string) => {
   }
 };
 
+export type ResumeWithRelations = NonNullable<
+  Awaited<ReturnType<typeof fetchResumeById>>
+>;
+
 export const fetchUserResumes = async () => {
   try {
     const user = await validateUser();
