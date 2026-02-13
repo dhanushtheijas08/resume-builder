@@ -2,6 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -19,16 +25,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { createResumeAction } from "@/lib/actions/resume-actions";
-import { getEnv } from "@/lib/env";
+import { fetchResumeTemplates } from "@/lib/api/resume.api";
 import {
   CreateResumeFormData,
   createResumeSchema,
 } from "@/lib/validations/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { Layout, Plus, X } from "lucide-react";
+import { Layout, Plus, SlidersHorizontal, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -40,7 +45,17 @@ import { COMPANIES, EXPERIENCE, ROLES } from "./data";
 import { FilterCombobox } from "./filter-combobox";
 import { TemplateCard, TemplateCardSkeleton } from "./template-card";
 import { TEMPLATE_COLORS } from "@/lib/const";
-import { fetchResumeTemplates } from "@/lib/api/resume.api";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerFooter,
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ScrollArea } from "../ui/scroll-area";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -84,6 +99,7 @@ export function CreateResume() {
     company: "All",
   });
   const router = useRouter();
+  const isMobile = useIsMobile();
   const form = useForm<CreateResumeFormData>({
     resolver: zodResolver(createResumeSchema),
     defaultValues: {
@@ -100,7 +116,6 @@ export function CreateResume() {
       control: form.control,
       name: "templateId",
     }) || "";
-  const { errors } = form.formState;
 
   const { execute: createResume, status } = useAction(createResumeAction, {
     onSuccess: ({ data }) => {
@@ -142,9 +157,6 @@ export function CreateResume() {
     enabled: open,
   });
 
-  const totalTemplates = apiData?.data.pagination.total ?? 0;
-  const totalPages = apiData?.data.pagination.totalPages ?? 1;
-
   const uiTemplates = useMemo(() => {
     const templates = apiData?.data.templates ?? [];
 
@@ -165,6 +177,20 @@ export function CreateResume() {
   }, [apiData]);
 
   const isPending = status === "executing";
+  const hasActiveFilters =
+    filterOptions.role !== "All" ||
+    filterOptions.exp !== "All" ||
+    filterOptions.company !== "All";
+  const activeFilterCount = [
+    filterOptions.role,
+    filterOptions.exp,
+    filterOptions.company,
+  ].filter((value) => value !== "All").length;
+
+  const totalPages = apiData?.data.pagination.totalPages ?? 1;
+  const totalTemplates = apiData?.data.pagination.total ?? 0;
+
+  const { errors } = form.formState;
 
   const selectTemplate = (templateId: string) => {
     form.setValue(
@@ -190,6 +216,233 @@ export function CreateResume() {
     },
     { preventDefault: true },
   );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button className="gap-1.5 max-w-fit" variant="primary">
+            <Plus className="size-4" />
+            Create Resume
+            <Kbd className="hidden lg:flex text-xs bg-card/30 mt-0.5 text-primary-foreground">
+              c
+            </Kbd>
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent className="w-full h-screen data-[vaul-drawer-direction=bottom]:max-h-[90vh]">
+          <Form {...form}>
+            <form
+              id="create-resume-form"
+              onSubmit={form.handleSubmit(createResume)}
+              className="flex h-full flex-col"
+            >
+              {/* Sidebar - Filters & Info */}
+              <div className="flex flex-col shrink-0">
+                <DrawerHeader>
+                  <DrawerTitle className="text-2xl font-semibold tracking-tight">
+                    Create Resume
+                  </DrawerTitle>
+                  <DrawerDescription>
+                    Choose a template to get started
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="px-3 pb-2">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="filters" className="border-b-0">
+                      <AccordionTrigger className="items-center rounded-md border bg-muted/30 px-3 py-2 hover:no-underline [&>svg]:translate-y-0 [&>svg]:self-center">
+                        <div className="flex w-full items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <SlidersHorizontal className="size-4 text-muted-foreground" />
+                            <Label className="text-sm font-medium">
+                              Filters
+                            </Label>
+                            {hasActiveFilters ? (
+                              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                                {activeFilterCount} active
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-4">
+                        <div className="space-y-3">
+                          {hasActiveFilters ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={resetAllFilters}
+                              className="h-auto bg-transparent border-none hover:bg-transparent p-0 text-xs text-muted-foreground hover:text-foreground"
+                            >
+                              <X className="size-3" />
+                              Reset all
+                            </Button>
+                          ) : null}
+
+                          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            <div className="space-y-1.5">
+                              <Label className="text-xs text-muted-foreground">
+                                Role
+                              </Label>
+                              <FilterCombobox
+                                value={filterOptions.role}
+                                onChange={(value) => {
+                                  setFilterOptions((prev) => ({
+                                    ...prev,
+                                    role: value,
+                                  }));
+                                  setCurrentPage(1);
+                                }}
+                                options={ROLES}
+                                placeholder="Select Role"
+                                searchPlaceholder="Search role..."
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <Label className="text-xs text-muted-foreground">
+                                Experience
+                              </Label>
+                              <FilterCombobox
+                                value={filterOptions.exp}
+                                onChange={(value) => {
+                                  setFilterOptions((prev) => ({
+                                    ...prev,
+                                    exp: value,
+                                  }));
+                                  setCurrentPage(1);
+                                }}
+                                options={EXPERIENCE}
+                                placeholder="Select Experience"
+                                searchPlaceholder="Search experience..."
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <Label className="text-xs text-muted-foreground">
+                                Company
+                              </Label>
+                              <FilterCombobox
+                                value={filterOptions.company}
+                                onChange={(value) => {
+                                  setFilterOptions((prev) => ({
+                                    ...prev,
+                                    company: value,
+                                  }));
+                                  setCurrentPage(1);
+                                }}
+                                options={COMPANIES}
+                                placeholder="Select Company"
+                                searchPlaceholder="Search company..."
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col bg-background overflow-y-auto">
+                <div className="flex-1 p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {isLoading && !apiData ? (
+                      Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+                        <TemplateCardSkeleton key={index} />
+                      ))
+                    ) : isError ? (
+                      <p className="text-sm text-destructive">
+                        Failed to load templates. Please try again.
+                      </p>
+                    ) : uiTemplates.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        No templates found for the selected filters.
+                      </p>
+                    ) : (
+                      <>
+                        {uiTemplates.map((template) => (
+                          <TemplateCard
+                            key={template.id}
+                            template={template}
+                            isSelected={selectedTemplate === template.id}
+                            onClick={() => selectTemplate(template.id)}
+                          />
+                        ))}
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {totalPages > 1 && (
+                  <div className=" px-4 pb-4">
+                    <p className="pb-2 text-center text-xs text-muted-foreground sm:text-sm">
+                      Page {currentPage} of {totalPages}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(1, prev - 1))
+                        }
+                        disabled={currentPage === 1}
+                        className="w-full bg-card"
+                      >
+                        Previous
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            Math.min(totalPages, prev + 1),
+                          )
+                        }
+                        disabled={currentPage === totalPages}
+                        className="w-full bg-card"
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <DrawerFooter className="border border-t border-b-0 mb-4">
+                <div className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter Resume Name"
+                            className="bg-background"
+                            disabled={isPending}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  form="create-resume-form"
+                  disabled={isPending || !titleValue || !selectedTemplate}
+                  className="relative overflow-hidden"
+                  variant="primary"
+                >
+                  {isPending ? "Creating..." : "Create Resume"}
+                </Button>
+              </DrawerFooter>
+            </form>
+          </Form>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -339,20 +592,15 @@ export function CreateResume() {
                   </p>
                 )}
 
-                <div className="grid grid-cols-1 gap-3">
-                  {/* <Button variant="outline" onClick={() => setOpen(false)}>
-                    Cancel
-                  </Button> */}
-                  <Button
-                    type="submit"
-                    form="create-resume-form"
-                    disabled={isPending || !titleValue || !selectedTemplate}
-                    className="relative overflow-hidden"
-                    variant="primary"
-                  >
-                    {isPending ? "Creating..." : "Create"}
-                  </Button>
-                </div>
+                <Button
+                  type="submit"
+                  form="create-resume-form"
+                  disabled={isPending || !titleValue || !selectedTemplate}
+                  className="relative overflow-hidden"
+                  variant="primary"
+                >
+                  {isPending ? "Creating..." : "Create"}
+                </Button>
               </div>
             </div>
 

@@ -13,6 +13,7 @@ export const FiltersContent = ({
   onApply,
   onReset,
   onClose,
+  showButtons = true,
 }: FiltersContentProps) => {
   const isFiltered =
     tempFilters.role !== "All" ||
@@ -76,30 +77,32 @@ export const FiltersContent = ({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2 pt-2 border-t mt-5">
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onApply}
-          className="w-full h-10 font-medium"
-        >
-          Apply Filters
-        </Button>
-        {isFiltered && (
+      {showButtons && (
+        <div className="flex flex-col gap-2 pt-2 border-t mt-5">
           <Button
-            variant="outline"
+            variant="default"
             size="sm"
-            onClick={() => {
-              onReset();
-              onClose();
-            }}
-            className="w-full h-10 text-muted-foreground hover:text-foreground border-dashed"
+            onClick={onApply}
+            className="w-full h-10 font-medium"
           >
-            <X className="mr-2 h-4 w-4" />
-            Clear All Filters
+            Apply Filters
           </Button>
-        )}
-      </div>
+          {isFiltered && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                onReset?.();
+                onClose?.();
+              }}
+              className="w-full h-10 text-muted-foreground hover:text-foreground border-dashed"
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear All Filters
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

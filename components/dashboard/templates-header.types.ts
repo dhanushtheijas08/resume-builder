@@ -23,9 +23,10 @@ export type TempFilters = {
 export interface FiltersContentProps {
   tempFilters: TempFilters;
   onTempFiltersChange: (filters: TempFilters) => void;
-  onApply: () => void;
-  onReset: () => void;
-  onClose: () => void;
+  onApply?: () => void;
+  onReset?: () => void;
+  onClose?: () => void;
+  showButtons?: boolean;
 }
 
 export interface ActiveFilter {
