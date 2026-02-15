@@ -23,7 +23,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { SettingsCard } from "./settings-card";
 import { accountSettingsSchema } from "@/lib/validations/auth";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 export function AccountSettings() {
   const { data: session } = authClient.useSession();
   const { executeAsync, isExecuting } = useAction(updateUserAction);
@@ -196,14 +200,22 @@ export function AccountSettings() {
           </div>
 
           <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={isSaving || isExecuting || isChangingPassword}
-            >
-              {isSaving || isExecuting || isChangingPassword
-                ? "Saving..."
-                : "Save Changes"}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  type="submit"
+                  // disabled={isSaving || isExecuting || isChangingPassword}
+                  disabled={true}
+                >
+                  {isSaving || isExecuting || isChangingPassword
+                    ? "Saving..."
+                    : "Save Changes"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Feature not available yet</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </form>
       </Form>
