@@ -650,13 +650,16 @@ export const CustomSectionForm = ({
   return (
     <div className="w-full bg-background">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-2.5 md:space-y-3 md:pt-4 px-1"
+        >
           <div className="flex gap-4">
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="w-full md:space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Section Title
                   </FormLabel>
@@ -678,7 +681,7 @@ export const CustomSectionForm = ({
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem className="w-full space-y-2">
+                <FormItem className="w-full md:space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Section Type
                   </FormLabel>
@@ -719,7 +722,11 @@ export const CustomSectionForm = ({
 
           {/* Action Buttons */}
           <div className="flex items-center justify-end">
-            <Button type="submit" disabled={isLoading} className="w-fit">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full md:w-fit"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />

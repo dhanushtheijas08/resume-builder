@@ -114,7 +114,6 @@ const paginateResumeContent = () => {
 
   if (currentPage.length) pages.push([...currentPage]);
 
-  // Rebuild DOM with pages
   container.innerHTML = "";
   pages.forEach((pageElements) => {
     const pageDiv = document.createElement("div");

@@ -84,14 +84,20 @@ export const WorkExperienceDisplay = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Briefcase className="size-4" />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+          <Briefcase className="size-3.5 sm:size-4" />
           <span>
             {experiences.length} experience{experiences.length !== 1 ? "s" : ""}
           </span>
         </div>
-        <Button type="button" variant="outline" size="sm" onClick={onAddClick}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onAddClick}
+          className="w-full sm:w-auto"
+        >
           <Plus className="size-4 mr-2" />
           Add Experience
         </Button>

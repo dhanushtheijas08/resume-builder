@@ -13,14 +13,14 @@ import { ProjectSection } from "@/components/resume/sections/project/project";
 import { CertificationSection } from "@/components/resume/sections/certification/certification";
 import { AwardSection } from "@/components/resume/sections/award/award";
 import { PublicationSection } from "@/components/resume/sections/publication/publication";
-import { CustomSectionComponent } from "@/components/resume/sections/custom-section/custom-section";
+// import { CustomSectionComponent } from "@/components/resume/sections/custom-section/custom-section";
 import type { ResumeWithRelations } from "@/lib/queries/resume";
 import {
   Award,
   BookOpen,
   Briefcase,
   Code,
-  FileText,
+  // FileText,
   FolderKanban,
   GraduationCap,
   Trophy,
@@ -45,7 +45,7 @@ export function ResumeSectionsAccordion({
   templateMeta,
 }: ResumeSectionsAccordionProps) {
   return (
-    <ScrollArea className="w-full h-[calc(100vh-3.75rem)] md:h-[calc(100vh-3.75rem)] pb-16 md:pb-0 p-5">
+    <ScrollArea className="w-full h-[calc(100vh-3.75rem)] md:h-[calc(100vh-3.75rem)] pb-16 md:pb-5 p-5">
       <Accordion
         type="multiple"
         defaultValue={["personal"]}
@@ -256,7 +256,7 @@ export function ResumeSectionsAccordion({
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem
+        {/* <AccordionItem
           value="custom-sections"
           className="border rounded-xl bg-card shadow-sm overflow-hidden"
         >
@@ -280,7 +280,7 @@ export function ResumeSectionsAccordion({
               />
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
       </Accordion>
     </ScrollArea>
   );

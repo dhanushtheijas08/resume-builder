@@ -27,14 +27,17 @@ export const EducationForm = ({
   return (
     <div className="w-full bg-background">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-6">
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form
+          onSubmit={form.handleSubmit(actionFn)}
+          className="space-y-2.5 md:space-y-3 md:pt-4 px-1"
+        >
+          <div className="space-y-3 md:space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <FormField
                 control={form.control}
                 name="degree"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Degree
                     </FormLabel>
@@ -56,7 +59,7 @@ export const EducationForm = ({
                 control={form.control}
                 name="institution"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Institution
                     </FormLabel>
@@ -75,12 +78,12 @@ export const EducationForm = ({
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <FormField
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Location
                     </FormLabel>
@@ -102,7 +105,7 @@ export const EducationForm = ({
                 control={form.control}
                 name="timePeriod"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Time Period
                     </FormLabel>
@@ -122,12 +125,12 @@ export const EducationForm = ({
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2.5 md:space-y-3">
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="space-y-2">
+                <FormItem className="md:space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Description
                   </FormLabel>
@@ -148,7 +151,11 @@ export const EducationForm = ({
 
           {/* Action Buttons */}
           <div className="flex items-center justify-end">
-            <Button type="submit" disabled={isLoading} className="w-fit">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full md:w-fit"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />

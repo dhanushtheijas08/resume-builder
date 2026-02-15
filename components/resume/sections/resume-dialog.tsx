@@ -1,10 +1,11 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "@/components/ui/responsive-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 interface ResumeDialogProps {
@@ -27,17 +28,26 @@ export const ResumeDialog = ({
   children,
 }: ResumeDialogProps) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(className)}>
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            {icon && icon}
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent
+        className={cn(
+          "w-full max-w-full md:max-w-2xl gap-4 md:gap-0",
+          className,
+        )}
+      >
+        <ResponsiveDialogHeader className="py-0">
+          <ResponsiveDialogTitle className="flex items-center gap-2 px-1 mx-auto md:mx-0">
+            <span className="hidden md:inline">{icon && icon}</span>
             {title}
-          </DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        {children}
-      </DialogContent>
-    </Dialog>
+          </ResponsiveDialogTitle>
+          <ResponsiveDialogDescription className="px-1 text-left">
+            {description}
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
+        <ScrollArea className="px-3 sm:px-5 md:px-0 overflow-y-auto pb-4">
+          {children}
+        </ScrollArea>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 };

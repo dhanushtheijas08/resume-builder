@@ -29,17 +29,38 @@ export const AwardSection = ({ awards }: { awards: Award | null }) => {
     },
   );
 
-  const handleOpenChange = (open: boolean) => {
+  const openAwardDialog = (open: boolean) => {
     setIsOpen(open);
   };
 
-  const handleEditClick = () => {
-    handleOpenChange(true);
+  const editAward = () => {
+    openAwardDialog(true);
   };
 
-  const handleDeleteClick = () => {
-    removeAward();
-  };
+  function truncateHtml(html: string, maxLength: number): string {
+    const plainText = html.replace(/<[^>]*>/g, "");
+
+    if (plainText.length <= maxLength) return html;
+
+    let visibleCount = 0;
+    let i = 0;
+    let result = "";
+
+    while (i < html.length && visibleCount < maxLength) {
+      if (html[i] === "<") {
+        const closeIndex = html.indexOf(">", i);
+        if (closeIndex === -1) break;
+        result += html.slice(i, closeIndex + 1);
+        i = closeIndex + 1;
+      } else {
+        result += html[i];
+        visibleCount++;
+        i++;
+      }
+    }
+
+    return result + "...";
+  }
 
   return (
     <div className="space-y-4">
@@ -51,18 +72,18 @@ export const AwardSection = ({ awards }: { awards: Award | null }) => {
                 <div
                   className="text-sm text-muted-foreground leading-relaxed flex-1"
                   dangerouslySetInnerHTML={{
-                    __html: awards.description,
+                    __html: truncateHtml(awards.description, 250),
                   }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0 group-hover:opacity-100 opacity-0 transition-opacity">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:transition-opacity mt-0 sm:mt-2.5">
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                onClick={handleEditClick}
+                onClick={editAward}
                 disabled={isLoading}
               >
                 <Edit2 className="size-4" />
@@ -92,7 +113,7 @@ export const AwardSection = ({ awards }: { awards: Award | null }) => {
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={handleDeleteClick}
+                      onClick={removeAward}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
                       Delete
@@ -113,7 +134,7 @@ export const AwardSection = ({ awards }: { awards: Award | null }) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleEditClick}
+            onClick={editAward}
             disabled={isLoading}
           >
             <Edit2 className="size-4 mr-2" />
@@ -124,7 +145,7 @@ export const AwardSection = ({ awards }: { awards: Award | null }) => {
 
       <AwardDialog
         open={isOpen}
-        onOpenChange={handleOpenChange}
+        onOpenChange={openAwardDialog}
         form={form}
         actionFn={awards ? updateAward : saveAward}
         isLoading={isLoading}

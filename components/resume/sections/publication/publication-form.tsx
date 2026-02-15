@@ -27,13 +27,16 @@ export const PublicationForm = ({
   return (
     <div className="w-full bg-background">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(actionFn)}
+          className="space-y-2.5 md:space-y-3 md:pt-4 px-1"
+        >
           <div className="space-y-4">
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="space-y-2">
+                <FormItem className="md:space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Publication Title
                   </FormLabel>
@@ -51,12 +54,12 @@ export const PublicationForm = ({
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <FormField
                 control={form.control}
                 name="publisher"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1.5">
                       <BookOpen className="size-4" />
                       Publisher
@@ -79,7 +82,7 @@ export const PublicationForm = ({
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="md:space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground flex items-center gap-1.5">
                       <Link2 className="size-4" />
                       URL (Optional)
@@ -100,12 +103,12 @@ export const PublicationForm = ({
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2.5 md:space-y-3">
             <FormField
               control={form.control}
               name="summary"
               render={({ field }) => (
-                <FormItem className="space-y-2">
+                <FormItem className="md:space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Summary (Optional)
                   </FormLabel>
@@ -126,7 +129,11 @@ export const PublicationForm = ({
 
           {/* Action Buttons */}
           <div className="flex items-center justify-end">
-            <Button type="submit" disabled={isLoading} className="w-fit">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full md:w-fit"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
@@ -145,4 +152,3 @@ export const PublicationForm = ({
     </div>
   );
 };
-

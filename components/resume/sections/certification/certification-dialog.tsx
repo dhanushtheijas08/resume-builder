@@ -33,7 +33,7 @@ export const CertificationDialog = ({
       }
       open={open}
       onOpenChange={onOpenChange}
-      className="sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar"
+      className="md:max-w-2xl w-full max-h-[90vh] overflow-hidden md:overflow-y-auto md:custom-scrollbar"
       icon={<Award className="size-5" />}
     >
       <CertificationForm
@@ -44,4 +44,3 @@ export const CertificationDialog = ({
     </ResumeDialog>
   );
 };
-

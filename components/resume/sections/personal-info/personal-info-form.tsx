@@ -24,8 +24,11 @@ export const PersonalInfoForm = ({
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(actionFn)} className="space-y-3 pt-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form
+          onSubmit={form.handleSubmit(actionFn)}
+          className="space-y-2.5 md:space-y-3 md:pt-4 px-1"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="name"
@@ -65,7 +68,7 @@ export const PersonalInfoForm = ({
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="email"
@@ -107,7 +110,7 @@ export const PersonalInfoForm = ({
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="location"
@@ -147,7 +150,7 @@ export const PersonalInfoForm = ({
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <FormField
               control={form.control}
               name="linkedin"
@@ -207,7 +210,11 @@ export const PersonalInfoForm = ({
             )}
           />
           <div className="flex justify-end">
-            <Button type="submit" className="w-fit" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              disabled={isLoading}
+            >
               <Save className="size-4" />
               Save changes
             </Button>

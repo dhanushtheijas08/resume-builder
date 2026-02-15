@@ -86,14 +86,20 @@ export const ProjectDisplay = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <FolderKanban className="size-4" />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+          <FolderKanban className="size-3.5 sm:size-4" />
           <span>
             {projects.length} project{projects.length !== 1 ? "s" : ""}
           </span>
         </div>
-        <Button type="button" variant="outline" size="sm" onClick={onAddClick}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onAddClick}
+          className="w-full sm:w-auto bg-background/40 hover:bg-background/60"
+        >
           <Plus className="size-4 mr-2" />
           Add Project
         </Button>

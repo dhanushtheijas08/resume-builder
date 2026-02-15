@@ -33,7 +33,7 @@ export const SkillDialog = ({
       description="Add, edit, and organize your skills."
       open={open}
       onOpenChange={onOpenChange}
-      className="sm:max-w-3xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar"
+      className="md:max-w-3xl w-full max-h-[90vh] overflow-hidden md:overflow-y-auto md:custom-scrollbar"
       icon={<Code className="size-5" />}
     >
       <SkillForm skills={skills} skillType={skillType} />

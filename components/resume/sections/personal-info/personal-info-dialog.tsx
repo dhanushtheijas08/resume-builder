@@ -27,7 +27,7 @@ export const PersonalInfoDialog = ({
       description="Add your contact details and professional summary."
       open={open}
       onOpenChange={onOpenChange}
-      className="sm:max-w-2xl w-full max-h-[90vh]"
+      className="md:max-w-2xl w-full max-h-[90vh] overflow-hidden md:overflow-y-auto md:custom-scrollbar"
       icon={<User className="size-5" />}
     >
       <PersonalInfoForm form={form} actionFn={actionFn} isLoading={isLoading} />

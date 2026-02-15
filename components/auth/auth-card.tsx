@@ -12,8 +12,6 @@ import { SocialProvider } from "./social-provider";
 import Link from "next/link";
 
 export const AuthCard = ({ type }: { type: "login" | "register" }) => {
-  //         "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
-
   return (
     <Card className="w-full max-w-120 border-none bg-transparent shadow-none sm:bg-card  sm:border sm:shadow-sm gap-3 sm:gap-6">
       <CardHeader className="px-4 sm:px-6">
@@ -59,4 +57,4 @@ export const AuthCard = ({ type }: { type: "login" | "register" }) => {
       </CardFooter>
     </Card>
   );
-};;
+};
