@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const handlePointerDown = (
   event: React.PointerEvent,
-  listeners?: SyntheticListenerMap
+  listeners?: SyntheticListenerMap,
 ) => {
   const target = event.target as HTMLElement;
   if (
@@ -23,3 +23,14 @@ export const handlePointerDown = (
     listeners.onPointerDown(event);
   }
 };
+
+export function getJoinedYear(
+  createdAt: string | Date | null | undefined,
+): string {
+  if (!createdAt) return "N/A";
+
+  const date = createdAt instanceof Date ? createdAt : new Date(createdAt);
+  if (Number.isNaN(date.getTime())) return "N/A";
+
+  return String(date.getFullYear());
+}

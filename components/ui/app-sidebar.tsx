@@ -25,7 +25,6 @@ import {
   FileText,
   LayoutDashboard,
   LogOut,
-  Settings,
   User2,
 } from "lucide-react";
 import Link from "next/link";
@@ -46,9 +45,9 @@ const menuItems = [
     url: "/templates",
   },
   {
-    title: "Settings",
-    icon: Settings,
-    url: "/settings",
+    title: "Profile",
+    icon: User2,
+    url: "/profile",
   },
 ];
 
@@ -172,22 +171,24 @@ export function AppSidebar() {
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          {user?.name || "User"}
+                          {user?.name}
                         </span>
-                        <span className="truncate text-xs">
-                          {user?.email || "user@example.com"}
-                        </span>
+                        <span className="truncate text-xs">{user?.email}</span>
                       </div>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User2 className="mr-2 size-4" />
-                    Profile
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <User2 className="mr-2 size-4" />
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 size-4" />
-                    Settings
+                  <DropdownMenuItem asChild>
+                    <Link href="/templates">
+                      <FileText className="mr-2 size-4" />
+                      Templates
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logoutUser}>

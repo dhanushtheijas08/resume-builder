@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import {
   ChevronsUpDown,
   FileText,
@@ -25,14 +26,12 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
-  Settings,
   User2,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Kbd } from "../ui/kbd";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Kbd } from "../ui/kbd";
 
 export const NavBar = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -127,17 +126,23 @@ export const NavBar = () => {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    Dashboard
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <User2 className="mr-2 size-4" />
-                    Profile
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <User2 className="mr-2 size-4" />
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 size-4" />
-                    Settings
+                  <DropdownMenuItem asChild>
+                    <Link href="/templates">
+                      <FileText className="mr-2 size-4" />
+                      Templates
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logoutUser}>
@@ -227,8 +232,8 @@ export const NavBar = () => {
                           "bg-muted text-white/95",
                       )}
                     >
-                      <Settings className="size-4" />
-                      Settings
+                      <FileText className="mr-2 size-4" />
+                      Templates
                     </Link>
                   )}
                 </div>
@@ -301,13 +306,17 @@ export const NavBar = () => {
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <User2 className="mr-2 size-4" />
-                        Profile
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile">
+                          <User2 className="mr-2 size-4" />
+                          Profile
+                        </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Settings className="mr-2 size-4" />
-                        Settings
+                      <DropdownMenuItem asChild>
+                        <Link href="/templates">
+                          <FileText className="mr-2 size-4" />
+                          Templates
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={logoutUser}>
