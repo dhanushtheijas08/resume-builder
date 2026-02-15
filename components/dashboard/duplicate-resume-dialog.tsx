@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "@/components/ui/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,16 +55,19 @@ export function DuplicateResumeDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent onClick={(e) => e.stopPropagation()}>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent
+        className="p-4 pt-0 md:p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
         <form onSubmit={handleDuplicate}>
-          <DialogHeader>
-            <DialogTitle>Duplicate Resume</DialogTitle>
-            <DialogDescription>
+          <ResponsiveDialogHeader className="pb-0">
+            <ResponsiveDialogTitle>Duplicate Resume</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>
               Create a copy of <strong>{originalTitle}</strong>. Enter a name
               for the new resume.
-            </DialogDescription>
-          </DialogHeader>
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="title">Resume Title</Label>
@@ -78,12 +81,13 @@ export function DuplicateResumeDialog({
               />
             </div>
           </div>
-          <DialogFooter>
+          <ResponsiveDialogFooter className="p-0">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isExecuting}
+              className="hidden md:block"
             >
               Cancel
             </Button>
@@ -97,9 +101,9 @@ export function DuplicateResumeDialog({
                 "Duplicate"
               )}
             </Button>
-          </DialogFooter>
+          </ResponsiveDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

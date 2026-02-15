@@ -23,6 +23,15 @@ import { useRouter } from "next/navigation";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogTrigger,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+} from "../ui/responsive-dialog";
 interface TemplateCardProps {
   template: Template;
   viewMode?: "grid" | "list";
@@ -84,11 +93,10 @@ export const TemplateCard = ({
             className="flex-1 sm:flex-none"
             asChild
           >
-            <Link href={`/resumes/new?templateId=${template.id}`}>
-              <Plus className="w-4 h-4 mr-2" />{" "}
-              <span className="hidden sm:inline">Use This</span>
-              <span className="sm:hidden">Use</span>
-            </Link>
+            <CreateResumeDialog
+              resumeTemplateId={template.id}
+              resumeTemplateName={template.name}
+            />
           </Button>
           <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Eye className="w-4 h-4 sm:mr-2" />{" "}
@@ -290,28 +298,87 @@ const CreateResumeDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    // <Dialog open={open} onOpenChange={setOpen}>
+    //   <DialogTrigger asChild>
+    //     <Button
+    //       variant="primary"
+    //       size="sm"
+    //       className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+    //     >
+    //       <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+    //       <span>Use This</span>
+    //     </Button>
+    //   </DialogTrigger>
+
+    //   <DialogContent>
+    //     <form onSubmit={createResumeHandler}>
+    //       <DialogHeader>
+    //         <DialogTitle>Create Resume</DialogTitle>
+    //         <DialogDescription>
+    //           Create a new resume using <strong>{resumeTemplateName}</strong>{" "}
+    //           template.
+    //         </DialogDescription>
+    //       </DialogHeader>
+
+    //       <div className="grid gap-4 py-4">
+    //         <div className="grid gap-2">
+    //           <Label htmlFor="resumeName">Resume Name</Label>
+    //           <Input
+    //             id="resumeName"
+    //             value={resumeName}
+    //             onChange={(e) => setResumeName(e.target.value)}
+    //             placeholder="My Resume"
+    //             disabled={status === "executing"}
+    //             autoFocus
+    //           />
+    //         </div>
+    //       </div>
+
+    //       <DialogFooter>
+    //         <Button
+    //           type="button"
+    //           variant="outline"
+    //           onClick={() => setOpen(false)}
+    //           disabled={status === "executing"}
+    //         >
+    //           Cancel
+    //         </Button>
+
+    //         <Button type="submit" disabled={status === "executing"}>
+    //           {status === "executing" ? (
+    //             <>
+    //               <Spinner className="mr-2 h-4 w-4" />
+    //               Creating...
+    //             </>
+    //           ) : (
+    //             "Create Resume"
+    //           )}
+    //         </Button>
+    //       </DialogFooter>
+    //     </form>
+    //   </DialogContent>
+    // </Dialog>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>
         <Button
           variant="primary"
           size="sm"
           className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
         >
           <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-          <span className="hidden sm:inline">Use This</span>
-          <span className="sm:hidden">Use</span>
+          <span>Use This</span>
         </Button>
-      </DialogTrigger>
+      </ResponsiveDialogTrigger>
 
-      <DialogContent>
+      <ResponsiveDialogContent className="p-4 pt-0 md:p-6">
         <form onSubmit={createResumeHandler}>
-          <DialogHeader>
-            <DialogTitle>Create Resume</DialogTitle>
-            <DialogDescription>
+          <ResponsiveDialogHeader className="pb-0">
+            <ResponsiveDialogTitle>Create Resume</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>
               Create a new resume using <strong>{resumeTemplateName}</strong>{" "}
               template.
-            </DialogDescription>
-          </DialogHeader>
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -327,12 +394,13 @@ const CreateResumeDialog = ({
             </div>
           </div>
 
-          <DialogFooter>
+          <ResponsiveDialogFooter className="p-0">
             <Button
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
               disabled={status === "executing"}
+              className="hidden md:block"
             >
               Cancel
             </Button>
@@ -347,9 +415,9 @@ const CreateResumeDialog = ({
                 "Create Resume"
               )}
             </Button>
-          </DialogFooter>
+          </ResponsiveDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 };

@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "@/components/ui/responsive-dialog";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { deleteResumeAction } from "@/lib/actions/resume-actions";
 import { useAction } from "next-safe-action/hooks";
@@ -50,20 +49,30 @@ export function DeleteResumeDialog({
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent onClick={(e) => e.stopPropagation()}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent className="p-4 pt-0 md:p-6">
+        <ResponsiveDialogHeader className="pb-0">
+          <ResponsiveDialogTitle>
+            Are you absolutely sure?
+          </ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
             This action cannot be undone. This will permanently delete your
             resume <strong>{resumeTitle}</strong> and remove its data from our
             servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
+        <ResponsiveDialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isDeleting}
+            className="hidden md:block"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
           >
@@ -75,9 +84,9 @@ export function DeleteResumeDialog({
             ) : (
               "Delete"
             )}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

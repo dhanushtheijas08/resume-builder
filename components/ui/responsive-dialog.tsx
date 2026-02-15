@@ -101,13 +101,16 @@ const ResponsiveDialogClose = ({
 const ResponsiveDialogContent = ({
   className,
   children,
+  onClick,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps & {
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+}) => {
   const { isDesktop } = useResponsiveDialogContext();
   const ResponsiveDialogContent = isDesktop ? DialogContent : DrawerContent;
 
   return (
-    <ResponsiveDialogContent className={className} {...props}>
+    <ResponsiveDialogContent className={className} {...props} onClick={onClick}>
       {children}
     </ResponsiveDialogContent>
   );
