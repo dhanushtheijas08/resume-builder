@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getJoinedYear } from "../lib/utils";
 
 interface ProfileOverviewProps {
   name?: string | null;
@@ -63,4 +62,3 @@ export function ProfileOverview({
     </section>
   );
 }
-
