@@ -36,7 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Layout, Plus, SlidersHorizontal, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
@@ -90,7 +90,11 @@ function getExperienceLabel(experience: number): string {
   return "Executive";
 }
 
-export function CreateResume() {
+type CreateResumeProps = {
+  trigger?: ReactNode;
+};
+
+export function CreateResume({ trigger }: CreateResumeProps = {}) {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOptions, setFilterOptions] = useState({
@@ -217,18 +221,20 @@ export function CreateResume() {
     { preventDefault: true },
   );
 
+  const defaultTrigger = (
+    <Button className="gap-1.5 max-w-fit" variant="primary">
+      <Plus className="size-4" />
+      Create Resume
+      <Kbd className="hidden lg:flex text-xs bg-card/30 mt-0.5 text-primary-foreground">
+        c
+      </Kbd>
+    </Button>
+  );
+
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <Button className="gap-1.5 max-w-fit" variant="primary">
-            <Plus className="size-4" />
-            Create Resume
-            <Kbd className="hidden lg:flex text-xs bg-card/30 mt-0.5 text-primary-foreground">
-              c
-            </Kbd>
-          </Button>
-        </DrawerTrigger>
+        <DrawerTrigger asChild>{trigger ?? defaultTrigger}</DrawerTrigger>
         <DrawerContent className="w-full h-screen data-[vaul-drawer-direction=bottom]:max-h-[90vh]">
           <Form {...form}>
             <form
@@ -446,15 +452,7 @@ export function CreateResume() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="gap-1.5 max-w-fit" variant="primary">
-          <Plus className="size-4" />
-          Create Resume
-          <Kbd className="hidden lg:flex text-xs bg-card/30 mt-0.5 text-primary-foreground">
-            c
-          </Kbd>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger ?? defaultTrigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[90vw] w-full max-w-6xl h-[90vh] p-0 overflow-hidden border-none shadow-2xl bg-background/95 backdrop-blur-xl">
         <Form {...form}>
           <form
