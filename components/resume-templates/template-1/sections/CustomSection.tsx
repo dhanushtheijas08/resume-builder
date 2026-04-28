@@ -11,12 +11,12 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
 
   if (customSection.type === "SUMMARY") {
     return (
-      <section key={customSection.id} className="mb-3.5">
-        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+      <section key={customSection.id} className="mb-[8px] ml-3.5">
+        <h2 className="mb-[3px] border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
         <div
-          className="resume text-sm"
+          className="resume text-[11pt] leading-[1.16]"
           dangerouslySetInnerHTML={{
             __html: sanitizeServerHtml(
               typeof content === "string" ? content : "",
@@ -37,18 +37,22 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
     };
 
     return (
-      <section key={customSection.id} className="mb-3.5">
-        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+      <section key={customSection.id} className="mb-[8px]">
+        <h2 className="mb-[3px] border-b border-black/60 pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
-        <div className="mb-4 resume">
-          <div className="flex justify-between items-center">
-            <h3 className="font-semibold text-sm">{exp.jobTitle}</h3>
+        <div className="resume mb-[5px]">
+          <div className="flex items-baseline justify-between gap-4">
+            <h3 className="text-[11.5pt] font-bold leading-tight">
+              {exp.jobTitle}
+            </h3>
             {exp.timePeriod && (
-              <span className="text-xs text-gray-600">{exp.timePeriod}</span>
+              <span className="shrink-0 text-[10.5pt] leading-tight text-black">
+                {exp.timePeriod}
+              </span>
             )}
           </div>
-          <p className="text-xs text-gray-600">
+          <p className="text-[10.5pt] italic leading-tight text-black">
             {exp.company}
             {exp.location && `, ${exp.location}`}
           </p>
@@ -74,17 +78,19 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
     };
 
     return (
-      <section key={customSection.id} className="mb-3.5">
-        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+      <section key={customSection.id} className="mb-[8px]">
+        <h2 className="mb-[3px] border-b border-black/60 pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
-        <div className="flex justify-between items-center text-sm">
-          <h3 className="font-semibold">{edu.degree}</h3>
+        <div className="flex items-baseline justify-between gap-4 text-[11.5pt]">
+          <h3 className="font-bold leading-tight">{edu.degree}</h3>
           {edu.timePeriod && (
-            <span className="text-xs text-gray-600">{edu.timePeriod}</span>
+            <span className="shrink-0 text-[10.5pt] italic leading-tight text-black">
+              {edu.timePeriod}
+            </span>
           )}
         </div>
-        <p className="text-xs text-gray-600">
+        <p className="text-[10.5pt] italic leading-tight text-black">
           {edu.institution}
           {edu.location && `, ${edu.location}`}
         </p>
@@ -111,13 +117,15 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
     };
 
     return (
-      <section key={customSection.id} className="mb-3.5">
-        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+      <section key={customSection.id} className="mb-[8px]">
+        <h2 className="mb-[3px] border-b border-black/60 pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-sm">{proj.name}</h3>
+        <div className="flex items-baseline justify-between gap-4">
+          <div className="flex items-baseline gap-1.5">
+            <h3 className="text-[11.5pt] font-bold leading-tight">
+              {proj.name}
+            </h3>
             {proj.github && (
               <a
                 href={
@@ -130,12 +138,14 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
                 className="flex items-center hover:text-gray-900 transition-colors"
                 title="View Repository"
               >
-                <GitHubIcon className="w-4 h-4" />
+                <GitHubIcon className="h-3.5 w-3.5" />
               </a>
             )}
           </div>
           {proj.timePeriod && (
-            <span className="text-xs text-gray-600">{proj.timePeriod}</span>
+            <span className="shrink-0 text-[10.5pt] leading-tight text-black">
+              {proj.timePeriod}
+            </span>
           )}
         </div>
         {proj.description && (
@@ -159,17 +169,17 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
     };
 
     return (
-      <section key={customSection.id} className="mb-3.5">
-        <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+      <section key={customSection.id} className="mb-[8px]">
+        <h2 className="mb-[3px] border-b border-black/60 pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
-        <div className="text-sm">
-          <span className="font-medium">{skill.name}</span>
+        <div className="text-[11pt] leading-[1.16]">
+          <span className="font-bold">{skill.name}</span>
           {skill.category && (
-            <span className="text-gray-600"> ({skill.category})</span>
+            <span className="text-black"> ({skill.category})</span>
           )}
           {skill.proficiency !== undefined && (
-            <span className="text-gray-600"> - {skill.proficiency}%</span>
+            <span className="text-black"> - {skill.proficiency}%</span>
           )}
         </div>
       </section>

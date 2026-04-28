@@ -46,9 +46,7 @@ const Template1 = ({ resumeData }: Template1Props) => {
         case "personal":
           return <HeaderSection profile={profile} />;
         case "workExperiences":
-          return (
-            <ExperienceSection workExperiences={sortedWorkExperiences} />
-          );
+          return <ExperienceSection workExperiences={sortedWorkExperiences} />;
         case "educations":
           return <EducationSection educations={sortedEducations} />;
         case "skills":
@@ -70,7 +68,7 @@ const Template1 = ({ resumeData }: Template1Props) => {
     return (
       <div
         ref={resumeRef}
-        className="w-[210mm] min-h-[297mm] p-8 bg-white text-gray-900 shadow-lg "
+        className="template-1-page w-[210mm] min-h-[297mm] bg-white p-[12mm] font-serif text-[11pt] leading-[1.16] text-black shadow-lg"
       >
         {sectionOrder.map((section) => (
           <Fragment key={section}>{renderSection(section)}</Fragment>
@@ -105,7 +103,7 @@ const Template1 = ({ resumeData }: Template1Props) => {
 
   const pageSplit = useCallback(() => {
     const A4_HEIGHT_PX = 1123;
-    const PADDING_PX = 40;
+    const PADDING_PX = 45;
     const USABLE_HEIGHT = A4_HEIGHT_PX - PADDING_PX * 2;
 
     if (!resumeRef.current) return;
@@ -166,13 +164,13 @@ const Template1 = ({ resumeData }: Template1Props) => {
       {resumePage.map((page, index) => (
         <div
           key={index}
-          className="mx-auto bg-white p-8 mb-8"
+          className="template-1-page mx-auto mb-8 bg-white p-[12mm] font-serif text-[11pt] leading-[1.16] text-black"
           style={{ width: "210mm", minHeight: "297mm" }}
         >
           {page.map((section, idx) => (
             <div
               key={idx}
-              className=" bg-white text-black"
+              className="bg-white text-black"
               dangerouslySetInnerHTML={{ __html: section.outerHTML }}
             />
           ))}

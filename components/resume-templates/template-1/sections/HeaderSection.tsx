@@ -8,15 +8,15 @@ interface HeaderSectionProps {
 
 export const HeaderSection = ({ profile }: HeaderSectionProps) => {
   return (
-    <section className="mb-3.5 font-serif">
-      <h1 className="text-3xl font-bold tracking-tight font-serif">
+    <section className="mb-[10px] text-center font-serif">
+      <h1 className="font-serif text-[26pt] font-bold leading-none tracking-normal">
         {profile?.name || "Your Name"}
       </h1>
-      <p className="text-sm text-gray-600 mt-1 font-serif">
+      <p className="mt-[2px] font-serif text-[10.5pt] italic leading-tight text-black">
         {profile?.designation || "Your Title"}
       </p>
 
-      <div className="flex flex-wrap gap-4 text-sm text-gray-700 mt-3 items-center">
+      <div className="mt-[4px] flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-[10.5pt] leading-tight text-black">
         {profile?.portfolio && (
           <a
             href={
@@ -26,9 +26,9 @@ export const HeaderSection = ({ profile }: HeaderSectionProps) => {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
           >
-            <Globe className="w-3.5 h-3.5" />
+            <Globe className="h-3 w-3" />
             <span>Portfolio</span>
           </a>
         )}
@@ -37,9 +37,9 @@ export const HeaderSection = ({ profile }: HeaderSectionProps) => {
             href={`tel:${profile.phoneNumber.replace(/\s+/g, "")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
           >
-            <Phone className="w-3.5 h-3.5" />
+            <Phone className="h-3 w-3" />
             <span>{profile.phoneNumber}</span>
           </a>
         )}
@@ -48,9 +48,9 @@ export const HeaderSection = ({ profile }: HeaderSectionProps) => {
             href={`mailto:${profile.email}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
           >
-            <Mail className="w-3.5 h-3.5" />
+            <Mail className="h-3 w-3" />
             <span>{profile.email}</span>
           </a>
         )}
@@ -63,9 +63,9 @@ export const HeaderSection = ({ profile }: HeaderSectionProps) => {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
           >
-            <GitHubIcon className="w-3.5 h-3.5" />
+            <GitHubIcon className="h-3 w-3" />
             <span>GitHub</span>
           </a>
         )}
@@ -78,15 +78,15 @@ export const HeaderSection = ({ profile }: HeaderSectionProps) => {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
           >
-            <LinkedinIcon className="w-3.5 h-3.5" />
+            <LinkedinIcon className="h-3 w-3" />
             <span>LinkedIn</span>
           </a>
         )}
         {profile?.location && (
-          <div className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1">
+            <MapPin className="h-3 w-3" />
             <span>{profile.location}</span>
           </div>
         )}

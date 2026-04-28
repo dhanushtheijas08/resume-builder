@@ -11,17 +11,19 @@ export const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
   if (projects.length === 0) return null;
 
   return (
-    <section className="">
-      <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+    <section className="mb-[8px]">
+      <h2 className="mb-[3px] border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
         Projects
       </h2>
 
       {projects.map((project, index) => {
         return (
           <Fragment key={project.id || index}>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm">{project.name}</h3>
+            <div className="flex items-baseline justify-between gap-4 ml-3.5">
+              <div className="flex items-baseline gap-1.5">
+                <h3 className="text-[11.5pt] font-bold leading-tight">
+                  {project.name}
+                </h3>
                 {project.github && (
                   <a
                     href={
@@ -34,18 +36,20 @@ export const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                     className="flex items-center hover:text-gray-900 transition-colors"
                     title="View Repository"
                   >
-                    <GitHubIcon className="w-4 h-4" />
+                    <GitHubIcon className="h-3.5 w-3.5" />
                   </a>
                 )}
               </div>
               {project.timePeriod && (
-                <span className="text-xs text-gray-600">{project.timePeriod}</span>
+                <span className="shrink-0 text-[10.5pt] leading-tight text-black">
+                  {project.timePeriod}
+                </span>
               )}
             </div>
 
             {project.description && (
               <div
-                className="resume"
+                className="resume ml-3.5"
                 dangerouslySetInnerHTML={{
                   __html: sanitizeServerHtml(project.description),
                 }}

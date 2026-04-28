@@ -9,28 +9,31 @@ export const EducationSection = ({ educations }: EducationSectionProps) => {
   if (educations.length === 0) return null;
 
   return (
-    <section>
-      <h2 className="text-lg font-semibold border-b border-gray-300 pb-1 mb-2">
+    <section className="mb-[8px]">
+      <h2 className="mb-[3px] border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
         Education
       </h2>
 
       {educations.map((education, index) => (
-        <div key={education.id || index} className={index > 0 ? "mt-4" : ""}>
-          <div className="flex justify-between items-center text-sm">
-            <h3 className="font-semibold">{education.degree}</h3>
+        <div
+          key={education.id || index}
+          className={index > 0 ? "mt-[3px] ml-3.5" : "ml-3.5"}
+        >
+          <div className="flex items-baseline justify-between gap-4 text-[11.5pt]">
+            <h3 className="font-bold leading-tight">{education.degree}</h3>
             {education.timePeriod && (
-              <span className="text-xs text-gray-600">
+              <span className="shrink-0 text-[10.5pt] italic leading-tight text-black">
                 {education.timePeriod}
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-600">
+          <p className="text-[10.5pt] italic leading-tight text-black">
             {education.institution}
             {education.location && `, ${education.location}`}
           </p>
           {education.description && (
             <div
-              className="resume mt-1"
+              className="resume mt-[2px]"
               dangerouslySetInnerHTML={{
                 __html: sanitizeServerHtml(education.description),
               }}

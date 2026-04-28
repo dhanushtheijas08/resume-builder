@@ -199,6 +199,41 @@ body {
 .resume li {
   @apply leading-6;
 }
+
+.template-1-page .resume {
+  font-size: 11pt;
+  line-height: 1.16;
+}
+
+.template-1-page .resume ul {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding-left: 1.15rem;
+}
+
+.template-1-page .resume ol {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding-left: 1.15rem;
+}
+
+.template-1-page .resume li {
+  line-height: 1.16;
+  margin-top: 0;
+  margin-bottom: 1px;
+  padding-left: 0.1rem;
+}
+
+.template-1-page .resume p {
+  margin-top: 0;
+  margin-bottom: 1px;
+}
+
+.template-1-page .resume strong,
+.template-1-page .resume b {
+  font-weight: 700;
+}
+
 .blur-effect {
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
