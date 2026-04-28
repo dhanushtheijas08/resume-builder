@@ -8,11 +8,11 @@ interface HeaderSectionProps {
 
 export const HeaderSection = ({ profile }: HeaderSectionProps) => {
   return (
-    <section className="mb-3.5">
-      <h1 className="text-3xl font-bold tracking-tight">
+    <section className="mb-3.5 font-serif">
+      <h1 className="text-3xl font-bold tracking-tight font-serif">
         {profile?.name || "Your Name"}
       </h1>
-      <p className="text-sm text-gray-600 mt-1">
+      <p className="text-sm text-gray-600 mt-1 font-serif">
         {profile?.designation || "Your Title"}
       </p>
 

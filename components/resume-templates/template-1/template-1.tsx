@@ -1,13 +1,20 @@
 "use client";
 import type { ResumeData } from "@/components/resume/resume-preview";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { HeaderSection } from "./sections/HeaderSection";
 import { ExperienceSection } from "./sections/ExperienceSection";
 import { ProjectsSection } from "./sections/ProjectsSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import { EducationSection } from "./sections/EducationSection";
 import { CustomSection } from "./sections/CustomSection";
-import { groupSkillsByCategory } from "./utils";
+import { groupSkillsByCategory, normalizeSectionOrder } from "./utils";
 
 interface Template1Props {
   resumeData: ResumeData;
@@ -29,25 +36,45 @@ const Template1 = ({ resumeData }: Template1Props) => {
     const sortedProjects = [...resumeData.projects].sort(
       (a, b) => (a.order ?? 0) - (b.order ?? 0),
     );
+    const sortedCustomSections = [...resumeData.customSections].sort(
+      (a, b) => a.order - b.order,
+    );
+    const sectionOrder = normalizeSectionOrder(resumeData.sectionOrder);
+
+    const renderSection = (section: string) => {
+      switch (section) {
+        case "personal":
+          return <HeaderSection profile={profile} />;
+        case "workExperiences":
+          return (
+            <ExperienceSection workExperiences={sortedWorkExperiences} />
+          );
+        case "educations":
+          return <EducationSection educations={sortedEducations} />;
+        case "skills":
+          return <SkillsSection groupedSkills={groupedSkills} />;
+        case "projects":
+          return <ProjectsSection projects={sortedProjects} />;
+        case "customSection":
+          return sortedCustomSections.map((customSection) => (
+            <CustomSection
+              key={customSection.id}
+              customSection={customSection}
+            />
+          ));
+        default:
+          return null;
+      }
+    };
 
     return (
       <div
         ref={resumeRef}
         className="w-[210mm] min-h-[297mm] p-8 bg-white text-gray-900 shadow-lg "
       >
-        <HeaderSection profile={profile} />
-        <ExperienceSection workExperiences={sortedWorkExperiences} />
-        <ProjectsSection projects={sortedProjects} />
-        <EducationSection educations={sortedEducations} />
-        <SkillsSection groupedSkills={groupedSkills} />
-        {resumeData.customSections
-          .sort((a, b) => a.order - b.order)
-          .map((customSection) => (
-            <CustomSection
-              key={customSection.id}
-              customSection={customSection}
-            />
-          ))}
+        {sectionOrder.map((section) => (
+          <Fragment key={section}>{renderSection(section)}</Fragment>
+        ))}
       </div>
     );
   };
@@ -69,6 +96,7 @@ const Template1 = ({ resumeData }: Template1Props) => {
       certCount: resumeData.certifications.length,
       pubCount: resumeData.publications.length,
       customSectionCount: resumeData.customSections.length,
+      sectionOrder: resumeData.sectionOrder,
       workExpOrders: resumeData.workExperiences.map((e) => e.order),
       eduOrders: resumeData.educations.map((e) => e.order),
       projectOrders: resumeData.projects.map((p) => p.order),

@@ -1,4 +1,8 @@
 import type { ResumeData } from "@/components/resume/resume-preview";
+export {
+  DEFAULT_SECTION_ORDER,
+  normalizeSectionOrder,
+} from "@/lib/resume-section-order";
 
 export const formatDateRange = (
   startDate: string,
@@ -7,8 +11,6 @@ export const formatDateRange = (
 ): string => {
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "";
-    // Try to parse date string (could be "2024-01", "2024-01-15", or "Jan 2024" format)
-    // Handle YYYY-MM format
     if (/^\d{4}-\d{2}$/.test(dateStr)) {
       const [year, month] = dateStr.split("-");
       const date = new Date(parseInt(year), parseInt(month) - 1);
@@ -17,7 +19,6 @@ export const formatDateRange = (
         year: "numeric",
       });
     }
-    // Try standard date parsing
     const date = new Date(dateStr);
     if (!isNaN(date.getTime())) {
       return date.toLocaleDateString("en-US", {
@@ -25,7 +26,6 @@ export const formatDateRange = (
         year: "numeric",
       });
     }
-    // If not a valid date, return as is
     return dateStr;
   };
 

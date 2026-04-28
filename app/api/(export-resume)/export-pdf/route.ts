@@ -246,6 +246,7 @@ const mapResumeToData = (
   awards: resume.awards,
   publications: resume.publications,
   customSections: resume.customSection ?? [],
+  sectionOrder: resume.sectionOrder,
 });
 
 export async function POST(request: NextRequest) {

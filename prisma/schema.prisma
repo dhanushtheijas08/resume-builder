@@ -114,7 +114,7 @@ model Resume {
   updatedAt DateTime @updatedAt
   exportedResumeUrl String?
   lastExportedAt DateTime?
-  sectionOrder String[]
+  sectionOrder String[] @default(["personal", "workExperiences", "educations", "skills", "projects", "certifications", "awards", "publications", "customSection"])
 
   @@map("resume")
 }

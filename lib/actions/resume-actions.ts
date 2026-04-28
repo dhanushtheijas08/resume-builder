@@ -7,11 +7,13 @@ import {
   createResumeSchema,
   duplicateResumeSchema,
   objectIdSchemaFn,
+  updateSectionOrderSchema,
   updatedOrderSchema,
 } from "../validations/resume";
 import { validateUser } from "./validate-user";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { normalizeSectionOrder } from "../resume-section-order";
 
 export const createResumeAction = safeAction
   .inputSchema(createResumeSchema)
@@ -183,6 +185,53 @@ export const updateOrderAction = safeAction
         message: sectionMessages[type] || "Order updated successfully",
         statusCode: 200,
       };
+    },
+  );
+
+export const updateSectionOrderAction = safeAction
+  .inputSchema(updateSectionOrderSchema)
+  .action(
+    async ({
+      parsedInput: { resumeId, sectionOrder },
+    }): Promise<ResponseData> => {
+      try {
+        const user = await validateUser();
+        if (!user) {
+          throw new ActionError("User not found", 404);
+        }
+
+        const resume = await prisma.resume.findUnique({
+          where: { id: resumeId },
+          select: { userId: true },
+        });
+
+        if (!resume || resume.userId !== user.id) {
+          throw new ActionError("Resume not found or access denied", 404);
+        }
+
+        await prisma.resume.update({
+          where: { id: resumeId },
+          data: {
+            sectionOrder: normalizeSectionOrder(sectionOrder),
+          },
+        });
+
+        revalidatePath(`/resume/${resumeId}`);
+
+        return {
+          success: true,
+          message: "Resume section order updated successfully",
+          statusCode: 200,
+        };
+      } catch (error) {
+        if (error instanceof APIError) {
+          throw new ActionError(error.message, error.statusCode);
+        }
+        if (error instanceof ActionError) {
+          throw error;
+        }
+        throw new ActionError("Failed to update resume section order", 500);
+      }
     },
   );
 

@@ -10,7 +10,6 @@ import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-// import { useSearchParams } from "next/navigation";
 import { fetchResumeTemplates } from "@/lib/api/resume.api";
 import { useCustomSearchParams } from "@/lib/search-params";
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DEFAULT_SECTION_ORDER } from "../resume-section-order";
 
 export const objectIdSchemaFn = (message: string) =>
   z.string().regex(/^[0-9a-fA-F]{24}$/, message);
@@ -232,6 +233,12 @@ export const updatedOrderSchema = z.object({
     }),
   ),
 });
+
+export const updateSectionOrderSchema = z.object({
+  resumeId: objectIdSchemaFn("Invalid resume ID format"),
+  sectionOrder: z.array(z.enum(DEFAULT_SECTION_ORDER)).min(1),
+});
+
 export type CreateResumeFormData = z.infer<typeof createResumeSchema>;
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchme>;
 export type WorkExperienceFormData = z.infer<typeof workExperienceSchema>;

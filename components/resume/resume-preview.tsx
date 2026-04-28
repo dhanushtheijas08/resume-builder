@@ -26,6 +26,7 @@ export type ResumeData = {
   awards: Award | null;
   publications: Publication[];
   customSections: CustomSection[];
+  sectionOrder: string[];
 };
 
 export const ResumePreview = ({

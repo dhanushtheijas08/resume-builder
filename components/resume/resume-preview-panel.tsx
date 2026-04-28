@@ -20,6 +20,7 @@ export function ResumePreviewPanel({ resume }: ResumePreviewPanelProps) {
         awards: resume.awards,
         publications: resume.publications,
         customSections: resume.customSection ?? [],
+        sectionOrder: resume.sectionOrder,
       }}
     />
   );
