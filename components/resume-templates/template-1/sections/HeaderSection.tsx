@@ -9,7 +9,7 @@ interface HeaderSectionProps {
 export const HeaderSection = ({ profile }: HeaderSectionProps) => {
   return (
     <section className="mb-[10px] text-center font-serif">
-      <h1 className="font-serif text-[26pt] font-bold leading-none tracking-normal">
+      <h1 className="font-serif text-[26pt] font-semibold leading-none tracking-normal">
         {profile?.name || "Your Name"}
       </h1>
       <p className="mt-[2px] font-serif text-[10.5pt] italic leading-tight text-black">

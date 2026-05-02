@@ -149,11 +149,30 @@ body {
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
+@layer base {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}
+
 .scrollbar-hidden {
   scrollbar-width: none;
 }
 
-/* Custom scrollbar styling */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: oklch(0.4 0 0) transparent;
