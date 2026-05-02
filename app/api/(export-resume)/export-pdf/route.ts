@@ -132,9 +132,14 @@ const generatePdfHtml = async (resumeData: ResumeData): Promise<string> => {
     <!DOCTYPE html>
     <html>
       <head>
+          <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
         <meta charset="utf-8" />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <style>
+        <style type="text/tailwindcss">
+          @theme {
+            --spacing: 0.25rem;
+          }
+
           @page { 
             size: A4; 
             margin: 0;
@@ -142,6 +147,7 @@ const generatePdfHtml = async (resumeData: ResumeData): Promise<string> => {
           body { 
             margin: 0;
             padding: 0;
+            font-family: serif !important;
           }
           
           #resume-container {
@@ -166,34 +172,16 @@ const generatePdfHtml = async (resumeData: ResumeData): Promise<string> => {
             break-after: auto;
           }
           
-          .resume-ul {
-            @apply list-disc pl-6 my-2;
-          }
-
-          .resume-ol {
-            @apply list-decimal pl-6 my-2;
-          }
-
-          .resume-li {
-            @apply leading-6;
-          }
-
           ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
+            @apply list-disc pl-6;
           }
 
           ol {
-            list-style-type: decimal;
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
+            @apply list-decimal pl-6;
           }
 
           li {
-            line-height: 1.5rem;
+            @apply leading-5;
           }
         </style>
       </head>
@@ -267,23 +255,23 @@ export async function POST(request: NextRequest) {
     if (!resume) {
       return NextResponse.json({ error: "Resume not found" }, { status: 404 });
     }
-    const TOLERANCE_MS = 1000;
-    const timeDifference = resume.lastExportedAt
-      ? resume.updatedAt.getTime() - resume.lastExportedAt.getTime()
-      : Infinity;
+    // const TOLERANCE_MS = 1000;
+    // const timeDifference = resume.lastExportedAt
+    //   ? resume.updatedAt.getTime() - resume.lastExportedAt.getTime()
+    //   : Infinity;
 
-    if (
-      resume.exportedResumeUrl &&
-      resume.lastExportedAt &&
-      timeDifference >= 0 &&
-      timeDifference <= TOLERANCE_MS
-    ) {
-      const url = await getResumeDownloadUrl(
-        resume.exportedResumeUrl,
-        resume.title,
-      );
-      return NextResponse.json({ url }, { status: 200 });
-    }
+    // if (
+    //   resume.exportedResumeUrl &&
+    //   resume.lastExportedAt &&
+    //   timeDifference >= 0 &&
+    //   timeDifference <= TOLERANCE_MS
+    // ) {
+    //   const url = await getResumeDownloadUrl(
+    //     resume.exportedResumeUrl,
+    //     resume.title,
+    //   );
+    //   return NextResponse.json({ url }, { status: 200 });
+    // }
 
     const resumeData = mapResumeToData(resume);
     const { buffer, closeBrowser: close } = await generatePdfBuffer(resumeData);
