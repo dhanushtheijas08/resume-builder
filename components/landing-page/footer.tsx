@@ -48,7 +48,7 @@ export const Footer = () => {
         viewport={{ once: true }}
         className="mx-auto w-full rounded-t-2xl  sm:rounded-t-[2.5rem] bg-card text-white py-8 sm:py-10 md:py-12 px-5 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden group border border-white/5"
       >
-        <div className="flex flex-col container mx-auto sm:flex-row justify-between items-center gap-5 sm:gap-6 md:gap-8 relative z-10">
+        <div className="flex flex-col max-w-7xl container mx-auto sm:flex-row justify-between items-center gap-5 sm:gap-6 md:gap-8 relative z-10">
           <p className="text-white/40 text-xs sm:text-sm order-3 sm:order-1">
             Copyright © {new Date().getFullYear()}{" "}
             <Link

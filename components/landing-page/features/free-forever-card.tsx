@@ -47,7 +47,7 @@ export const FreeForeverCard = () => {
         </div>
 
         <Link href="/register">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-background/50 backdrop-blur-sm border border-primary/20 relative overflow-hidden w-full">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-lg bg-background/50 backdrop-blur-sm border border-primary/20 relative overflow-hidden w-full">
             <motion.div
               className="absolute inset-0 bg-linear-to-r from-transparent via-primary/10 to-transparent"
               animate={{
@@ -67,7 +67,7 @@ export const FreeForeverCard = () => {
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5, duration: 0.5, type: "spring" }}
-                className="text-4xl font-bold text-primary"
+                className="text-3xl font-bold text-primary"
               >
                 $0
               </motion.span>

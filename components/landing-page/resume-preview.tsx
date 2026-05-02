@@ -26,8 +26,8 @@ import { GitHubIcon, LinkedinIcon } from "../icons";
 export const HeroSectionResumePreview = () => {
   return (
     <>
-      <div className="absolute w-screen pointer-events-none select-none">
-        <div className="h-[600px] w-full pointer-events-none sm:h-[820px]">
+      <div className="absolute 2xl:-translate-x-40 w-screen xl:-translate-x-10 2xl:max-w-480 xl:mt-10 2xl:mx-auto pointer-events-none select-none">
+        <div className="h-[600px] w-full pointer-events-none sm:h-[820px] md:h-[760px] lg:h-[820px]">
           <div className="absolute inset-0 z-30 bg-linear-to-b from-transparent to-background w-full h-full" />
           <div className="absolute inset-0  z-30 bg-linear-to-r from-transparent from-70% via-transparent to-background w-full h-full" />
           <div
@@ -39,7 +39,7 @@ export const HeroSectionResumePreview = () => {
               contain: "strict",
             }}
           >
-            <div className="absolute translate-x-140 sm:translate-x-0 inset-0 w-[1000px] sm:w-[1600px] h-[900px] bg-background border rounded-xl mt-[220px] ml-auto sm:mt-[200px] sm:ml-[1%] sm:mr-auto sm:mb-auto pointer-events-auto overflow-hidden flex flex-col text-foreground transition-all duration-500 ease-in-out origin-top-left transform-3d backface-hidden transform-[translateX(2%)_scale(0.6)_rotateX(47deg)_rotateY(21deg)_rotate(330deg)] sm:transform-[translateX(1%)_scale(1.15)_rotateX(47deg)_rotateY(31deg)_rotate(326deg)]">
+            <div className="absolute translate-x-140 sm:translate-x-0 md:translate-x-6 lg:translate-x-0 inset-0 w-[1000px] sm:w-[1600px] md:w-[1400px] lg:w-[1600px] h-[900px] bg-background border rounded-xl mt-[220px] ml-auto sm:mt-[200px] md:mt-[170px] lg:mt-[200px] sm:ml-[1%] md:ml-[3%] lg:ml-[1%] sm:mr-auto sm:mb-auto pointer-events-auto overflow-hidden flex flex-col text-foreground transition-all duration-500 ease-in-out origin-top-left transform-3d backface-hidden transform-[translateX(2%)_scale(0.6)_rotateX(47deg)_rotateY(21deg)_rotate(330deg)] sm:transform-[translateX(1%)_scale(1.15)_rotateX(47deg)_rotateY(31deg)_rotate(326deg)] md:transform-[translateX(0%)_scale(0.88)_rotateX(47deg)_rotateY(29deg)_rotate(326deg)] lg:transform-[translateX(1%)_scale(1.15)_rotateX(47deg)_rotateY(31deg)_rotate(326deg)]">
               <nav className="flex items-center justify-between px-6 py-4  bg-card/50 backdrop-blur-sm">
                 <ResumePreviewAnimation duration={0.5} delay={1.5}>
                   <div className="flex items-center gap-3">

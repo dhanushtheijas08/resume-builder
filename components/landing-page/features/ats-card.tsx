@@ -40,10 +40,10 @@ export function ATSFriendlyCard() {
         >
           {/* MOBILE CONNECTORS */}
           <div className="md:hidden pointer-events-none absolute inset-0">
-            <div className="absolute top-[22px] left-[25%] right-[25%] h-[1px] bg-border/40" />
-            <div className="absolute bottom-[22px] left-[25%] right-[25%] h-[1px] bg-border/40" />
-            <div className="absolute left-[25%] top-[22px] bottom-[22px] w-[1px] bg-border/40" />
-            <div className="absolute right-[25%] top-[22px] bottom-[22px] w-[1px] bg-border/40" />
+            <div className="absolute top-[22px] left-[25%] right-[25%] h-px bg-border/40" />
+            <div className="absolute bottom-[22px] left-[25%] right-[25%] h-px bg-border/40" />
+            <div className="absolute left-[25%] top-[22px] bottom-[22px] w-px bg-border/40" />
+            <div className="absolute right-[25%] top-[22px] bottom-[22px] w-px bg-border/40" />
           </div>
 
           {/* ITEM 1 */}
@@ -130,7 +130,7 @@ function ChecklistItem({ text, delay }: { text: string; delay: number }) {
 function DesktopLine({ top, delay }: { top: string; delay: number }) {
   return (
     <div
-      className="hidden md:block absolute left-[26px] w-0.5 h-[20px] -z-10 bg-border/30"
+      className="hidden md:block absolute left-[22px] w-0.5 h-[20px] -z-10 bg-border/30"
       style={{ top }}
     >
       <motion.div

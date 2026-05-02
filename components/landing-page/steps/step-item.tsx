@@ -49,7 +49,7 @@ export const StepItem = ({
     <div
       ref={ref}
       className={cn(
-        "lg:min-h-screen flex flex-col snap-start transition-all duration-700",
+        "lg:min-h-screen 2xl:max-h-1/2 flex flex-col snap-start transition-all duration-700",
         step.id < 3 ? "justify-center" : "justify-end",
       )}
     >

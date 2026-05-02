@@ -48,12 +48,12 @@ export const Steps = () => {
   return (
     <section className="py-10 px-4 md:px-6 relative">
       <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col md:flex-row gap-8 lg:gap-24">
+        <div className="flex flex-col md:flex-row gap-8 2xl:gap-24">
           <motion.div
             className="hidden lg:block w-[45%] lg:w-1/2 flex-1"
             ref={sectionRef}
           >
-            <div className="sticky top-24 lg:top-28 sm:h-[calc(100vh-8rem)] lg:h-[calc(100vh-10rem)] rounded-lg bg-white/3 border border-white/5 backdrop-blur-2xl overflow-hidden shadow-2xl">
+            <div className="sticky top-24 lg:top-28 2xl:top-1/4 sm:h-[calc(100vh-8rem)] lg:h-[calc(100vh-10rem)] 2xl:h-[50vh] rounded-lg bg-white/3 border border-white/5 backdrop-blur-2xl overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
               <AnimatePresence mode="wait">
                 <motion.div
