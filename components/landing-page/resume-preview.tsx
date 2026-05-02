@@ -26,7 +26,7 @@ import { GitHubIcon, LinkedinIcon } from "../icons";
 export const HeroSectionResumePreview = () => {
   return (
     <>
-      <div className="absolute 2xl:-translate-x-40 w-screen xl:-translate-x-10 2xl:max-w-480 xl:mt-10 2xl:mx-auto pointer-events-none select-none">
+      <div className="absolute 2xl:-translate-x-40 w-screen xl:-translate-x-10 2xl:max-w-480 2xl:mt-10 2xl:mx-auto pointer-events-none select-none">
         <div className="h-[600px] w-full pointer-events-none sm:h-[820px] md:h-[760px] lg:h-[820px]">
           <div className="absolute inset-0 z-30 bg-linear-to-b from-transparent to-background w-full h-full" />
           <div className="absolute inset-0  z-30 bg-linear-to-r from-transparent from-70% via-transparent to-background w-full h-full" />
