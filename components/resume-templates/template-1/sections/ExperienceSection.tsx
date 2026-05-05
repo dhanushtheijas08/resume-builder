@@ -12,7 +12,7 @@ export const ExperienceSection = ({
 
   return (
     <section className="mb-[8px]">
-      <h2 className="mb-[3px] title border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
+      <h2 className="mb-[3px] font-normal border-b border-bottom border-black pb-[1.5px] font-serif text-[14pt] uppercase leading-none tracking-[0.02em]">
         Experience
       </h2>
       {workExperiences.map((exp, index) => {

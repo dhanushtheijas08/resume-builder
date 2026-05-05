@@ -183,6 +183,9 @@ const generatePdfHtml = async (resumeData: ResumeData): Promise<string> => {
           li {
             @apply leading-5;
           }
+          .border-bottom {
+            border-bottom: 0.5px solid black;
+          }
         </style>
       </head>
       <body>
@@ -255,23 +258,23 @@ export async function POST(request: NextRequest) {
     if (!resume) {
       return NextResponse.json({ error: "Resume not found" }, { status: 404 });
     }
-    const TOLERANCE_MS = 1000;
-    const timeDifference = resume.lastExportedAt
-      ? resume.updatedAt.getTime() - resume.lastExportedAt.getTime()
-      : Infinity;
+    // const TOLERANCE_MS = 1000;
+    // const timeDifference = resume.lastExportedAt
+    //   ? resume.updatedAt.getTime() - resume.lastExportedAt.getTime()
+    //   : Infinity;
 
-    if (
-      resume.exportedResumeUrl &&
-      resume.lastExportedAt &&
-      timeDifference >= 0 &&
-      timeDifference <= TOLERANCE_MS
-    ) {
-      const url = await getResumeDownloadUrl(
-        resume.exportedResumeUrl,
-        resume.title,
-      );
-      return NextResponse.json({ url }, { status: 200 });
-    }
+    // if (
+    //   resume.exportedResumeUrl &&
+    //   resume.lastExportedAt &&
+    //   timeDifference >= 0 &&
+    //   timeDifference <= TOLERANCE_MS
+    // ) {
+    //   const url = await getResumeDownloadUrl(
+    //     resume.exportedResumeUrl,
+    //     resume.title,
+    //   );
+    //   return NextResponse.json({ url }, { status: 200 });
+    // }
 
     const resumeData = mapResumeToData(resume);
     const { buffer, closeBrowser: close } = await generatePdfBuffer(resumeData);

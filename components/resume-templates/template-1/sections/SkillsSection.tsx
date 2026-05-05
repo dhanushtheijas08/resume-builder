@@ -7,7 +7,7 @@ export const SkillsSection = ({ groupedSkills }: SkillsSectionProps) => {
 
   return (
     <section className="mb-[8px]">
-      <h2 className="mb-[3px] border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
+      <h2 className="mb-[3px] font-normal border-b border-bottom border-black pb-[1.5px] font-serif text-[14pt] uppercase leading-none tracking-[0.02em]">
         Skills
       </h2>
       <div className="grid grid-cols-2 gap-x-6 gap-y-px text-[11pt] leading-[1.16] ml-3.5">

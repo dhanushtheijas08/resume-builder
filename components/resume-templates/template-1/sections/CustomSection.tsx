@@ -12,7 +12,7 @@ export const CustomSection = ({ customSection }: CustomSectionProps) => {
   if (customSection.type === "SUMMARY") {
     return (
       <section key={customSection.id} className="mb-[8px] ml-3.5">
-        <h2 className="mb-[3px] border-b border-black pb-0 font-serif text-[14pt] font-normal uppercase leading-none tracking-[0.02em]">
+        <h2 className="mb-[3px] border-b border-bottom border-black pb-[1.5px] font-serif text-[14pt] uppercase leading-none tracking-[0.02em]">
           {customSection.title}
         </h2>
         <div
