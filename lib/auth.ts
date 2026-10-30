@@ -26,5 +26,9 @@ export const auth = betterAuth({
       maxAge: 60 * 60,
     },
   },
+  trustedOrigins: [
+    "https://coder-cv.vercel.app",
+    "https://www.coder-cv.vercel.app/",
+  ],
   plugins: [nextCookies()],
 });
